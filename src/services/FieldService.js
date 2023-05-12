@@ -1,6 +1,6 @@
 import http from '../http-common';
 
-const FieldDataService = {
+const FieldService = {
 	async getList() {
 		const response = await http.get("/field");
 		return response.data;
@@ -27,4 +27,4 @@ const FieldDataService = {
 	},
 };
 
-export default FieldDataService;
+export default EquipmentStateService;

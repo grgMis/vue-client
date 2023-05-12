@@ -291,15 +291,15 @@
 
 <script>
 
-import EntryActionDataService from '../services/EntryActionDataService'
-import WellDataService from '../services/WellDataService'
-import DeptDataService from '../services/DeptDataService'
-import EquipmentCategoryDataService from '../services/EquipmentCategoryDataService'
-import EquipmentClassDataService from '../services/EquipmentClassDataService'
-import EquipmentModelDataService from '../services/EquipmentModelDataService'
-import EquipmentStateDataService from '../services/EquipmentStateDataService'
+import ActionService from '../services/ActionService'
+import WellService from '../services/WellService'
+import DeptService from '../services/DeptService'
+import EquipmentCategoryService from '../services/EquipmentCategoryService'
+import EquipmentClassService from '../services/EquipmentClassService'
+import EquipmentModelService from '../services/EquipmentModelService'
+import EquipmentStateService from '../services/EquipmentStateService'
 
-import EquipmentDataService from "../services/EquipmentDataService"
+import EquipmentDataService from "../services/EquipmentService"
 
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 
@@ -332,43 +332,43 @@ export default {
 	},
 	methods: {
 		getEntryActionList: async function() {
-			const data = await EntryActionDataService.getList();
+			const data = await ActionService.getList();
 			this.entryActionList = data;
 			console.log(this.entryActionList);
 		},
 		getWellList: async function() {
-			const data = await WellDataService.getList();
+			const data = await WellService.getList();
 			this.wellList = data;
 			console.log(this.wellList);
 		},
 		getDeptList: async function() {
-			const data = await DeptDataService.getList();
+			const data = await DeptService.getList();
 			this.deptList = data;
 			console.log(this.deptList);
 		},
 		getEquipmentCategoryList: async function() {
-			const data = await EquipmentCategoryDataService.getList();
+			const data = await EquipmentCategoryService.getList();
 			this.equipmentCategoryList = data;
 			console.log(this.equipmentCategoryList);
 		},
 		getEquipmentClassList: async function() {
-			const data = await EquipmentClassDataService.getList();
+			const data = await EquipmentClassService.getList();
 			this.equipmentClassList = data;
 			console.log(this.equipmentClassList);
 		},
 		getEquipmentModelList: async function() {
-			const data = await EquipmentModelDataService.getList();
+			const data = await EquipmentModelService.getList();
 			this.equipmentModelList = data;
 			console.log(this.equipmentModelList);
 		},
 		getEquipmentStateList: async function() {
-			const data = await EquipmentStateDataService.getList();
+			const data = await EquipmentStateService.getList();
 			this.equipmentStateList = data;
 			console.log(this.equipmentStateList);
 		},
 
 		getEquipmentList: async function() {
-			const data = await EquipmentDataService.getList();
+			const data = await EquipmentService.getList();
 			this.equipmentList = data;
 			console.log(this.equipmentList);
 		},

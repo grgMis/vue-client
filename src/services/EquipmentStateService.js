@@ -1,6 +1,6 @@
 import http from '../http-common';
 
-const EquipmentStateDataService = {
+const EquipmentStateService = {
 	async getList() {
 		const response = await http.get("/equipment-state");
 		return response.data;
@@ -27,4 +27,4 @@ const EquipmentStateDataService = {
 	},
 };
 
-export default EquipmentStateDataService;
+export default EquipmentStateService;

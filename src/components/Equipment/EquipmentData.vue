@@ -91,6 +91,7 @@
 				<Button label="Сохранить" icon="pi pi-check" text @click="saveEquipment" />
 		</template>
 	</Dialog>
+
 	<Toolbar>
 		<template #start>
 			<span class="font-bold text-3xl">Оборудование</span>
@@ -117,6 +118,7 @@
 				style="color: gray"
 				outlined />
 		</template>
+
 	</Toolbar>	
 
 	<DataTable 
@@ -316,11 +318,11 @@
 
 <script>
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
-import EquipmentCategoryDataService from '../../services/EquipmentCategoryDataService'
-import EquipmentClassDataService from '../../services/EquipmentClassDataService'
-import EquipmentDataService from '../../services/EquipmentDataService'
-import EquipmentModelDataService from '../../services/EquipmentModelDataService'
-import EquipmentStateDataService from '../../services/EquipmentStateDataService'
+import EquipmentCategoryService from '../../services/EquipmentCategoryService'
+import EquipmentClassService from '../../services/EquipmentClassService'
+import EquipmentService from '../../services/EquipmentService'
+import EquipmentModelService from '../../services/EquipmentModelService'
+import EquipmentStateService from '../../services/EquipmentStateService'
 
 export default {
 	name: "Equipment",
@@ -359,17 +361,17 @@ export default {
 		getModelList: async function() {
 			const equipmentClassId = this.equipmentData.equipmentClass.equipment_class_id;
 			if (equipmentClassId === null) {
-				const data = await EquipmentModelDataService.getList();
+				const data = await EquipmentModelService.getList();
 				this.modelList = data;
 				console.log(this.modelList);
 			} else {
-				const data = await EquipmentModelDataService.getListByEquipClass(equipmentClassId);
+				const data = await EquipmentModelService.getListByEquipClass(equipmentClassId);
 				this.modelList = data;
 				console.log(this.modelList);
 			}	
 		},
 		getClassList: async function() {
-			const data = await EquipmentClassDataService.getList();
+			const data = await EquipmentClassService.getList();
 			this.classList = data;
 			console.log(this.classList);
 		},
@@ -380,7 +382,7 @@ export default {
 				factory_number: this.equipmentData.factory_number,
 				inventory_number: this.equipmentData.inventory_number,
 			};
-			const data = await EquipmentDataService.create(equipmentModelId, equipmentStateId, requestData);
+			const data = await EquipmentService.create(equipmentModelId, equipmentStateId, requestData);
 			this.createData = data;
 			console.log(this.createData);
 		},
@@ -417,32 +419,32 @@ export default {
 		},
 		deleteEquipment: async function() {
 			const selectedId = this.selectedEquipment.equipment_id;
-			await EquipmentDataService.delete(selectedId);
+			await EquipmentService.delete(selectedId);
 			this.getEquipmentList();
 			this.selectedEquipment = null;
 		},
 		getEquipmentList: async function() {
-			const data = await EquipmentDataService.getList();
+			const data = await EquipmentService.getList();
 			this.equipmentList = data;
 			console.log(this.equipmentList);
 		},
 		getEquipmentModelList: async function() {
-			const data = await EquipmentModelDataService.getList();
+			const data = await EquipmentModelService.getList();
 			this.equipmentModelList = data;
 			console.log(this.equipmentModelList);
 		},
 		getEquipmentCategoryList: async function() {
-			const data = await EquipmentCategoryDataService.getList();
+			const data = await EquipmentCategoryService.getList();
 			this.equipmentCategoryList = data;
 			console.log(this.equipmentCategoryList);
 		},
 		getEquipmentClassList: async function() {
-			const data = await EquipmentClassDataService.getList();
+			const data = await EquipmentClassService.getList();
 			this.equipmentClassList = data;
 			console.log(this.equipmentClassList);
 		},
 		getEquipmentStateList: async function() {
-			const data = await EquipmentStateDataService.getList();
+			const data = await EquipmentStateService.getList();
 			this.equipmentStateList = data;
 			console.log(this.equipmentStateList);
 		},		

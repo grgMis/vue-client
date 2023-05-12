@@ -1,17 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TestVue from "../components/Test.vue";
-import Equipment from "../components/Equipment/EquipmentData.vue"
 
 const routes = [
   {
     path: '/test',
     name: 'home',
-    component: TestVue
+    component: () => import('../components/Test.vue')
   },
   {
-    path: '/equipment',
+    path: '/admin/equipment',
     name: 'equipment',
-    component: Equipment
+		meta: {layout: 'admin'},
+    component: () => import('../components/Equipment/EquipmentData.vue')
+  },
+	{
+    path: '/login',
+    name: 'login',
+		meta: {layout: 'empty'},
+    component: () => import('../components/Login/Login.vue')
   },
 ]
 

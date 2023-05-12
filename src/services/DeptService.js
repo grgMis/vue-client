@@ -1,6 +1,6 @@
 import http from '../http-common';
 
-const DeptDataService = {
+const DeptService = {
 	async getList() {
 		const response = await http.get("/dept");
 		return response.data;
@@ -27,4 +27,4 @@ const DeptDataService = {
 	},
 };
 
-export default DeptDataService;
+export default DeptService;

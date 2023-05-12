@@ -1,6 +1,6 @@
 import http from '../http-common';
 
-const WellStateDataService = {
+const WellStateService = {
 	async getList() {
 		const response = await http.get("/well-state");
 		return response.data;
@@ -27,4 +27,4 @@ const WellStateDataService = {
 	},
 };
 
-export default WellStateDataService;
+export default WellStateService;
