@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const WellEquipmentService = {
 	async getList() {
-		const response = await http.get("/well-equipment");
+		const response = await http.get('/well-equipment');
 		return response.data;
 	},
 
@@ -12,7 +12,7 @@ const WellEquipmentService = {
 	},
 
 	async create(data) {
-		const response = await http.post("/well-equipment", data);
+		const response = await http.post('/well-equipment', data);
 		return response.data;
 	},
 

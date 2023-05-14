@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const ActionGroupService = {
 	async getList() {
-		const response = await http.get("/action-group");
+		const response = await http.get('/action-group');
 		return response.data;
 	},
 
@@ -12,7 +12,7 @@ const ActionGroupService = {
 	},
 
 	async create(data) {
-		const response = await http.post("/eaction-group", data);
+		const response = await http.post('/eaction-group', data);
 		return response.data;
 	},
 

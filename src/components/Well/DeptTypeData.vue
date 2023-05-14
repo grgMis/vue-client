@@ -5,24 +5,24 @@
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
-    header="Добавление состояния"
+    header="Добавление типа компании"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="dept_type_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        v-model.trim="equipmentStateData.equipment_state_name"
+        id="dept_type_name"
+        v-model.trim="deptTypeData.dept_type_name"
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !deptTypeData.dept_type_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !deptTypeData.dept_type_name"
       >
         Укажите наименование.
       </small>
@@ -36,27 +36,27 @@
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
-    header="Редактирование состояния"
+    header="Редактирование типа компании"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="dept_type_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        :value="equipmentStateData.equipment_state_name"
+        id="dept_type_name"
+        :value="deptTypeData.dept_type_name"
         @input="
-          equipmentStateData.equipment_state_name = $event.target.value
+          deptTypeData.dept_type_name = $event.target.value
         "
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !deptTypeData.dept_type_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !deptTypeData.dept_type_name"
       >
         Укажите наименование.
       </small>
@@ -69,7 +69,7 @@
 
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Состояния</span>
+      <span class="font-bold text-3xl">Типы компании</span>
     </template>
     <template #end>
       <Button
@@ -108,31 +108,31 @@
 
   <DataTable
     class="pt-1 p-datatable-sm"
-    v-model:selection="selectedState"
-    :value="equipmentStateList"
+    v-model:selection="selectedDeptType"
+    :value="deptTypeList"
     selectionMode="single"
-    dataKey="equipment_state_id"
+    dataKey="dept_type_id"
     showGridlines
   >
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
-      field="equipment_state_id"
+      field="dept_type_id"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_id }}
+        {{ data.dept_type_id }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Наименование"
-      field="equipment_state_name"
+      field="dept_type_name"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_name }}
+        {{ data.dept_type_name }}
       </template>
     </Column>
 
@@ -140,28 +140,28 @@
 </template>
 
 <script>
-import EquipmentStateService from '../../services/EquipmentStateService';
+import DeptTypeService from '../../services/DeptTypeService'
 
 export default {
-  name: 'EquipmentState',
+  name: 'DeptType',
   data() {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
       submitted: false,
-      equipmentStateList: [],
-      selectedState: null,
-      equipmentStateData: {
-        equipment_state_name: null
+      deptTypeList: [],
+      selectedDeptType: null,
+      deptTypeData: {
+        dept_type_name: null
       },
       createData: [],
     };
   },
   methods: {
-    getEquipmentStateList: async function () {
-      const data = await EquipmentStateService.getList();
-      this.equipmentStateList = data;
-      console.log(this.equipmentStateList);
+    getDeptTypeList: async function () {
+      const data = await DeptTypeService.getList();
+      this.deptTypeList = data;
+      console.log(this.deptTypeList);
     },
     refreshData() {
       this.$toast.add({
@@ -171,68 +171,68 @@ export default {
 				group: 'br',
         life: 3000,
       });
-      this.getEquipmentStateList();
+      this.getDeptTypeList();
     },
     showAddData() {
       this.visibleAddDialog = true;
     },
     showEditData() {
-      if (this.selectedState === null) {
+      if (this.selectedDeptType === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите состояние для редактирования',
+          detail: 'Выберите тип компании для редактирования',
 					group: 'br',
           life: 3000,
         });
       } else {
         this.visibleEditDialog = true;
-        this.equipmentStateData.equipment_state_name =
-          this.selectedState.equipment_state_name;
+        this.deptTypeData.dept_type_name =
+          this.selectedDeptType.dept_type_name;
       }
     },
     saveData() {
       this.submitted = true;
       if (
-        this.equipmentStateData.equipment_state_name !== null) {
-        this.createEquipmentState();
-        this.getEquipmentStateList();
+        this.deptTypeData.dept_type_name !== null) {
+        this.createDeptType();
+        this.getDeptTypeList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
-          detail: 'Состояние добавлено',
+          detail: 'Тип компании добавлено',
 					group: 'br',
           life: 3000,
         });
-        this.equipmentStateData = {
-          equipment_state_name: null
+        this.deptTypeData = {
+          dept_type_name: null
         };
       }
     },
-    createEquipmentState: async function () {
+    createDeptType: async function () {
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        dept_type_name:
+          this.deptTypeData.dept_type_name,
       };
-      const data = await EquipmentStateService.create(requestData);
+      const data = await DeptTypeService.create(requestData);
       this.createData = data;
       console.log(this.createData);
     },
     updateData() {
       this.submitted = true;
-      console.log(this.equipmentStateData);
+      console.log(this.deptTypeData);
       if (
-        this.equipmentStateData.equipment_state_name !== '') {
+        this.deptTypeData.dept_type_name !== '') {
         this.$confirm.require({
           message: 'Вы точно хотите изменить выбранную запись?',
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.updateEquipmentState();
-            this.getEquipmentStateList();
-            this.equipmentStateData = {
-              equipment_state_name: null
+            this.updateDeptType();
+            this.getDeptTypeList();
+            this.deptTypeData = {
+              dept_type_name: null
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -255,22 +255,22 @@ export default {
         });
       }
     },
-    updateEquipmentState: async function () {
-      const equipmentStateId = this.selectedState.equipment_state_id;
+    updateDeptType: async function () {
+      const deptTypeId = this.selectedDeptType.dept_type_id;
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        dept_type_name:
+          this.deptTypeData.dept_type_name,
       };
-      await EquipmentStateService.update(equipmentStateId, requestData);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+      await DeptTypeService.update(deptTypeId, requestData);
+      this.getDeptTypeList();
+      this.selectedDeptType = null;
     },
     deleteData() {
-      if (this.selectedState === null) {
+      if (this.selectedDeptType === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите состояние для удаления',
+          detail: 'Выберите тип компании для удаления',
 					group: 'br',
           life: 3000,
         });
@@ -281,8 +281,8 @@ export default {
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.deleteEquipmentState();
-            this.getEquipmentStateList();
+            this.deleteDeptType();
+            this.getDeptTypeList();
             this.$toast.add({
               severity: 'success',
               summary: 'Выполнено',
@@ -303,15 +303,15 @@ export default {
         });
       }
     },
-    deleteEquipmentState: async function () {
-      const selectedId = this.selectedState.equipment_state_id;
-      await EquipmentStateService.delete(selectedId);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+    deleteDeptType: async function () {
+      const selectedId = this.selectedDeptType.dept_type_id;
+      await DeptTypeService.delete(selectedId);
+      this.getDeptTypeList();
+      this.selectedDeptType = null;
     },
   },
   mounted() {
-    this.getEquipmentStateList();
+    this.getDeptTypeList();
   },
 };
 </script>

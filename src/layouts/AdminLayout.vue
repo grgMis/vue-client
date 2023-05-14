@@ -1,71 +1,85 @@
 <template>
   <div>
-		<Menubar>
-			<template #start>
-				<Button icon="pi pi-bars"
-								style="color: gray"
-								outlined
-								@click="visible = true"/>
-			</template>
-		</Menubar>
-		<div class="card flex justify-content-center">
-			<Sidebar v-model:visible="visible"
-							 class="w-full md:w-15rem lg:w-15rem">
-				<div class="card flex justify-content-center">
-					<Menu :model="items">
-						<template #start>
-							<div>
-								<span class="w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 font-bold">Оборудование</span>
-							</div>
-						</template>
-					</Menu>
-				</div>
-			</Sidebar>
-		</div>
-		<router-view></router-view>
-	</div>	
+    <Menubar>
+      <template #start>
+        <Button
+          icon="pi pi-bars"
+          style="color: gray"
+          outlined
+          @click="visible = true"
+        />
+      </template>
+    </Menubar>
+    <div class="card flex justify-content-center">
+      <Sidebar v-model:visible="visible" class="w-full md:w-15rem lg:w-15rem">
+        <div class="card flex justify-content-center">
+          <Menu :model="items" />
+        </div>
+      </Sidebar>
+    </div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import router from '../router'
 
 export default {
-	data() {
-		return {
-			visible: false,
-			items: [
-				{
-					label: 'Список',
-					command: () => {
-						router.push('/admin/equipment');
-					}
-				},
-				{
-					label: 'Модели',
-					command: () => {
-						router.push('/admin/equipment-model');
-					}
-				},
-				{
-					label: 'Классы',
-					command: () => {
-						router.push('/admin/equipment-class');
-					}
-				},
-					{
-					label: 'Категории',
-					command: () => {
-						router.push('/admin/equipment-category');
-					}
-				},
-					{
-					label: 'Состояния',
-					command: () => {
-						router.push('/admin/equipment-state');
-					}
-				}
-			]
-		}
-	}
-}
+  data() {
+    return {
+      visible: false,
+      items: [
+        {
+          label: 'Оборудование',
+          items: [
+            {
+              label: 'Список',
+							to: '/admin/equipment'
+            },
+            {
+              label: 'Модели',
+              to: '/admin/equipment-model'
+            },
+            {
+              label: 'Классы',
+              to: '/admin/equipment-class'
+            },
+            {
+              label: 'Категории',
+							to: '/admin/equipment-category'
+            },
+            {
+              label: 'Состояния',
+              to: '/admin/equipment-state'
+            },
+          ],
+        },
+        {
+          label: 'Объекты',
+          items: [
+            {
+              label: 'Список',
+              to: '/admin/well'
+            },
+            {
+              label: "Компании",
+              to: '/admin/dept'
+            },
+            {
+              label: 'Типы компаний',
+              to: '/admin/dept-type'
+            },
+            {
+              label: 'Месторождения',
+              to: '/admin/field'
+            },
+            {
+              label: 'Состояния',
+              to: '/admin/well-state'
+            },
+          ],
+        },
+      ],
+    };
+  },
+};
 </script>

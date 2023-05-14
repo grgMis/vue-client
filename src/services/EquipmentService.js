@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const EquipmentService = {
 	async getList() {
-		const response = await http.get("/equipment");
+		const response = await http.get('/equipment');
 		return response.data;
 	},
 

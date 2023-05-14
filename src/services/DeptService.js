@@ -2,27 +2,27 @@ import http from '../http-common';
 
 const DeptService = {
 	async getList() {
-		const response = await http.get("/dept");
+		const response = await http.get('/dept');
 		return response.data;
 	},
 
-	async get(id) {
-		const response = await http.get(`/dept/${id}`);
+	async get(deptId) {
+		const response = await http.get(`/dept/${deptId}`);
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post("/dept", data);
+	async create(deptTypeId, fieldId, requestData) {
+		const response = await http.post(`/dept?dept_type_id=${deptTypeId}&field_id=${fieldId}`, requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/dept/${id}`, data);
+	async update(deptId, deptTypeId, fieldId, requestData) {
+		const response = await http.put(`/dept/${deptId}?dept_type_id=${deptTypeId}&field_id=${fieldId}`, requestData);
 		return response.data;
 	},
 
-	async delete(id) {
-		const response = await http.delete(`/dept/${id}`)
+	async delete(deptId) {
+		const response = await http.delete(`/dept/${deptId}`)
 		return response.data;
 	},
 };

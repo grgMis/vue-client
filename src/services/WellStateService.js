@@ -2,27 +2,27 @@ import http from '../http-common';
 
 const WellStateService = {
 	async getList() {
-		const response = await http.get("/well-state");
+		const response = await http.get('/well-state');
 		return response.data;
 	},
 
-	async get(id) {
-		const response = await http.get(`/well-state/${id}`);
+	async get(wellStateId) {
+		const response = await http.get(`/well-state/${wellStateId}`);
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post("/well-state", data);
+	async create(requestData) {
+		const response = await http.post('/well-state', requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/well-state/${id}`, data);
+	async update(wellStateId, requestData) {
+		const response = await http.put(`/well-state/${wellStateId}`, requestData);
 		return response.data;
 	},
 
-	async delete(id) {
-		const response = await http.delete(`/well-state/${id}`)
+	async delete(wellStateId) {
+		const response = await http.delete(`/well-state/${wellStateId}`)
 		return response.data;
 	},
 };

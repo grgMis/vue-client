@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const ACtionService = {
 	async getList() {
-		const response = await http.get("/action");
+		const response = await http.get('/action');
 		return response.data;
 	},
 
@@ -12,7 +12,7 @@ const ACtionService = {
 	},
 
 	async create(data) {
-		const response = await http.post("/action", data);
+		const response = await http.post('/action', data);
 		return response.data;
 	},
 

@@ -42,6 +42,37 @@ const routes = [
 		meta: {layout: 'admin'},
     component: () => import('../components/Equipment/EquipmentStateData.vue')
   },
+	{
+    path: '/admin/field',
+    name: 'field',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/FieldData.vue')
+  },
+	{
+    path: '/admin/dept-type',
+    name: 'dept-type',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/DeptTypeData.vue')
+  },
+	{
+    path: '/admin/well-state',
+    name: 'well-state',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/WellStateData.vue')
+  },
+	{
+    path: '/admin/dept',
+    name: 'dept',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/DeptData.vue')
+  },
+	{
+    path: '/admin/well',
+    name: 'well',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/Well.vue')
+  },
+	
 ]
 
 const router = createRouter({

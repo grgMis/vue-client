@@ -190,10 +190,10 @@
 </template>
 
 <script>
-import EquipmentCategoryService from "../../services/EquipmentCategoryService";
+import EquipmentCategoryService from '../../services/EquipmentCategoryService';
 
 export default {
-  name: "EquipmentCategory",
+  name: 'EquipmentCategory',
   data() {
     return {
       visibleAddDialog: false,
@@ -216,9 +216,9 @@ export default {
     },
     refreshData() {
       this.$toast.add({
-        severity: "success",
-        summary: "Внимание",
-        detail: "Данные перезагружены",
+        severity: 'success',
+        summary: 'Внимание',
+        detail: 'Данные перезагружены',
 				group: 'br',
         life: 3000,
       });
@@ -230,9 +230,9 @@ export default {
     showEditData() {
       if (this.selectedCategory === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите категорию для редактирования",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите категорию для редактирования',
 					group: 'br',
           life: 3000,
         });
@@ -253,9 +253,9 @@ export default {
         this.createEquipmentCategory();
         this.getEquipmentCategoryList();
         this.$toast.add({
-          severity: "success",
-          summary: "Успешно",
-          detail: "Категория добавлена",
+          severity: 'success',
+          summary: 'Успешно',
+          detail: 'Категория добавлена',
 					group: 'br',
           life: 3000,
         });
@@ -280,14 +280,14 @@ export default {
       this.submitted = true;
       console.log(this.equipmentCategoryData);
       if (
-        this.equipmentCategoryData.equipment_category_name !== "" &&
-        this.equipmentCategoryData.equipment_category_sysname !== ""
+        this.equipmentCategoryData.equipment_category_name !== '' &&
+        this.equipmentCategoryData.equipment_category_sysname !== ''
       ) {
         this.$confirm.require({
-          message: "Вы точно хотите изменить выбранную запись?",
-          header: "Подтверждение изменения",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите изменить выбранную запись?',
+          header: 'Подтверждение изменения',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.updateEquipmentCategory();
             this.getEquipmentCategoryList();
@@ -297,18 +297,18 @@ export default {
             };
             this.visibleEditDialog = false;
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись изменена",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись изменена',
 							group: 'br',
               life: 3000,
             });
           },
           reject: () => {
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена изменения",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена изменения',
 							group: 'br',
               life: 3000,
             });
@@ -331,34 +331,34 @@ export default {
     deleteData() {
       if (this.selectedCategory === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите категорию для удаления",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите категорию для удаления',
 					group: 'br',
           life: 3000,
         });
       } else {
         this.$confirm.require({
-          message: "Вы точно хотите удалить выбранную запись?",
-          header: "Подтверждение удаления",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите удалить выбранную запись?',
+          header: 'Подтверждение удаления',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.deleteEquipmentCategory();
             this.getEquipmentCategoryList();
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись удалена",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись удалена',
               life: 3000,
             });
           },
           reject: () => {
             this.selectedCategory = null;
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена удаления",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена удаления',
 							group: 'br',
               life: 3000,
             });

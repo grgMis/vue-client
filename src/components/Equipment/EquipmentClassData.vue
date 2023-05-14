@@ -278,12 +278,12 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-import EquipmentCategoryService from "../../services/EquipmentCategoryService";
-import EquipmentClassService from "../../services/EquipmentClassService";
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+import EquipmentCategoryService from '../../services/EquipmentCategoryService';
+import EquipmentClassService from '../../services/EquipmentClassService';
 
 export default {
-  name: "EquipmentClass",
+  name: 'EquipmentClass',
   data() {
     return {
       visibleAddDialog: false,
@@ -298,7 +298,7 @@ export default {
         equipment_class_sysname: null,
       },
       filters: {
-        "equipmentCategory.equipment_category_name": {
+        'equipmentCategory.equipment_category_name': {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -319,9 +319,9 @@ export default {
     },
     refreshData() {
       this.$toast.add({
-        severity: "success",
-        summary: "Внимание",
-        detail: "Данные перезагружены",
+        severity: 'success',
+        summary: 'Внимание',
+        detail: 'Данные перезагружены',
 				group: 'br',
         life: 3000,
       });
@@ -333,9 +333,9 @@ export default {
     showEditData() {
       if (this.selectedClass === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите класс для редактирования",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите класс для редактирования',
 					group: 'br',
           life: 3000,
         });
@@ -359,9 +359,9 @@ export default {
         this.createEquipmentClass();
         this.getEquipmentClassList();
         this.$toast.add({
-          severity: "success",
-          summary: "Успешно",
-          detail: "Класс добавлен",
+          severity: 'success',
+          summary: 'Успешно',
+          detail: 'Класс добавлен',
 					group: 'br',
           life: 3000,
         });
@@ -391,14 +391,14 @@ export default {
       this.submitted = true;
       console.log(this.equipmentClassData);
       if (
-        this.equipmentClassData.equipment_class_name !== "" &&
-        this.equipmentClassData.equipment_class_sysname !== ""
+        this.equipmentClassData.equipment_class_name !== '' &&
+        this.equipmentClassData.equipment_class_sysname !== ''
       ) {
         this.$confirm.require({
-          message: "Вы точно хотите изменить выбранную запись?",
-          header: "Подтверждение изменения",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите изменить выбранную запись?',
+          header: 'Подтверждение изменения',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.updateEquipmentClass();
             this.getEquipmentClassList();
@@ -409,18 +409,18 @@ export default {
             };
             this.visibleEditDialog = false;
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись изменена",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись изменена',
 							group: 'br',
               life: 3000,
             });
           },
           reject: () => {
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена изменения",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена изменения',
 							group: 'br',
               life: 3000,
             });
@@ -448,34 +448,34 @@ export default {
     deleteData() {
       if (this.selectedClass === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите класс для удаления",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите класс для удаления',
 					group: 'br',
           life: 3000,
         });
       } else {
         this.$confirm.require({
-          message: "Вы точно хотите удалить выбранную запись?",
-          header: "Подтверждение удаления",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите удалить выбранную запись?',
+          header: 'Подтверждение удаления',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.deleteEquipmentClass();
             this.getEquipmentClassList();
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись удалена",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись удалена',
               life: 3000,
             });
           },
           reject: () => {
             this.selectedCategory = null;
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена удаления",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена удаления',
 							group: 'br',
               life: 3000,
             });

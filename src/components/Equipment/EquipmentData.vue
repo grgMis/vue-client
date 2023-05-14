@@ -503,15 +503,15 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-import EquipmentCategoryService from "../../services/EquipmentCategoryService";
-import EquipmentClassService from "../../services/EquipmentClassService";
-import EquipmentService from "../../services/EquipmentService";
-import EquipmentModelService from "../../services/EquipmentModelService";
-import EquipmentStateService from "../../services/EquipmentStateService";
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+import EquipmentCategoryService from '../../services/EquipmentCategoryService';
+import EquipmentClassService from '../../services/EquipmentClassService';
+import EquipmentService from '../../services/EquipmentService';
+import EquipmentModelService from '../../services/EquipmentModelService';
+import EquipmentStateService from '../../services/EquipmentStateService';
 
 export default {
-  name: "Equipment",
+  name: 'Equipment',
   data() {
     return {
       visibleAddDialog: false,
@@ -534,17 +534,17 @@ export default {
       equipmentStateList: [],
       selectedEquipment: null,
       filters: {
-        "equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
+        'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name':
           { value: null, matchMode: FilterMatchMode.EQUALS },
-        "equipmentModel.equipmentClass.equipment_class_name": {
+        'equipmentModel.equipmentClass.equipment_class_name': {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        "equipmentModel.equipment_model_name": {
+        'equipmentModel.equipment_model_name': {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        "equipmentState.equipment_state_name": {
+        'equipmentState.equipment_state_name': {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -649,10 +649,10 @@ export default {
           this.createEquipment();
           this.getEquipmentList();
           this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            group: "br",
-            detail: "Оборудование добавлено",
+            severity: 'success',
+            summary: 'Successful',
+            group: 'br',
+            detail: 'Оборудование добавлено',
             life: 3000,
           });
           (this.modelList = []),
@@ -669,10 +669,10 @@ export default {
     },
     refreshData() {
       this.$toast.add({
-        severity: "success",
-        summary: "Внимание",
-        detail: "Данные перезагружены",
-        group: "br",
+        severity: 'success',
+        summary: 'Внимание',
+        detail: 'Данные перезагружены',
+        group: 'br',
         life: 3000,
       });
       this.getEquipmentList();
@@ -683,10 +683,10 @@ export default {
     showEditData() {
       if (this.selectedEquipment === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите оборудование для редактирования",
-          group: "br",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите оборудование для редактирования',
+          group: 'br',
           life: 3000,
         });
       } else {
@@ -708,15 +708,15 @@ export default {
       this.submitted = true;
       console.log(this.equipmentData);
       if (
-        this.equipmentData.factory_number !== "" &&
-        this.equipmentData.inventory_number !== "" &&
+        this.equipmentData.factory_number !== '' &&
+        this.equipmentData.inventory_number !== '' &&
 				this.equipmentData.equipmentModel !== null
       ) {
         this.$confirm.require({
-          message: "Вы точно хотите изменить выбранную запись?",
-          header: "Подтверждение изменения",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите изменить выбранную запись?',
+          header: 'Подтверждение изменения',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.updateEquipment();
             this.getEquipmentList();
@@ -729,19 +729,19 @@ export default {
             };
             this.visibleEditDialog = false;
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись изменена",
-              group: "br",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись изменена',
+              group: 'br',
               life: 3000,
             });
           },
           reject: () => {
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена изменения",
-              group: "br",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена изменения',
+              group: 'br',
               life: 3000,
             });
           },
@@ -770,35 +770,35 @@ export default {
     deleteData() {
       if (this.selectedEquipment === null) {
         this.$toast.add({
-          severity: "info",
-          summary: "Внимание",
-          detail: "Выберите оборудование для удаления",
-          group: "br",
+          severity: 'info',
+          summary: 'Внимание',
+          detail: 'Выберите оборудование для удаления',
+          group: 'br',
           life: 3000,
         });
       } else {
         this.$confirm.require({
-          message: "Вы точно хотите удалить выбранную запись?",
-          header: "Подтверждение удаления",
-          icon: "pi pi-info-circle",
-          acceptClass: "p-button-danger",
+          message: 'Вы точно хотите удалить выбранную запись?',
+          header: 'Подтверждение удаления',
+          icon: 'pi pi-info-circle',
+          acceptClass: 'p-button-danger',
           accept: () => {
             this.deleteEquipment();
             this.getEquipmentList();
             this.$toast.add({
-              severity: "success",
-              summary: "Выполнено",
-              detail: "Запись удалена",
+              severity: 'success',
+              summary: 'Выполнено',
+              detail: 'Запись удалена',
               life: 3000,
             });
           },
           reject: () => {
             this.selectedEquipment = null;
             this.$toast.add({
-              severity: "error",
-              summary: "Отмена",
-              detail: "Отмена удаления",
-              group: "br",
+              severity: 'error',
+              summary: 'Отмена',
+              detail: 'Отмена удаления',
+              group: 'br',
               life: 3000,
             });
           },

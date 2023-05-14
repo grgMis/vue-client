@@ -5,24 +5,24 @@
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
-    header="Добавление состояния"
+    header="Добавление состояния компании"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="well_state_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        v-model.trim="equipmentStateData.equipment_state_name"
+        id="well_state_name"
+        v-model.trim="wellStateData.well_state_name"
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !wellStateData.well_state_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !wellStateData.well_state_name"
       >
         Укажите наименование.
       </small>
@@ -36,27 +36,27 @@
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
-    header="Редактирование состояния"
+    header="Редактирование состояния компании"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="well_state_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        :value="equipmentStateData.equipment_state_name"
+        id="dept_type_name"
+        :value="wellStateData.well_state_name"
         @input="
-          equipmentStateData.equipment_state_name = $event.target.value
+          wellStateData.well_state_name = $event.target.value
         "
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !wellStateData.well_state_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !wellStateData.well_state_name"
       >
         Укажите наименование.
       </small>
@@ -69,7 +69,7 @@
 
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Состояния</span>
+      <span class="font-bold text-3xl">Состояние компании</span>
     </template>
     <template #end>
       <Button
@@ -108,31 +108,31 @@
 
   <DataTable
     class="pt-1 p-datatable-sm"
-    v-model:selection="selectedState"
-    :value="equipmentStateList"
+    v-model:selection="selectedWellState"
+    :value="wellStateList"
     selectionMode="single"
-    dataKey="equipment_state_id"
+    dataKey="well_state_id"
     showGridlines
   >
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
-      field="equipment_state_id"
+      field="well_state_id"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_id }}
+        {{ data.well_state_id }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Наименование"
-      field="equipment_state_name"
+      field="well_state_name"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_name }}
+        {{ data.well_state_name }}
       </template>
     </Column>
 
@@ -140,28 +140,28 @@
 </template>
 
 <script>
-import EquipmentStateService from '../../services/EquipmentStateService';
+import WellStateService from '../../services/WellStateService'
 
 export default {
-  name: 'EquipmentState',
+  name: 'WellState',
   data() {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
       submitted: false,
-      equipmentStateList: [],
-      selectedState: null,
-      equipmentStateData: {
-        equipment_state_name: null
+      wellStateList: [],
+      selectedWellState: null,
+      wellStateData: {
+        well_state_name: null
       },
       createData: [],
     };
   },
   methods: {
-    getEquipmentStateList: async function () {
-      const data = await EquipmentStateService.getList();
-      this.equipmentStateList = data;
-      console.log(this.equipmentStateList);
+    getWellStateList: async function () {
+      const data = await WellStateService.getList();
+      this.wellStateList = data;
+      console.log(this.wellStateList);
     },
     refreshData() {
       this.$toast.add({
@@ -171,13 +171,13 @@ export default {
 				group: 'br',
         life: 3000,
       });
-      this.getEquipmentStateList();
+      this.getWellStateList();
     },
     showAddData() {
       this.visibleAddDialog = true;
     },
     showEditData() {
-      if (this.selectedState === null) {
+      if (this.selectedWellState === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
@@ -187,16 +187,16 @@ export default {
         });
       } else {
         this.visibleEditDialog = true;
-        this.equipmentStateData.equipment_state_name =
-          this.selectedState.equipment_state_name;
+        this.wellStateData.well_state_name =
+          this.selectedWellState.well_state_name;
       }
     },
     saveData() {
       this.submitted = true;
       if (
-        this.equipmentStateData.equipment_state_name !== null) {
-        this.createEquipmentState();
-        this.getEquipmentStateList();
+        this.wellStateData.well_state_name !== null) {
+        this.createWellState();
+        this.getWellStateList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
@@ -204,35 +204,35 @@ export default {
 					group: 'br',
           life: 3000,
         });
-        this.equipmentStateData = {
-          equipment_state_name: null
+        this.wellStateData = {
+          well_state_name: null
         };
       }
     },
-    createEquipmentState: async function () {
+    createWellState: async function () {
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        well_state_name:
+          this.wellStateData.well_state_name,
       };
-      const data = await EquipmentStateService.create(requestData);
+      const data = await WellStateService.create(requestData);
       this.createData = data;
       console.log(this.createData);
     },
     updateData() {
       this.submitted = true;
-      console.log(this.equipmentStateData);
+      console.log(this.wellStateData);
       if (
-        this.equipmentStateData.equipment_state_name !== '') {
+        this.wellStateData.well_state_name !== '') {
         this.$confirm.require({
           message: 'Вы точно хотите изменить выбранную запись?',
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.updateEquipmentState();
-            this.getEquipmentStateList();
-            this.equipmentStateData = {
-              equipment_state_name: null
+            this.updateWellState();
+            this.getWellStateList();
+            this.wellStateData = {
+              well_state_name: null
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -255,18 +255,18 @@ export default {
         });
       }
     },
-    updateEquipmentState: async function () {
-      const equipmentStateId = this.selectedState.equipment_state_id;
+    updateWellState: async function () {
+      const wellStateId = this.selectedWellState.well_state_id;
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        well_state_name:
+          this.wellStateData.well_state_name,
       };
-      await EquipmentStateService.update(equipmentStateId, requestData);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+      await WellStateService.update(wellStateId, requestData);
+      this.getWellStateList();
+      this.selectedWellState = null;
     },
     deleteData() {
-      if (this.selectedState === null) {
+      if (this.selectedWellState === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
@@ -281,8 +281,8 @@ export default {
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.deleteEquipmentState();
-            this.getEquipmentStateList();
+            this.deleteWellState();
+            this.getWellStateList();
             this.$toast.add({
               severity: 'success',
               summary: 'Выполнено',
@@ -291,7 +291,7 @@ export default {
             });
           },
           reject: () => {
-            this.selectedState = null;
+            this.selectedWellState = null;
             this.$toast.add({
               severity: 'error',
               summary: 'Отмена',
@@ -303,15 +303,15 @@ export default {
         });
       }
     },
-    deleteEquipmentState: async function () {
-      const selectedId = this.selectedState.equipment_state_id;
-      await EquipmentStateService.delete(selectedId);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+    deleteWellState: async function () {
+      const selectedId = this.selectedWellState.well_state_id;
+      await WellStateService.delete(selectedId);
+      this.getWellStateList();
+      this.selectedWellState = null;
     },
   },
   mounted() {
-    this.getEquipmentStateList();
+    this.getWellStateList();
   },
 };
 </script>

@@ -5,24 +5,24 @@
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
-    header="Добавление состояния"
+    header="Добавление месторождения"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="field_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        v-model.trim="equipmentStateData.equipment_state_name"
+        id="field_name"
+        v-model.trim="fieldData.field_name"
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !fieldData.field_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !fieldData.field_name"
       >
         Укажите наименование.
       </small>
@@ -36,27 +36,27 @@
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
-    header="Редактирование состояния"
+    header="Редактирование месторождения"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_state_name">Наименование</label>
+      <label for="field_name">Наименование</label>
       <InputText
-        id="equipment_state_name"
-        :value="equipmentStateData.equipment_state_name"
+        id="field_name"
+        :value="fieldData.field_name"
         @input="
-          equipmentStateData.equipment_state_name = $event.target.value
+          fieldData.field_name = $event.target.value
         "
         required="true"
         :class="{
           'p-invalid':
-            submitted && !equipmentStateData.equipment_state_name,
+            submitted && !fieldData.field_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentStateData.equipment_state_name"
+        v-if="submitted && !fieldData.field_name"
       >
         Укажите наименование.
       </small>
@@ -69,7 +69,7 @@
 
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Состояния</span>
+      <span class="font-bold text-3xl">Месторождение</span>
     </template>
     <template #end>
       <Button
@@ -108,31 +108,31 @@
 
   <DataTable
     class="pt-1 p-datatable-sm"
-    v-model:selection="selectedState"
-    :value="equipmentStateList"
+    v-model:selection="selectedField"
+    :value="fieldList"
     selectionMode="single"
-    dataKey="equipment_state_id"
+    dataKey="filed_id"
     showGridlines
   >
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
-      field="equipment_state_id"
+      field="field_id"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_id }}
+        {{ data.field_id }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Наименование"
-      field="equipment_state_name"
+      field="field_name"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_state_name }}
+        {{ data.field_name }}
       </template>
     </Column>
 
@@ -140,28 +140,28 @@
 </template>
 
 <script>
-import EquipmentStateService from '../../services/EquipmentStateService';
+import FieldService from '../../services/FieldService'
 
 export default {
-  name: 'EquipmentState',
+  name: 'Field',
   data() {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
       submitted: false,
-      equipmentStateList: [],
-      selectedState: null,
-      equipmentStateData: {
-        equipment_state_name: null
+      fieldList: [],
+      selectedField: null,
+      fieldData: {
+        field_name: null
       },
       createData: [],
     };
   },
   methods: {
-    getEquipmentStateList: async function () {
-      const data = await EquipmentStateService.getList();
-      this.equipmentStateList = data;
-      console.log(this.equipmentStateList);
+    getFieldList: async function () {
+      const data = await FieldService.getList();
+      this.fieldList = data;
+      console.log(this.fieldList);
     },
     refreshData() {
       this.$toast.add({
@@ -171,68 +171,68 @@ export default {
 				group: 'br',
         life: 3000,
       });
-      this.getEquipmentStateList();
+      this.getFieldList();
     },
     showAddData() {
       this.visibleAddDialog = true;
     },
     showEditData() {
-      if (this.selectedState === null) {
+      if (this.selectedField === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите состояние для редактирования',
+          detail: 'Выберите месторождение для редактирования',
 					group: 'br',
           life: 3000,
         });
       } else {
         this.visibleEditDialog = true;
-        this.equipmentStateData.equipment_state_name =
-          this.selectedState.equipment_state_name;
+        this.fieldData.field_name =
+          this.selectedField.field_name;
       }
     },
     saveData() {
       this.submitted = true;
       if (
-        this.equipmentStateData.equipment_state_name !== null) {
-        this.createEquipmentState();
-        this.getEquipmentStateList();
+        this.fieldData.field_name !== null) {
+        this.createField();
+        this.getFieldList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
-          detail: 'Состояние добавлено',
+          detail: 'Месторождение добавлено',
 					group: 'br',
           life: 3000,
         });
-        this.equipmentStateData = {
-          equipment_state_name: null
+        this.fieldData = {
+          field_name: null
         };
       }
     },
-    createEquipmentState: async function () {
+    createField: async function () {
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        field_name:
+          this.fieldData.field_name,
       };
-      const data = await EquipmentStateService.create(requestData);
+      const data = await FieldService.create(requestData);
       this.createData = data;
       console.log(this.createData);
     },
     updateData() {
       this.submitted = true;
-      console.log(this.equipmentStateData);
+      console.log(this.fieldData);
       if (
-        this.equipmentStateData.equipment_state_name !== '') {
+        this.fieldData.field_name !== '') {
         this.$confirm.require({
           message: 'Вы точно хотите изменить выбранную запись?',
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.updateEquipmentState();
-            this.getEquipmentStateList();
-            this.equipmentStateData = {
-              equipment_state_name: null
+            this.updateField();
+            this.getFieldList();
+            this.fieldData = {
+              field_name: null
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -255,22 +255,22 @@ export default {
         });
       }
     },
-    updateEquipmentState: async function () {
-      const equipmentStateId = this.selectedState.equipment_state_id;
+    updateField: async function () {
+      const fieldId = this.selectedField.field_id;
       const requestData = {
-        equipment_state_name:
-          this.equipmentStateData.equipment_state_name,
+        field_name:
+          this.fieldData.field_name,
       };
-      await EquipmentStateService.update(equipmentStateId, requestData);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+      await FieldService.update(fieldId, requestData);
+      this.getFieldList();
+      this.selectedField = null;
     },
     deleteData() {
-      if (this.selectedState === null) {
+      if (this.selectedField === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите состояние для удаления',
+          detail: 'Выберите месторождение для удаления',
 					group: 'br',
           life: 3000,
         });
@@ -281,8 +281,8 @@ export default {
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.deleteEquipmentState();
-            this.getEquipmentStateList();
+            this.deleteField();
+            this.getFieldList();
             this.$toast.add({
               severity: 'success',
               summary: 'Выполнено',
@@ -291,7 +291,7 @@ export default {
             });
           },
           reject: () => {
-            this.selectedState = null;
+            this.selectedField = null;
             this.$toast.add({
               severity: 'error',
               summary: 'Отмена',
@@ -303,15 +303,15 @@ export default {
         });
       }
     },
-    deleteEquipmentState: async function () {
-      const selectedId = this.selectedState.equipment_state_id;
-      await EquipmentStateService.delete(selectedId);
-      this.getEquipmentStateList();
-      this.selectedState = null;
+    deleteField: async function () {
+      const selectedId = this.selectedField.field_id;
+      await FieldService.delete(selectedId);
+      this.getFieldList();
+      this.selectedField = null;
     },
   },
   mounted() {
-    this.getEquipmentStateList();
+    this.getFieldList();
   },
 };
 </script>

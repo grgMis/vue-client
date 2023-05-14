@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const EquipmentCategoryService = {
 	async getList() {
-		const response = await http.get("/equipment-category");
+		const response = await http.get('/equipment-category');
 		return response.data;
 	},
 
@@ -12,7 +12,7 @@ const EquipmentCategoryService = {
 	},
 
 	async create(requestData) {
-		const response = await http.post("/equipment-category", requestData);
+		const response = await http.post('/equipment-category', requestData);
 		return response.data;
 	},
 

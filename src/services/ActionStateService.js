@@ -2,7 +2,7 @@ import http from '../http-common';
 
 const ActionStateService = {
 	async getList() {
-		const response = await http.get("/action-state");
+		const response = await http.get('/action-state');
 		return response.data;
 	},
 
@@ -12,7 +12,7 @@ const ActionStateService = {
 	},
 
 	async create(data) {
-		const response = await http.post("/action-state", data);
+		const response = await http.post('/action-state', data);
 		return response.data;
 	},
 

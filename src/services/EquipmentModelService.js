@@ -7,7 +7,7 @@ const EquipmentModelService = {
 	},
 
 	async getList() {
-		const response = await http.get("/equipment-model");
+		const response = await http.get('/equipment-model');
 		return response.data;
 	},
 
