@@ -16,13 +16,13 @@ const EquipmentModelService = {
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post("/equipment-model", data);
+	async create(equipmentClassId, requestData) {
+		const response = await http.post(`/equipment-model?equipment_class_id=${equipmentClassId}`, requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/equipment-model/${id}`, data);
+	async update(equipmentModelId, equipmentClassId, requestData) {
+		const response = await http.put(`/equipment-model/${equipmentModelId}?equipment_class_id=${equipmentClassId}`, requestData);
 		return response.data;
 	},
 

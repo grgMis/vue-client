@@ -16,8 +16,8 @@ const EquipmentService = {
 		return response.data;
 	},
 
-	async update(id, requestData) {
-		const response = await http.put(`/equipment/${id}`, requestData);
+	async update(equipmentId, equipmentModelId, equipmentStateId, requestData) {
+		const response = await http.put(`/equipment/${equipmentId}?equipment_model_id=${equipmentModelId}&equipment_state_id=${equipmentStateId}`, requestData);
 		return response.data;
 	},
 

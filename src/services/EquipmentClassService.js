@@ -11,13 +11,13 @@ const EquipmentClassService = {
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post("/equipment-class", data);
+	async create(equipmentCategoryId, requestData) {
+		const response = await http.post(`/equipment-class?equipment_category_id=${equipmentCategoryId}`, requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/equipment-class/${id}`, data);
+	async update(equipmentClassId, equipmentCategoryId, requestData) {
+		const response = await http.put(`/equipment-class/${equipmentClassId}?equipment_category_id=${equipmentCategoryId}`, requestData);
 		return response.data;
 	},
 

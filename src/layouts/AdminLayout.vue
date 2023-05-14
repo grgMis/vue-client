@@ -15,7 +15,7 @@
 					<Menu :model="items">
 						<template #start>
 							<div>
-								<span class="w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 font-bold">Список</span>
+								<span class="w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 font-bold">Оборудование</span>
 							</div>
 						</template>
 					</Menu>
@@ -35,21 +35,33 @@ export default {
 			visible: false,
 			items: [
 				{
-					label: 'Текущее оборудование',
-					command: () => {
-						router.push('/test');
-					}
-				},
-				{
-					label: 'Оборудование',
+					label: 'Список',
 					command: () => {
 						router.push('/admin/equipment');
 					}
 				},
 				{
-					label: 'Логин',
+					label: 'Модели',
 					command: () => {
-						router.push('/login');
+						router.push('/admin/equipment-model');
+					}
+				},
+				{
+					label: 'Классы',
+					command: () => {
+						router.push('/admin/equipment-class');
+					}
+				},
+					{
+					label: 'Категории',
+					command: () => {
+						router.push('/admin/equipment-category');
+					}
+				},
+					{
+					label: 'Состояния',
+					command: () => {
+						router.push('/admin/equipment-state');
 					}
 				}
 			]

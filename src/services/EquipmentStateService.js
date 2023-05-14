@@ -6,23 +6,23 @@ const EquipmentStateService = {
 		return response.data;
 	},
 
-	async get(id) {
-		const response = await http.get(`/equipment-state/${id}`);
+	async get(equipmentStateId) {
+		const response = await http.get(`/equipment-state/${equipmentStateId}`);
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post("/equipment-state", data);
+	async create(requestData) {
+		const response = await http.post("/equipment-state", requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/equipment-state/${id}`, data);
+	async update(equipmentStateId, requestData) {
+		const response = await http.put(`/equipment-state/${equipmentStateId}`, requestData);
 		return response.data;
 	},
 
-	async delete(id) {
-		const response = await http.delete(`/equipment-state/${id}`)
+	async delete(equipmentStateId) {
+		const response = await http.delete(`/equipment-state/${equipmentStateId}`)
 		return response.data;
 	},
 };
