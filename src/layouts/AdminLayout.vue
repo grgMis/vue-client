@@ -78,6 +78,27 @@ export default {
             },
           ],
         },
+				{
+          label: 'Мероприятия',
+          items: [
+            {
+              label: 'Список',
+              to: '/admin/action'
+            },
+            {
+              label: "Группы",
+              to: '/admin/action-group'
+            },
+            {
+              label: 'Типы',
+              to: '/admin/action-type'
+            },
+            {
+              label: 'Состояния',
+              to: '/admin/action-state'
+            },
+          ],
+        },
       ],
     };
   },

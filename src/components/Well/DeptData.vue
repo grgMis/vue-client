@@ -213,7 +213,11 @@
       </template>
     </Column>
 
-    <Column style="max-width: 10rem" header="Наименование" field="d" sortable>
+    <Column 
+			style="max-width: 10rem" 
+			header="Наименование" 
+			field="dept_name" 
+			sortable>
       <template #body="{ data }">
         {{ data.dept_name }}
       </template>
@@ -222,6 +226,7 @@
     <Column
       style="max-width: 10rem"
       header="Тип компании"
+			field="deptType.dept_type_name"
       filterField="deptType.dept_type_name"
       sortable
       :showFilterMenu="false"
@@ -253,6 +258,7 @@
     <Column
       style="max-width: 10rem"
       header="Месторождение"
+			field="field.field_name"
       filterField="field.field_name"
       sortable
       :showFilterMenu="false"
@@ -284,6 +290,7 @@
     <Column
       style="max-width: 12rem"
       header="Дата добавления"
+			field="date_entry"
       filterField="date_entry"
       dataType="date"
       :showFilterMenu="false"

@@ -72,6 +72,30 @@ const routes = [
 		meta: {layout: 'admin'},
     component: () => import('../components/Well/Well.vue')
   },
+	{
+    path: '/admin/action-group',
+    name: 'action-group',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Action/ActionGroupData.vue')
+  },
+	{
+    path: '/admin/action-state',
+    name: 'action-state',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Action/ActionStateData.vue')
+  },
+	{
+    path: '/admin/action-type',
+    name: 'action-type',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Action/ActionTypeData.vue')
+  },
+	{
+    path: '/admin/action',
+    name: 'action',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Action/ActionData.vue')
+  },
 	
 ]
 

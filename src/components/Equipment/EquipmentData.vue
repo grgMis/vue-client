@@ -91,7 +91,7 @@
     </div>
 
     <div class="field">
-      <label for="equipment_state_name" class="mb-3">Модель</label>
+      <label for="equipment_state_name" class="mb-3">Состояние</label>
       <Dropdown
         id="equipment_state_name"
         v-model="equipmentData.equipmentState"
@@ -311,8 +311,9 @@
     <Column
       style="max-width: 10rem"
       header="Модель"
+			field="equipmentModel.equipment_model_name"
       filterField="equipmentModel.equipment_model_name"
-      sortable
+			sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
@@ -342,6 +343,7 @@
     <Column
       style="max-width: 10rem"
       header="Класс"
+			field="equipmentModel.equipmentClass.equipment_class_name"
       filterField="equipmentModel.equipmentClass.equipment_class_name"
       sortable
       :showFilterMenu="false"
@@ -373,6 +375,7 @@
     <Column
       style="max-width: 10rem"
       header="Категория"
+			field="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
       filterField="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
       sortable
       :showFilterMenu="false"
@@ -407,6 +410,7 @@
     <Column
       style="max-width: 10rem"
       header="Инвентарный номер"
+			field="inventory_number"
       filterField="inventory_number"
       sortable
       :showFilterMenu="false"
@@ -429,6 +433,7 @@
     <Column
       style="max-width: 9rem"
       header="Заводской номер"
+			field="factory_number"
       filterField="factory_number"
       sortable
       :showFilterMenu="false"
@@ -450,6 +455,7 @@
     <Column
       style="max-width: 12rem"
       header="Дата добавления"
+			field="date_entry"
       filterField="date_entry"
       dataType="date"
       :showFilterMenu="false"
@@ -471,13 +477,17 @@
 
     <Column
       style="max-width: 10rem"
+			field="equipmentState.equipment_state_name"
       filterField="equipmentState.equipment_state_name"
       sortable
       header="Состояние"
       :showFilterMenu="false"
     >
-      <template #body="{ data }">
-        {{ data.equipmentState.equipment_state_name }}
+      <template #body="slotProps">
+        <Tag
+          :value="slotProps.data.equipmentState.equipment_state_name"
+          :severity="getSeverity(slotProps.data)"
+        />
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
@@ -503,15 +513,15 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import EquipmentCategoryService from '../../services/EquipmentCategoryService';
-import EquipmentClassService from '../../services/EquipmentClassService';
-import EquipmentService from '../../services/EquipmentService';
-import EquipmentModelService from '../../services/EquipmentModelService';
-import EquipmentStateService from '../../services/EquipmentStateService';
+import { FilterMatchMode, FilterOperator } from "primevue/api";
+import EquipmentCategoryService from "../../services/EquipmentCategoryService";
+import EquipmentClassService from "../../services/EquipmentClassService";
+import EquipmentService from "../../services/EquipmentService";
+import EquipmentModelService from "../../services/EquipmentModelService";
+import EquipmentStateService from "../../services/EquipmentStateService";
 
 export default {
-  name: 'Equipment',
+  name: "Equipment",
   data() {
     return {
       visibleAddDialog: false,
@@ -534,17 +544,17 @@ export default {
       equipmentStateList: [],
       selectedEquipment: null,
       filters: {
-        'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name':
+        "equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
           { value: null, matchMode: FilterMatchMode.EQUALS },
-        'equipmentModel.equipmentClass.equipment_class_name': {
+        "equipmentModel.equipmentClass.equipment_class_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        'equipmentModel.equipment_model_name': {
+        "equipmentModel.equipment_model_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        'equipmentState.equipment_state_name': {
+        "equipmentState.equipment_state_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -599,7 +609,7 @@ export default {
       }
     },
     getEditModelList: async function () {
-			this.equipmentData.equipmentModel = null;
+      this.equipmentData.equipmentModel = null;
       const equipmentClassId =
         this.equipmentData.equipmentClass.equipment_class_id;
       if (equipmentClassId === null) {
@@ -649,30 +659,29 @@ export default {
           this.createEquipment();
           this.getEquipmentList();
           this.$toast.add({
-            severity: 'success',
-            summary: 'Successful',
-            group: 'br',
-            detail: 'Оборудование добавлено',
+            severity: "success",
+            summary: "Successful",
+            group: "br",
+            detail: "Оборудование добавлено",
             life: 3000,
           });
           (this.modelList = []),
-            (this.classList = []),
-            (this.equipmentData = {
-              factory_number: null,
-              inventory_number: null,
-              equipmentModel: null,
-              equipmentClass: null,
-              equipment_state_id: 1,
-            });
+					(this.equipmentData = {
+						factory_number: null,
+						inventory_number: null,
+						equipmentModel: null,
+						equipmentClass: null,
+						equipment_state_id: 1,
+					});
         }
       }
     },
     refreshData() {
       this.$toast.add({
-        severity: 'success',
-        summary: 'Внимание',
-        detail: 'Данные перезагружены',
-        group: 'br',
+        severity: "success",
+        summary: "Внимание",
+        detail: "Данные перезагружены",
+        group: "br",
         life: 3000,
       });
       this.getEquipmentList();
@@ -683,10 +692,10 @@ export default {
     showEditData() {
       if (this.selectedEquipment === null) {
         this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите оборудование для редактирования',
-          group: 'br',
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите оборудование для редактирования",
+          group: "br",
           life: 3000,
         });
       } else {
@@ -708,15 +717,15 @@ export default {
       this.submitted = true;
       console.log(this.equipmentData);
       if (
-        this.equipmentData.factory_number !== '' &&
-        this.equipmentData.inventory_number !== '' &&
-				this.equipmentData.equipmentModel !== null
+        this.equipmentData.factory_number !== "" &&
+        this.equipmentData.inventory_number !== "" &&
+        this.equipmentData.equipmentModel !== null
       ) {
         this.$confirm.require({
-          message: 'Вы точно хотите изменить выбранную запись?',
-          header: 'Подтверждение изменения',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
+          message: "Вы точно хотите изменить выбранную запись?",
+          header: "Подтверждение изменения",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
           accept: () => {
             this.updateEquipment();
             this.getEquipmentList();
@@ -729,19 +738,19 @@ export default {
             };
             this.visibleEditDialog = false;
             this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись изменена',
-              group: 'br',
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись изменена",
+              group: "br",
               life: 3000,
             });
           },
           reject: () => {
             this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена изменения',
-              group: 'br',
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена изменения",
+              group: "br",
               life: 3000,
             });
           },
@@ -764,41 +773,40 @@ export default {
         equipmentStateId,
         requestData
       );
-      this.getEquipmentList();
       this.selectedEquipment = null;
     },
     deleteData() {
       if (this.selectedEquipment === null) {
         this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите оборудование для удаления',
-          group: 'br',
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите оборудование для удаления",
+          group: "br",
           life: 3000,
         });
       } else {
         this.$confirm.require({
-          message: 'Вы точно хотите удалить выбранную запись?',
-          header: 'Подтверждение удаления',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
+          message: "Вы точно хотите удалить выбранную запись?",
+          header: "Подтверждение удаления",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
           accept: () => {
             this.deleteEquipment();
             this.getEquipmentList();
             this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись удалена',
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись удалена",
               life: 3000,
             });
           },
           reject: () => {
             this.selectedEquipment = null;
             this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена удаления',
-              group: 'br',
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена удаления",
+              group: "br",
               life: 3000,
             });
           },
@@ -808,8 +816,22 @@ export default {
     deleteEquipment: async function () {
       const selectedId = this.selectedEquipment.equipment_id;
       await EquipmentService.delete(selectedId);
-      this.getEquipmentList();
       this.selectedEquipment = null;
+    },
+    getSeverity(equipment) {
+      switch (equipment.equipmentState.equipment_state_name) {
+        case "Установлено":
+          return "success";
+
+        case "Не установлено":
+          return "warning";
+
+        case "Ремонт":
+          return "danger";
+
+        default:
+          return null;
+      }
     },
   },
   mounted() {

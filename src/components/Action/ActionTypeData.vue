@@ -4,63 +4,63 @@
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
-    header="Добавление класса"
+    header="Добавление типа мероприятия"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_class_name">Наименование</label>
+      <label for="action_type_name">Наименование</label>
       <InputText
-        id="equipment_class_name"
-        v-model.trim="equipmentClassData.equipment_class_name"
+        id="action_type_name"
+        v-model.trim="actionTypeData.action_type_name"
         required="true"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipment_class_name,
+          'p-invalid': submitted && !actionTypeData.action_type_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentClassData.equipment_class_name"
+        v-if="submitted && !actionTypeData.action_type_name"
       >
         Укажите наименование.
       </small>
     </div>
 
     <div class="field">
-      <label for="equipment_class_sysname">Системное имя</label>
+      <label for="action_type_sysname">Системное имя</label>
       <InputText
-        id="equipment_class_sysname"
-        v-model.trim="equipmentClassData.equipment_class_sysname"
+        id="action_type_name"
+        v-model.trim="actionTypeData.action_type_sysname"
         required="true"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipment_class_sysname,
+          'p-invalid': submitted && !actionTypeData.action_type_sysname,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentClassData.equipment_class_sysname"
+        v-if="submitted && !actionTypeData.action_type_sysname"
       >
         Укажите системное имя.
       </small>
     </div>
 
     <div class="field">
-      <label for="equipment_category_name" class="mb-3"
-        >Категория оборудования</label
+      <label for="action_group_name" class="mb-3"
+        >Группа мероприятия</label
       >
       <Dropdown
-        id="equipment_category_name"
-        v-model="equipmentClassData.equipmentCategory"
-        :options="equipmentCategoryList"
-        optionLabel="equipment_category_name"
-        placeholder="Выберите категорию"
+        id="action_group_name"
+        v-model="actionTypeData.actionGroup"
+        :options="actionGroupList"
+        optionLabel="action_group_name"
+        placeholder="Выберите группу"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipmentCategory,
+          'p-invalid': submitted && !actionTypeData.actionGroup,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.equipment_category_name">
-            <span>{{ slotProps.option.equipment_category_name }}</span>
+          <div v-if="slotProps.option.action_group_name">
+            <span>{{ slotProps.option.action_group_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
@@ -68,7 +68,7 @@
         </template>
         <small
           class="p-error"
-          v-if="submitted && !equipmentClassData.equipmentCategory"
+          v-if="submitted && !actionTypeData.actionGroup"
         >
         </small>
       </Dropdown>
@@ -82,67 +82,67 @@
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
-    header="Редактирование класса"
+    header="Редактирование типа мероприятия"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="equipment_class_name">Наименование</label>
+      <label for="action_type_name">Наименование</label>
       <InputText
-        id="equipment_class_name"
-        :value="equipmentClassData.equipment_class_name"
-        @input="equipmentClassData.equipment_class_name = $event.target.value"
+        id="action_type_name"
+        :value="actionTypeData.action_type_name"
+        @input="actionTypeData.action_type_name = $event.target.value"
         required="true"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipment_class_name,
+          'p-invalid': submitted && !actionTypeData.action_type_name,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentClassData.equipment_class_name"
+        v-if="submitted && !actionTypeData.action_type_name"
       >
         Укажите наименование.
       </small>
     </div>
 
     <div class="field">
-      <label for="equipment_class_sysname">Системное имя</label>
+      <label for="action_type_sysname">Системное имя</label>
       <InputText
-        id="equipment_class_sysname"
-        :value="equipmentClassData.equipment_class_sysname"
+        id="action_type_sysname"
+        :value="actionTypeData.action_type_sysname"
         @input="
-          equipmentClassData.equipment_class_sysname = $event.target.value
+          actionTypeData.action_type_sysname = $event.target.value
         "
         required="true"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipment_class_sysname,
+          'p-invalid': submitted && !actionTypeData.action_type_sysname,
         }"
       />
       <small
         class="p-error"
-        v-if="submitted && !equipmentClassData.equipment_class_sysname"
+        v-if="submitted && !actionTypeData.action_type_sysname"
       >
         Укажите системное имя.
       </small>
     </div>
 
     <div class="field">
-      <label for="equipment_category_name" class="mb-3"
-        >Категория оборудования</label
+      <label for="action_group_name" class="mb-3"
+        >Группа оборудования</label
       >
       <Dropdown
-        id="equipment_category_name"
-        v-model="equipmentClassData.equipmentCategory"
-        :options="equipmentCategoryList"
-        optionLabel="equipment_category_name"
-        placeholder="Выберите категорию"
+        id="action_group_name"
+        v-model="actionTypeData.actionGroup"
+        :options="actionGroupList"
+        optionLabel="action_group_name"
+        placeholder="Выберите группу"
         :class="{
-          'p-invalid': submitted && !equipmentClassData.equipmentCategory,
+          'p-invalid': submitted && !actionTypeData.actionGroup,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.equipment_category_name">
-            <span>{{ slotProps.option.equipment_category_name }}</span>
+          <div v-if="slotProps.option.action_group_name">
+            <span>{{ slotProps.option.action_group_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
@@ -150,7 +150,7 @@
         </template>
         <small
           class="p-error"
-          v-if="submitted && !equipmentClassData.equipmentCategory"
+          v-if="submitted && !actionTypeData.actionGroup"
         >
         </small>
       </Dropdown>
@@ -163,7 +163,7 @@
 
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Классы</span>
+      <span class="font-bold text-3xl">Типы мероприятий</span>
     </template>
     <template #end>
       <Button
@@ -202,58 +202,58 @@
 
   <DataTable
     class="pt-1 p-datatable-sm"
-    v-model:selection="selectedClass"
+    v-model:selection="selectedActionType"
     v-model:filters="filters"
-    :value="equipmentClassList"
+    :value="actionTypeList"
     filterDisplay="row"
     selectionMode="single"
-    dataKey="equipment_class_id"
+    dataKey="action_type_id"
     showGridlines
-    :globalFilterFields="['equipmentCategory.equipment_category_name']"
+    :globalFilterFields="['actionGroup.action_group_name']"
   >
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
-      field="equipment_class_id"
+      field="action_type_id"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_class_id }}
+        {{ data.action_type_id }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Наименование"
-      field="equipment_class_name"
+      field="action_type_name"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_class_name }}
+        {{ data.action_type_name }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Системное имя"
-      field="equipment_class_sysname"
+      field="action_type_sysname"
       sortable
     >
       <template #body="{ data }">
-        {{ data.equipment_class_sysname }}
+        {{ data.action_type_sysname }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
-      header="Категория"
-			field="equipmentCategory.equipment_category_name"
-      filterField="equipmentCategory.equipment_category_name"
+      header="Группа"
+			field="actionGroup.action_group_name"
+      filterField="actionGroup.action_group_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.equipmentCategory.equipment_category_name }}
+        {{ data.actionGroup.action_group_name }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
@@ -262,14 +262,14 @@
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
-          :options="equipmentCategoryList"
-          optionLabel="equipment_category_name"
-          optionValue="equipment_category_name"
-          placeholder="Категория"
+          :options="actionGroupList"
+          optionLabel="action_group_name"
+          optionValue="action_group_name"
+          placeholder="Группа"
         >
           <template #option="slotProps">
             <div>
-              <span>{{ slotProps.option.equipment_category_name }}</span>
+              <span>{{ slotProps.option.action_group_name }}</span>
             </div>
           </template>
         </Dropdown>
@@ -280,26 +280,26 @@
 
 <script>
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import EquipmentCategoryService from '../../services/EquipmentCategoryService';
-import EquipmentClassService from '../../services/EquipmentClassService';
+import ActionTypeService from '../../services/ActionTypeService'
+import ActionGroupService from '../../services/ActionGroupService';
 
 export default {
-  name: 'EquipmentClass',
+  name: 'ActionType',
   data() {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
       submitted: false,
-      equipmentClassList: [],
-      equipmentCategoryList: [],
-      selectedClass: null,
-      equipmentClassData: {
-        equipmentCategory: null,
-        equipment_class_name: null,
-        equipment_class_sysname: null,
+      actionTypeList: [],
+      actionGroupList: [],
+      selectedActionType: null,
+      actionTypeData: {
+        actionGroup: null,
+        action_type_name: null,
+        action_type_sysname: null,
       },
       filters: {
-        'equipmentCategory.equipment_category_name': {
+        'actionGroup.action_group_name': {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -308,15 +308,15 @@ export default {
     };
   },
   methods: {
-    getEquipmentClassList: async function () {
-      const data = await EquipmentClassService.getList();
-      this.equipmentClassList = data;
-      console.log(this.equipmentClassList);
+    getActionTypeList: async function () {
+      const data = await ActionTypeService.getList();
+      this.actionTypeList = data;
+      console.log(this.actionTypeList);
     },
-    getEquipmentCategoryList: async function () {
-      const data = await EquipmentCategoryService.getList();
-      this.equipmentCategoryList = data;
-      console.log(this.equipmentCategoryList);
+    getActionGroupList: async function () {
+      const data = await ActionGroupService.getList();
+      this.actionGroupList = data;
+      console.log(this.actionGroupList);
     },
     refreshData() {
       this.$toast.add({
@@ -326,63 +326,63 @@ export default {
 				group: 'br',
         life: 3000,
       });
-      this.getEquipmentClassList();
+      this.getActionTypeList();
     },
     showAddData() {
       this.visibleAddDialog = true;
     },
     showEditData() {
-      if (this.selectedClass === null) {
+      if (this.selectedActionType === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите класс для редактирования',
+          detail: 'Выберите тип для редактирования',
 					group: 'br',
           life: 3000,
         });
       } else {
         this.visibleEditDialog = true;
-        this.equipmentClassData.equipmentCategory =
-          this.selectedClass.equipmentCategory;
-        this.equipmentClassData.equipment_class_name =
-          this.selectedClass.equipment_class_name;
-        this.equipmentClassData.equipment_class_sysname =
-          this.selectedClass.equipment_class_sysname;
+        this.actionTypeData.actionGroup =
+          this.selectedActionType.actionGroup;
+        this.actionTypeData.action_type_name =
+          this.selectedActionType.action_type_name;
+        this.actionTypeData.action_type_sysname =
+          this.selectedActionType.action_type_sysname;
       }
     },
     saveData() {
       this.submitted = true;
       if (
-        this.equipmentClassData.equipment_class_name !== null &&
-        this.equipmentClassData.equipment_class_sysname !== null &&
-        this.equipmentClassData.equipmentCategory !== null
+        this.actionTypeData.action_type_name !== null &&
+        this.actionTypeData.action_type_sysname !== null &&
+        this.actionTypeData.actionGroup !== null
       ) {
-        this.createEquipmentClass();
-        this.getEquipmentClassList();
+        this.createActionType();
+        this.getActionTypeList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
-          detail: 'Класс добавлен',
+          detail: 'Тип добавлен',
 					group: 'br',
           life: 3000,
         });
-        this.equipmentClassData = {
-          equipmentCategory: null,
-          equipment_class_name: null,
-          equipment_class_sysname: null,
+        this.actionTypeData = {
+          actionGroup: null,
+          action_type_name: null,
+          action_type_sysname: null,
         };
       }
     },
-    createEquipmentClass: async function () {
-      const equipmentCategoryId =
-        this.equipmentClassData.equipmentCategory.equipment_category_id;
+    createActionType: async function () {
+      const actionGroupId =
+        this.actionTypeData.actionGroup.action_group_id;
       const requestData = {
-        equipment_class_name: this.equipmentClassData.equipment_class_name,
-        equipment_class_sysname:
-          this.equipmentClassData.equipment_class_sysname,
+        action_type_name: this.actionTypeData.action_type_name,
+        action_type_sysname:
+          this.actionTypeData.action_type_sysname,
       };
-      const data = await EquipmentClassService.create(
-        equipmentCategoryId,
+      const data = await ActionTypeService.create(
+        actionGroupId,
         requestData
       );
       this.createData = data;
@@ -390,10 +390,10 @@ export default {
     },
     updateData() {
       this.submitted = true;
-      console.log(this.equipmentClassData);
+      console.log(this.actionTypeData);
       if (
-        this.equipmentClassData.equipment_class_name !== '' &&
-        this.equipmentClassData.equipment_class_sysname !== ''
+        this.actionTypeData.action_type_name !== '' &&
+        this.actionTypeData.action_type_sysname !== ''
       ) {
         this.$confirm.require({
           message: 'Вы точно хотите изменить выбранную запись?',
@@ -401,12 +401,12 @@ export default {
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.updateEquipmentClass();
-            this.getEquipmentClassList();
-            this.equipmentClassData = {
-              equipmentCategory: null,
-              equipment_class_name: null,
-              equipment_class_sysname: null,
+            this.updateActionType();
+            this.getActionTypeList();
+            this.actionTypeData = {
+              actionGroup: null,
+              action_type_name: null,
+              action_type_sysname: null,
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -429,29 +429,29 @@ export default {
         });
       }
     },
-    updateEquipmentClass: async function () {
-      const equipmentClassId = this.selectedClass.equipment_class_id;
-      const equipmentCategoryId =
-        this.equipmentClassData.equipmentCategory.equipment_category_id;
+    updateActionType: async function () {
+      const actionTypeId = this.selectedActionType.action_type_id;
+      const actionGroupId =
+        this.actionTypeData.actionGroup.action_group_id;
       const requestData = {
-        equipment_class_name: this.equipmentClassData.equipment_class_name,
-        equipment_class_sysname:
-          this.equipmentClassData.equipment_class_sysname,
+        action_type_name: this.actionTypeData.action_type_name,
+        action_type_sysname:
+          this.actionTypeData.action_type_sysname,
       };
-      await EquipmentClassService.update(
-        equipmentClassId,
-        equipmentCategoryId,
+      await ActionTypeService.update(
+        actionTypeId,
+        actionGroupId,
         requestData
       );
-      this.getEquipmentClassList();
-      this.selectedClass = null;
+      this.getActionTypeList();
+      this.selectedActionType = null;
     },
     deleteData() {
-      if (this.selectedClass === null) {
+      if (this.selectedActionType === null) {
         this.$toast.add({
           severity: 'info',
           summary: 'Внимание',
-          detail: 'Выберите класс для удаления',
+          detail: 'Выберите тип для удаления',
 					group: 'br',
           life: 3000,
         });
@@ -462,8 +462,8 @@ export default {
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
           accept: () => {
-            this.deleteEquipmentClass();
-            this.getEquipmentClassList();
+            this.deleteActionType();
+            this.getActionTypeList();
             this.$toast.add({
               severity: 'success',
               summary: 'Выполнено',
@@ -472,7 +472,7 @@ export default {
             });
           },
           reject: () => {
-            this.selectedCategory = null;
+            this.selectedActionType = null;
             this.$toast.add({
               severity: 'error',
               summary: 'Отмена',
@@ -484,16 +484,16 @@ export default {
         });
       }
     },
-    deleteEquipmentClass: async function () {
-      const selectedId = this.selectedClass.equipment_class_id;
-      await EquipmentClassService.delete(selectedId);
-      this.getEquipmentClassList();
-      this.selectedClass = null;
+    deleteActionType: async function () {
+      const selectedId = this.selectedActionType.action_type_id;
+      await ActionTypeService.delete(selectedId);
+      this.getActionTypeList();
+      this.selectedActionType = null;
     },
   },
   mounted() {
-    this.getEquipmentClassList();
-    this.getEquipmentCategoryList();
+    this.getActionTypeList();
+    this.getActionGroupList();
   },
 };
 </script>

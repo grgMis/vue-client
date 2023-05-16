@@ -6,23 +6,23 @@ const ActionGroupService = {
 		return response.data;
 	},
 
-	async get(id) {
-		const response = await http.get(`/action-group/${id}`);
+	async get(actionGroupId) {
+		const response = await http.get(`/action-group/${actionGroupId}`);
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post('/eaction-group', data);
+	async create(requestData) {
+		const response = await http.post('/action-group', requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/action-group/${id}`, data);
+	async update(actionGroupId, requestData) {
+		const response = await http.put(`/action-group/${actionGroupId}`, requestData);
 		return response.data;
 	},
 
-	async delete(id) {
-		const response = await http.delete(`/action-group/${id}`)
+	async delete(actionGroupId) {
+		const response = await http.delete(`/action-group/${actionGroupId}`)
 		return response.data;
 	},
 };

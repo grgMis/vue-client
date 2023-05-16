@@ -247,6 +247,7 @@
     <Column
       style="max-width: 10rem"
       header="Класс"
+			field="equipmentClass.equipment_class_name"
       filterField="equipmentClass.equipment_class_name"
       sortable
       :showFilterMenu="false"
@@ -259,6 +260,7 @@
 		<Column
       style="max-width: 10rem"
       header="Категория"
+			field="equipmentClass.equipmentCategory.equipment_category_name"
       filterField="equipmentClass.equipmentCategory.equipment_category_name"
       sortable
       :showFilterMenu="false"

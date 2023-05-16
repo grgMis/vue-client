@@ -16,6 +16,11 @@ const WellService = {
 		return response.data;
 	},
 
+	async updateState(wellId, wellStateId) {
+		const response = await http.put(`/well/${wellId}?well_state_id=${wellStateId}`);
+		return response.data;
+	},
+
 	async update(wellId, deptId, wellStateId, requestData) {
 		const response = await http.put(`/well/${wellId}?dept_id=${deptId}&well_state=${wellStateId}`, requestData);
 		return response.data;

@@ -23,7 +23,7 @@
       </small>
     </div>
 
-    <div class="dept">
+    <div class="field">
       <label for="dept_name" class="mb-3">Компании</label>
       <Dropdown
         id="dept_name"
@@ -202,6 +202,7 @@
     showGridlines
     :globalFilterFields="[
       'dept.dept_name',
+      'dept.field.field_name',
       'wellState.well_state_name',
       'date_entry',
     ]"
@@ -226,6 +227,7 @@
     <Column
       style="max-width: 10rem"
       header="Компания"
+			field="dept.dept_name"
       filterField="dept.dept_name"
       sortable
       :showFilterMenu="false"
@@ -256,13 +258,72 @@
 
     <Column
       style="max-width: 10rem"
-      header="Состояние"
-      filterField="wellState.well_state_name"
+      header="Месторождение"
+			field="dept.field.field_name"
+      filterField="dept.field.field_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.wellState.well_state_name }}
+        {{ data.dept.field.field_name }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          class="p-column-filter"
+          style="width: 165px"
+          :showClear="true"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="fieldList"
+          optionLabel="field_name"
+          optionValue="field_name"
+          placeholder="Месторождения"
+        >
+          <template #option="slotProps">
+            <div>
+              <span>{{ slotProps.option.field_name }}</span>
+            </div>
+          </template>
+        </Dropdown>
+      </template>
+    </Column>
+
+    <Column
+      style="max-width: 12rem"
+      header="Дата добавления"
+			field="date_entry"
+      filterField="date_entry"
+      dataType="date"
+      :showFilterMenu="false"
+      sortable
+    >
+      <template #body="{ data }">
+        {{ data.date_entry }}
+      </template>
+      <template #filter="{ filterModel }">
+        <Calendar
+          v-model="filterModel.value"
+          dateFormat="dd-mm-yy"
+          placeholder="дд-мм-гггг"
+          mask="99-99-9999"
+          style="width: 7rem"
+        />
+      </template>
+    </Column>
+
+    <Column
+      style="max-width: 10rem"
+      header="Состояние"
+			field="wellState.well_state_name"
+      filterField="wellState.well_state_name"
+      sortable
+      :showFilterMenu="false"
+    >
+      <template #body="slotProps">
+        <Tag
+          :value="slotProps.data.wellState.well_state_name"
+          :severity="getSeverity(slotProps.data)"
+        />
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
@@ -284,28 +345,6 @@
         </Dropdown>
       </template>
     </Column>
-
-    <Column
-      style="max-width: 12rem"
-      header="Дата добавления"
-      filterField="date_entry"
-      dataType="date"
-      :showFilterMenu="false"
-      sortable
-    >
-      <template #body="{ data }">
-        {{ data.date_entry }}
-      </template>
-      <template #filter="{ filterModel }">
-        <Calendar
-          v-model="filterModel.value"
-          dateFormat="dd-mm-yy"
-          placeholder="дд-мм-гггг"
-          mask="99-99-9999"
-          style="width: 7rem"
-        />
-      </template>
-    </Column>
   </DataTable>
 </template>
 
@@ -314,6 +353,7 @@ import { FilterMatchMode, FilterOperator } from "primevue/api";
 import WellService from "../../services/WellService";
 import DeptService from "../../services/DeptService";
 import WellStateService from "../../services/WellStateService";
+import FieldService from "../../services/FieldService";
 
 export default {
   name: "Well",
@@ -324,6 +364,7 @@ export default {
       submitted: false,
       wellList: [],
       deptList: [],
+      fieldList: [],
       wellStateList: [],
       selectedWell: null,
       wellData: {
@@ -333,6 +374,10 @@ export default {
       },
       filters: {
         "dept.dept_name": {
+          value: null,
+          matchMode: FilterMatchMode.EQUALS,
+        },
+        "dept.field.field_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -358,6 +403,11 @@ export default {
       const data = await DeptService.getList();
       this.deptList = data;
       console.log(this.deptList);
+    },
+    getFieldList: async function () {
+      const data = await FieldService.getList();
+      this.fieldList = data;
+      console.log(this.fieldList);
     },
     getWellStateList: async function () {
       const data = await WellStateService.getList();
@@ -523,11 +573,27 @@ export default {
       this.getWellList();
       this.selectedWell = null;
     },
+    getSeverity(well) {
+      switch (well.wellState.well_state_name) {
+        case "Активно":
+          return "success";
+
+        case "Не активно":
+          return "warning";
+
+        case "Простой":
+          return "danger";
+
+        default:
+          return null;
+      }
+    },
   },
   mounted() {
     this.getWellList();
     this.getDeptList();
     this.getWellStateList();
+    this.getFieldList();
   },
 };
 </script>

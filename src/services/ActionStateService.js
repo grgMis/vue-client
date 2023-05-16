@@ -6,23 +6,23 @@ const ActionStateService = {
 		return response.data;
 	},
 
-	async get(id) {
-		const response = await http.get(`/action-state/${id}`);
+	async get(actionStateId) {
+		const response = await http.get(`/action-state/${actionStateId}`);
 		return response.data;
 	},
 
-	async create(data) {
-		const response = await http.post('/action-state', data);
+	async create(requestData) {
+		const response = await http.post('/action-state', requestData);
 		return response.data;
 	},
 
-	async update(id, data) {
-		const response = await http.put(`/action-state/${id}`, data);
+	async update(actionStateId, requestData) {
+		const response = await http.put(`/action-state/${actionStateId}`, requestData);
 		return response.data;
 	},
 
-	async delete(id) {
-		const response = await http.delete(`/action-state/${id}`)
+	async delete(actionStateId) {
+		const response = await http.delete(`/action-state/${actionStateId}`)
 		return response.data;
 	},
 };
