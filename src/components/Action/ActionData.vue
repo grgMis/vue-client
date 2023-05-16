@@ -175,9 +175,8 @@
           <Calendar
             v-model="actionData.date_begin"
             showIcon
-            dateFormat="dd-mm-yy"
-            placeholder="дд-мм-гггг"
-            mask="99-99-9999"
+            placeholder="дд.мм.гггг"
+            mask="99.99.9999"
           />
         </div>
 
@@ -186,9 +185,8 @@
           <Calendar
             v-model="actionData.date_end"
             showIcon
-            dateFormat="dd-mm-yy"
-            placeholder="дд-мм-гггг"
-            mask="99-99-9999"
+            placeholder="дд.мм.гггг"
+            mask="99.99.9999"
           />
         </div>
 
@@ -869,8 +867,8 @@ export default {
       actionList: [],
       selectedAction: null,
       actionData: {
-        date_begin: null,
-        date_end: null,
+        date_begin: '',
+        date_end: '',
         action_note: null,
         wellEquipment: null,
         actionType: null,
@@ -919,6 +917,7 @@ export default {
         wellEquipmentListByEquip: [],
         wellStateList: [],
         equipmentStateList: [],
+        createdWellEquipment: {},
       },
       selectedData: {
         selectedWellState: {},
@@ -997,7 +996,23 @@ export default {
     createWellEquipment: async function () {
       const wellId = this.selectedData.selectedWell.well_id;
       const equipmentId = this.selectedData.selectedEquipment.equipment_id;
-      const data = await WellEquipmentService.create(wellId, equipmentId);
+      const wellEquipData = await WellEquipmentService.create(wellId, equipmentId);
+      this.dialogData.createdWellEquipment = wellEquipData;
+      console.log(this.dialogData.createdWellEquipment);
+      const wellEquipmentId = this.dialogData.createdWellEquipment.well_equipment_id;
+      const actionTypeId = this.actionData.actionType.action_type_id;
+      const actionStateId = this.actionData.actionState.action_state_id;
+      const requestData = {
+        date_begin: this.actionData.date_begin,
+        date_end: this.actionData.date_end,
+        action_note: this.actionData.action_note,
+      };
+      const data = await ActionService.create(
+        wellEquipmentId,
+        actionTypeId,
+        actionStateId,
+        requestData
+      );
       this.createData = data;
       console.log(this.createData);
     },
@@ -1022,12 +1037,12 @@ export default {
     getEquipmentStateList: async function () {
       const data = await EquipmentStateService.getList();
       this.dialogData.equipmentStateList = data;
-      console.log(this.equipmentStateList);
+      console.log(this.dialogData.equipmentStateList);
     },
     getWellStateList: async function () {
       const data = await WellStateService.getList();
       this.dialogData.wellStateList = data;
-      console.log(this.wellStateList);
+      console.log(this.dialogData.wellStateList);
     },
     getEquipmentListByState: async function () {
       const equipmentStateId = 1;
@@ -1041,23 +1056,22 @@ export default {
       this.dialogData.wellEquipListByWell = data;
       console.log(this.dialogData.wellEquipListByWell);
     },
-
-    // getWellEquipListByEquip: async function () {
-    //   const wellId = this.dialogData.well.well_id;
-    //   const data = await WellEquipmentService.getListByWell(wellId);
-    //   this.dialogData.wellEquipListByWell = data;
-    //   console.log(this.dialogData.wellEquipListByWell);
-    // },
+    getWellEquipListByEquip: async function () {
+      const equipmentId = this.selectedData.selectedEquipment.equipment_id;
+      const data = await WellEquipmentService.getListByEquip(equipmentId);
+      this.dialogData.wellEquipmentListByEquip = data;
+      console.log(this.dialogData.wellEquipmentListByEquip);
+    },
     getActionTypeListByGroup: async function () {
       const actionGroupId = this.dialogData.actionGroup.action_group_id;
       const data = await ActionTypeService.getListByGroup(actionGroupId);
       this.dialogData.actionTypeListByGroup = data;
       console.log(this.dialogData.actionTypeListByGroup);
     },
-    createAction: async function () {
+    createActionRepair: async function () {
       const wellEquipmentId = this.actionData.wellEquipment.well_equipment_id;
-      const actionTypeId = this.actionData.actionTypeId.action_type_id;
-      const actionStateId = this.actionData.actionStateId.action_state_id;
+      const actionTypeId = this.actionData.actionType.action_type_id;
+      const actionStateId = this.actionData.actionState.action_state_id;
       const requestData = {
         date_begin: this.actionData.date_begin,
         date_end: this.actionData.date_end,
@@ -1104,7 +1118,7 @@ export default {
         this.actionData.actionType !== null &&
         this.actionData.actionState !== null
       ) {
-        this.createAction();
+        this.createActionRepair();
         this.getActionList();
         this.submitted = false;
         this.$toast.add({
@@ -1119,8 +1133,8 @@ export default {
     },
     createEntry() {
       this.createWellEquipment();
-			this.updateEquipmentState();
-			this.updateWellState();
+      this.updateEquipmentState();
+      this.updateWellState();
       this.visibleEntryDialog = false;
     },
     resetData() {
@@ -1160,10 +1174,15 @@ export default {
       this.resetData();
     },
     showRepair() {
+      this.getActionStateList();
+      this.getActionGroupList();
       this.visibleRepairDialog = true;
     },
     showEntry() {
+      this.getActionStateList();
       this.getEquipmentListByState();
+      this.getWellStateList();
+      this.getEquipmentStateList();
       this.visibleEntryDialog = true;
     },
     getSeverity(action) {
@@ -1182,14 +1201,11 @@ export default {
   mounted() {
     this.getActionList();
     this.getWellList();
-    this.getWellStateList();
     this.getEquipmentList();
     this.getEquipmentClassList();
     this.getEquipmentCategoryList();
-    this.getEquipmentStateList();
     this.getActionTypeList();
     this.getActionGroupList();
-    this.getActionStateList();
   },
 };
 </script>
