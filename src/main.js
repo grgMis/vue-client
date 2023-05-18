@@ -105,6 +105,10 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 
+//my components
+import ActionEntryDialog from '@/components/Action/ActionDialog/ActionEntryDialog';
+import ActionRepairDialog from '@/components/Action/ActionDialog/ActionRepairDialog'
+
 const app = createApp(App);
 
 app.use(PrimeVue, { ripple: true });
@@ -118,6 +122,10 @@ app.directive('badge', BadgeDirective);
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 app.directive('focustrap', FocusTrap);
+
+//my components
+app.component('ActionEntryDialog', ActionEntryDialog);
+app.component('ActionRepairDialog', ActionRepairDialog);
 
 //components
 app.component('Accordion', Accordion);
