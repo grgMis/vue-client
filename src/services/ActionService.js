@@ -33,6 +33,15 @@ const ActionService = {
 		return response.data;
 	},
 
+	async updateState(actionId, actionStateId, requestData) {
+		const response = await http.put(
+			`/action/${actionId}
+			?action_state_id=${actionStateId}`,
+			 requestData
+			);
+		return response.data;
+	},
+
 	async delete(actionId) {
 		const response = await http.delete(`/action/${actionId}`)
 		return response.data;

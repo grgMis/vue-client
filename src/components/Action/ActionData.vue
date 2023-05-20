@@ -3,9 +3,9 @@
   <ConfirmDialog />
 
   <ActionEntryDialog v-model:visible="visibleEntryDialog"></ActionEntryDialog>
-  <ActionRepairDialog
-    v-model:visible="visibleRepairDialog"
-  ></ActionRepairDialog>
+  <ActionRepairDialog v-model:visible="visibleRepairDialog"></ActionRepairDialog>
+  <ActionDemolitionDialog v-model:visible="visibleDemolitionDialog"></ActionDemolitionDialog>
+	<ActionInfoDialog v-model:visible="visibleInfoDialog" :selectedAction="selectedAction"></ActionInfoDialog>
 
   <Toolbar>
     <template #start>
@@ -16,6 +16,14 @@
         label="Установка"
         @click="showEntryDialog"
         icon="pi pi-plus"
+        class="mr-2"
+        style="color: gray"
+        outlined
+      />
+      <Button
+        label="Демонтаж"
+        @click="showDemolitionDialog"
+        icon="pi pi-times"
         class="mr-2"
         style="color: gray"
         outlined
@@ -41,6 +49,7 @@
   <DataTable
     class="pt-1 p-datatable-sm"
     paginator
+    @dblclick="showInfo"
     :rows="19"
     v-model:selection="selectedAction"
     v-model:filters="filters"
@@ -264,6 +273,8 @@
 <script>
 import ActionEntryDialog from "./ActionDialog/ActionEntryDialog.vue";
 import ActionRepairDialog from "./ActionDialog/ActionRepairDialog.vue";
+import ActionDemolitionDialog from "./ActionDialog/ActionDemolitionDialog.vue";
+import ActionInfoDialog from "./ActionDialog/ActionInfoDialog.vue"
 
 import { FilterMatchMode } from "primevue/api";
 import ActionService from "../../services/ActionService";
@@ -278,12 +289,17 @@ export default {
   components: {
     ActionEntryDialog,
     ActionRepairDialog,
+    ActionDemolitionDialog,
+		ActionInfoDialog
   },
   data() {
     return {
       submitted: false,
       visibleRepairDialog: false,
       visibleEntryDialog: false,
+      visibleDemolitionDialog: false,
+      visibleInfoDialog: false,
+
       createData: [],
       actionList: [],
       selectedAction: null,
@@ -335,6 +351,12 @@ export default {
     },
     showRepairDialog() {
       this.visibleRepairDialog = true;
+    },
+    showDemolitionDialog() {
+      this.visibleDemolitionDialog = true;
+    },
+    showInfo() {
+      this.visibleInfoDialog = true;
     },
     getActionList: async function () {
       const data = await ActionService.getList();
@@ -395,6 +417,7 @@ export default {
     this.getEquipmentClassList();
     this.getActionTypeList();
     this.getActionGroupList();
+    this.getActionStateList();
   },
 };
 </script>

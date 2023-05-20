@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :style="{ width: '1000px' }"
-    header="Установка оборудования"
+    header="Демонтаж оборудования"
     :modal="true"
     class="p-fluid"
   >
@@ -14,6 +14,7 @@
             id="well_name"
             v-model="selectedData.selectedWell"
             :options="wellList"
+            @change="getWellEquipListByWell"
             optionLabel="well_name"
             placeholder="Выберите объект"
             class="w-full md:w-10rem"
@@ -180,8 +181,9 @@
           <Calendar
             v-model="actionData.date_begin"
             showIcon
-            placeholder="дд.мм.гггг"
-            mask="99.99.9999"
+            dateFormat="dd-mm-yy"
+            placeholder="дд-мм-гггг"
+            mask="99-99-9999"
           />
         </div>
 
@@ -190,8 +192,9 @@
           <Calendar
             v-model="actionData.date_end"
             showIcon
-            placeholder="дд.мм.гггг"
-            mask="99.99.9999"
+            dateFormat="dd-mm-yy"
+            placeholder="дд-мм-гггг"
+            mask="99-99-9999"
           />
         </div>
 
@@ -211,28 +214,28 @@
     <div class="field">
       <DataTable
         class="pt-1 p-datatable-sm h-30rem"
-        v-model:selection="selectedData.selectedEquipment"
+        v-model:selection="actionData.wellEquipment"
         v-model:filters="filters"
-        :value="equipmentList"
+        :value="wellEquipmentList"
         selectionMode="single"
-        dataKey="equipment_id"
+        dataKey="well_equipment_id"
         filterDisplay="row"
         showGridlines
         :globalFilterFields="[
-          'inventory_number',
-          'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
+          'equipment.inventory_number',
+          'equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
         ]"
       >
         <Column
           style="max-width: 10rem"
           header="Инвентарный номер"
           field="inventory_number"
-          filterField="inventory_number"
+          filterField="equipment.inventory_number"
           sortable
           :showFilterMenu="false"
         >
           <template #body="{ data }">
-            {{ data.inventory_number }}
+            {{ data.equipment.inventory_number }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText
@@ -249,13 +252,13 @@
         <Column
           style="max-width: 10rem"
           header="Категория"
-          field="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
-          filterField="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
+          field="equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
+          filterField="equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
           sortable
         >
           <template #body="{ data }">
             {{
-              data.equipmentModel.equipmentClass.equipmentCategory
+              data.equipment.equipmentModel.equipmentClass.equipmentCategory
                 .equipment_category_name
             }}
           </template>
@@ -282,33 +285,35 @@
         <Column
           style="max-width: 10rem"
           header="Модель"
-          field="equipmentModel.equipment_model_name"
+          field="equipment.equipmentModel.equipment_model_name"
           sortable
         >
           <template #body="{ data }">
-            {{ data.equipmentModel.equipment_model_name }}
+            {{ data.equipment.equipmentModel.equipment_model_name }}
           </template>
         </Column>
 
         <Column
           style="max-width: 10rem"
           header="Класс"
-          field="equipmentModel.equipmentClass.equipment_class_name"
+          field="equipment.equipmentModel.equipmentClass.equipment_class_name"
           sortable
         >
           <template #body="{ data }">
-            {{ data.equipmentModel.equipmentClass.equipment_class_name }}
+            {{
+              data.equipment.equipmentModel.equipmentClass.equipment_class_name
+            }}
           </template>
         </Column>
 
         <Column
           style="max-width: 10rem"
           header="Состояние"
-          field="equipmentState.equipment_state_name"
+          field="equipment.equipmentState.equipment_state_name"
           sortable
         >
           <template #body="{ data }">
-            {{ data.equipmentState.equipment_state_name }}
+            {{ data.equipment.equipmentState.equipment_state_name }}
           </template>
         </Column>
       </DataTable>
@@ -316,42 +321,40 @@
 
     <template #footer>
       <Button label="Очистить" icon="pi pi-eraser" text @click="refreshData" />
-      <Button label="Сохранить" icon="pi pi-save" text @click="createEntry" />
+      <Button label="Сохранить" icon="pi pi-check" text @click="createRepair" />
     </template>
   </Dialog>
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 
-import ActionGroupService from "../../../services/ActionGroupService";
 import ActionService from "../../../services/ActionService";
-import ActionStateService from "../../../services/ActionStateService";
+import ActionGroupService from "../../../services/ActionGroupService";
 import ActionTypeService from "../../../services/ActionTypeService";
+import ActionStateService from "../../../services/ActionStateService";
 import EquipmentCategoryService from "../../../services/EquipmentCategoryService";
 import EquipmentService from "../../../services/EquipmentService";
 import EquipmentStateService from "../../../services/EquipmentStateService";
-import WellEquipmentService from "../../../services/WellEquipmentService";
 import WellService from "../../../services/WellService";
 import WellStateService from "../../../services/WellStateService";
+import WellEquipmentService from "../../../services/WellEquipmentService";
 
 export default {
-  name: "ActionEntryDialog",
   data() {
     return {
       submitted: false,
       wellList: [],
       wellStateList: [],
+      wellEquipmentList: [],
       equipmentStateList: [],
       actionGroupList: [],
       actionTypeList: [],
-      actionStateList: [],
       equipmentList: [],
       equipmentCategoryList: [],
-      createdWellEquipment: {},
-      createdActionData: {},
-      updatedEquipmentState: {},
       updatedWellState: {},
+      updatedEquipmentState: {},
+      createdActionData: {},
       actionData: {
         date_begin: "",
         date_end: "",
@@ -365,14 +368,13 @@ export default {
         selectedWellState: null,
         selectedEquipmentState: null,
         selectedActionGroup: null,
-        selectedEquipment: null,
       },
       filters: {
-        inventory_number: {
+        "equipment.inventory_number": {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        "equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
+        "equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
           {
             value: null,
             matchMode: FilterMatchMode.EQUALS,
@@ -396,6 +398,11 @@ export default {
       this.equipmentStateList = data;
       console.log(this.equipmentStateList);
     },
+    getEquipmentCategoryList: async function () {
+      const data = await EquipmentCategoryService.getList();
+      this.equipmentCategoryList = data;
+      console.log(this.equipmentCategoryList);
+    },
     getActionGroupList: async function () {
       const data = await ActionGroupService.getList();
       this.actionGroupList = data;
@@ -406,17 +413,6 @@ export default {
       this.actionStateList = data;
       console.log(this.actionStateList);
     },
-    getEquipmentListByState: async function () {
-      const equipmentStateId = 1;
-      const data = await EquipmentService.getListByState(equipmentStateId);
-      this.equipmentList = data;
-      console.log(this.equipmentList);
-    },
-    getEquipmentCategoryList: async function () {
-      const data = await EquipmentCategoryService.getList();
-      this.equipmentCategoryList = data;
-      console.log(this.equipmentCategoryList);
-    },
     getActionTypeListByGroup: async function () {
       const actionGroupId =
         this.selectedData.selectedActionGroup.action_group_id;
@@ -425,34 +421,14 @@ export default {
       this.actionTypeList = data;
       console.log(this.actionTypeList);
     },
-    createActionData: async function () {
+    getWellEquipListByWell: async function () {
       const wellId = this.selectedData.selectedWell.well_id;
-      const equipmentId = this.selectedData.selectedEquipment.equipment_id;
-      const wellEquipData = await WellEquipmentService.create(
-        wellId,
-        equipmentId
-      );
-      this.createdWellEquipment = wellEquipData;
-      console.log(this.createdWellEquipment);
-      const wellEquipmentId = this.createdWellEquipment.well_equipment_id;
-      const actionTypeId = this.actionData.actionType.action_type_id;
-      const actionStateId = this.actionData.actionState.action_state_id;
-      const requestData = {
-        date_begin: this.actionData.date_begin,
-        date_end: this.actionData.date_end,
-        action_note: this.actionData.action_note,
-      };
-      const data = await ActionService.create(
-        wellEquipmentId,
-        actionTypeId,
-        actionStateId,
-        requestData
-      );
-      this.createdActionData = data;
-      console.log(this.createdActionData);
+      const data = await WellEquipmentService.getListByWell(wellId);
+      this.wellEquipmentList = data;
+      console.log(this.wellEquipmentList);
     },
     updateEquipmentState: async function () {
-      const equipmentId = this.selectedData.selectedEquipment.equipment_id;
+      const equipmentId = this.actionData.wellEquipment.equipment.equipment_id;
       const equipmentStateId =
         this.selectedData.selectedEquipmentState.equipment_state_id;
       const data = await EquipmentService.updateState(
@@ -469,17 +445,34 @@ export default {
       this.updatedWellState = data;
       console.log(this.updatedWellState);
     },
-    createEntry() {
-      console.log(this.actionData.actionType);
+    createActionData: async function () {
+      const wellEquipmentId = this.actionData.wellEquipment.well_equipment_id;
+      const actionTypeId = this.actionData.actionType.action_type_id;
+      const actionStateId = this.actionData.actionState.action_state_id;
+      const requestData = {
+        date_begin: this.actionData.date_begin,
+        date_end: this.actionData.date_end,
+        action_note: this.actionData.action_note,
+      };
+      const data = await ActionService.create(
+        wellEquipmentId,
+        actionTypeId,
+        actionStateId,
+        requestData
+      );
+      this.createdActionData = data;
+      console.log(this.createdActionData);
+    },
+    createRepair() {
       this.submitted = true;
       if (
         this.selectedData.selectedWell !== null &&
-        this.selectedData.selectedEquipmentState !== null &&
         this.selectedData.selectedWellState !== null &&
+        this.selectedData.selectedEquipmentState !== null &&
         this.selectedData.selectedActionGroup !== null &&
-        this.selectedData.selectedEquipment !== null &&
         this.actionData.actionType !== null &&
-        this.actionData.actionState !== null
+        this.actionData.actionState !== null &&
+        this.actionData.wellEquipment !== null
       ) {
         this.createActionData();
         this.updateEquipmentState();
@@ -492,6 +485,7 @@ export default {
           group: "br",
           life: 3000,
         });
+        this.refreshData();
       } else {
         this.$toast.add({
           severity: "error",
@@ -503,8 +497,7 @@ export default {
       }
     },
     refreshData() {
-      console.log("REFRESH");
-      this.getEquipmentListByState();
+      this.wellEquipmentList = null;
       this.actionData = {
         date_begin: "",
         date_end: "",
@@ -518,7 +511,6 @@ export default {
         selectedWellState: null,
         selectedEquipmentState: null,
         selectedActionGroup: null,
-        selectedEquipment: null,
       };
     },
   },
@@ -526,10 +518,9 @@ export default {
     this.getWellList();
     this.getWellStateList();
     this.getEquipmentStateList();
+    this.getEquipmentCategoryList();
     this.getActionGroupList();
     this.getActionStateList();
-    this.getEquipmentListByState();
-    this.getEquipmentCategoryList();
   },
 };
 </script>
