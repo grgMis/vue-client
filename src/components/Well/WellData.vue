@@ -4,70 +4,70 @@
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
-    header="Добавление компании"
+    header="Добавление объекта"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="dept_name">Наименование</label>
+      <label for="well_name">Наименование</label>
       <InputText
-        id="dept_name"
-        v-model.trim="deptData.dept_name"
+        id="well_name"
+        v-model.trim="wellData.well_name"
         required="true"
         :class="{
-          'p-invalid': submitted && !deptData.dept_name,
+          'p-invalid': submitted && !wellData.well_name,
         }"
       />
-      <small class="p-error" v-if="submitted && !deptData.dept_name">
+      <small class="p-error" v-if="submitted && !wellData.well_name">
         Укажите наименование.
       </small>
     </div>
 
     <div class="field">
-      <label for="dept_type_name" class="mb-3">Тип компании</label>
+      <label for="company_name" class="mb-3">Компании</label>
       <Dropdown
-        id="dept_type_name"
-        v-model="deptData.deptType"
-        :options="deptTypeList"
-        optionLabel="dept_type_name"
-        placeholder="Выберите тип компании"
+        id="company_name"
+        v-model="wellData.company"
+        :options="companyList"
+        optionLabel="company_name"
+        placeholder="Выберите компанию"
         :class="{
-          'p-invalid': submitted && !deptData.deptType,
+          'p-invalid': submitted && !wellData.company,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.dept_type_name">
-            <span>{{ slotProps.option.dept_type_name }}</span>
+          <div v-if="slotProps.option.company_name">
+            <span>{{ slotProps.option.company_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !deptData.deptType"> </small>
+        <small class="p-error" v-if="submitted && !wellData.company"> </small>
       </Dropdown>
     </div>
 
     <div class="field">
-      <label for="field_name" class="mb-3">Месторождение</label>
+      <label for="well_state_name" class="mb-3">Состояние</label>
       <Dropdown
-        id="field_name"
-        v-model="deptData.field"
-        :options="fieldList"
-        optionLabel="field_name"
-        placeholder="Выберите месторождение"
+        id="well_state_name"
+        v-model="wellData.wellState"
+        :options="wellStateList"
+        optionLabel="well_state_name"
+        placeholder="Выберите состояние"
         :class="{
-          'p-invalid': submitted && !deptData.field,
+          'p-invalid': submitted && !wellData.wellState,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.field_name">
-            <span>{{ slotProps.option.field_name }}</span>
+          <div v-if="slotProps.option.well_state_name">
+            <span>{{ slotProps.option.well_state_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !deptData.field"> </small>
+        <small class="p-error" v-if="submitted && !wellData.wellState"> </small>
       </Dropdown>
     </div>
 
@@ -79,71 +79,71 @@
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
-    header="Редактирование компании"
+    header="Редактирование объекта"
     :modal="true"
     class="p-fluid"
   >
     <div class="field">
-      <label for="dept_name">Наименование</label>
+      <label for="well_name">Наименование</label>
       <InputText
-        id="dept_name"
-        :value="deptData.dept_name"
-        @input="deptData.dept_name = $event.target.value"
+        id="well_name"
+        :value="wellData.well_name"
+        @input="wellData.well_name = $event.target.value"
         required="true"
         :class="{
-          'p-invalid': submitted && !deptData.dept_name,
+          'p-invalid': submitted && !wellData.well_name,
         }"
       />
-      <small class="p-error" v-if="submitted && !deptData.dept_name">
+      <small class="p-error" v-if="submitted && !wellData.well_name">
         Укажите наименование.
       </small>
     </div>
 
     <div class="field">
-      <label for="dept_type_name" class="mb-3">Тип компании</label>
+      <label for="company_name" class="mb-3">Компания</label>
       <Dropdown
-        id="dept_type_name"
-        v-model="deptData.deptType"
-        :options="deptTypeList"
-        optionLabel="dept_type_name"
-        placeholder="Выберите тип компании"
+        id="company_name"
+        v-model="wellData.company"
+        :options="companyList"
+        optionLabel="company_name"
+        placeholder="Выберите компанию"
         :class="{
-          'p-invalid': submitted && !deptData.deptType,
+          'p-invalid': submitted && !wellData.company,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.dept_type_name">
-            <span>{{ slotProps.option.dept_type_name }}</span>
+          <div v-if="slotProps.option.company_name">
+            <span>{{ slotProps.option.company_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !deptData.deptType"> </small>
+        <small class="p-error" v-if="submitted && !wellData.company_name"> </small>
       </Dropdown>
     </div>
 
     <div class="field">
-      <label for="field_name" class="mb-3">Месторождение</label>
+      <label for="well_state_name" class="mb-3">Состояние</label>
       <Dropdown
-        id="field_name"
-        v-model="deptData.field"
-        :options="fieldList"
-        optionLabel="field_name"
-        placeholder="Выберите месторождение"
+        id="well_state_name"
+        v-model="wellData.wellState"
+        :options="wellStateList"
+        optionLabel="well_state_name"
+        placeholder="Выберите состояние"
         :class="{
-          'p-invalid': submitted && !deptData.field,
+          'p-invalid': submitted && !wellData.wellState,
         }"
       >
         <template #option="slotProps">
-          <div v-if="slotProps.option.field_name">
-            <span>{{ slotProps.option.field_name }}</span>
+          <div v-if="slotProps.option.well_state_name">
+            <span>{{ slotProps.option.well_state_name }}</span>
           </div>
           <span v-else>
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !deptData.field"> </small>
+        <small class="p-error" v-if="submitted && !wellData.wellState"> </small>
       </Dropdown>
     </div>
 
@@ -154,7 +154,7 @@
 
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Компании</span>
+      <span class="font-bold text-3xl">Объект</span>
     </template>
     <template #end>
       <Button
@@ -193,46 +193,47 @@
 
   <DataTable
     class="pt-1 p-datatable-sm"
-    v-model:selection="selectedDept"
+    v-model:selection="selectedWell"
     v-model:filters="filters"
-    :value="deptList"
+    :value="wellList"
     selectionMode="single"
-    dataKey="dept_id"
+    dataKey="well_id"
     filterDisplay="row"
     showGridlines
-    :globalFilterFields="['field.field_name', 'deptType.dept_type_name', 'date_entry']"
+    :globalFilterFields="[
+      'company.company_name',
+      'company.field.field_name',
+      'wellState.well_state_name',
+      'date_entry',
+    ]"
   >
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
-      field="dept_id"
+      field="well_id"
       sortable
     >
       <template #body="{ data }">
-        {{ data.dept_id }}
+        {{ data.well_id }}
       </template>
     </Column>
 
-    <Column 
-			style="max-width: 10rem" 
-			header="Наименование" 
-			field="dept_name" 
-			sortable>
+    <Column style="max-width: 10rem" header="Наименование" field="d" sortable>
       <template #body="{ data }">
-        {{ data.dept_name }}
+        {{ data.well_name }}
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
-      header="Тип компании"
-			field="deptType.dept_type_name"
-      filterField="deptType.dept_type_name"
+      header="Компания"
+			field="company.company_name"
+      filterField="company.company_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.deptType.dept_type_name }}
+        {{ data.company.company_name }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
@@ -241,14 +242,14 @@
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
-          :options="deptTypeList"
-          optionLabel="dept_type_name"
-          optionValue="dept_type_name"
-          placeholder="Тип компании"
+          :options="companyList"
+          optionLabel="company_name"
+          optionValue="company_name"
+          placeholder="Компания"
         >
           <template #option="slotProps">
             <div>
-              <span>{{ slotProps.option.dept_type_name }}</span>
+              <span>{{ slotProps.option.company_name }}</span>
             </div>
           </template>
         </Dropdown>
@@ -258,13 +259,13 @@
     <Column
       style="max-width: 10rem"
       header="Месторождение"
-			field="field.field_name"
-      filterField="field.field_name"
+			field="company.field.field_name"
+      filterField="company.field.field_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.field.field_name }}
+        {{ data.company.field.field_name }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
@@ -276,7 +277,7 @@
           :options="fieldList"
           optionLabel="field_name"
           optionValue="field_name"
-          placeholder="Месторождение"
+          placeholder="Месторождения"
         >
           <template #option="slotProps">
             <div>
@@ -309,37 +310,78 @@
         />
       </template>
     </Column>
+
+    <Column
+      style="max-width: 10rem"
+      header="Состояние"
+			field="wellState.well_state_name"
+      filterField="wellState.well_state_name"
+      sortable
+      :showFilterMenu="false"
+    >
+      <template #body="slotProps">
+        <Tag
+          :value="slotProps.data.wellState.well_state_name"
+          :severity="getSeverity(slotProps.data)"
+        />
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <Dropdown
+          class="p-column-filter"
+          style="width: 165px"
+          :showClear="true"
+          v-model="filterModel.value"
+          @change="filterCallback()"
+          :options="wellStateList"
+          optionLabel="well_state_name"
+          optionValue="well_state_name"
+          placeholder="Состояние"
+        >
+          <template #option="slotProps">
+            <div>
+              <span>{{ slotProps.option.well_state_name }}</span>
+            </div>
+          </template>
+        </Dropdown>
+      </template>
+    </Column>
   </DataTable>
 </template>
 
 <script>
 import { FilterMatchMode, FilterOperator } from "primevue/api";
-import DeptService from "../../services/DeptService";
-import DeptTypeService from "../../services/DeptTypeService";
+import WellService from "../../services/WellService";
+import CompanyService from "../../services/CompanyService";
+import WellStateService from "../../services/WellStateService";
 import FieldService from "../../services/FieldService";
 
 export default {
-  name: "Dept",
+  name: "Well",
   data() {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
       submitted: false,
-      deptList: [],
+      wellList: [],
+      companyList: [],
       fieldList: [],
-      deptTypeList: [],
-      selectedDept: null,
-      deptData: {
-        dept_type_name: null,
-        field: null,
-        deptType: null,
+      wellStateList: [],
+      selectedWell: null,
+      wellData: {
+        well_name: null,
+        company: null,
+        wellState: null,
       },
       filters: {
-        "field.field_name": {
+        "company.company_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        "deptType.dept_type_name": {
+        "company.field.field_name": {
+          value: null,
+          matchMode: FilterMatchMode.EQUALS,
+        },
+        "wellState.well_state_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -352,20 +394,25 @@ export default {
     };
   },
   methods: {
-    getDeptList: async function () {
-      const data = await DeptService.getList();
-      this.deptList = data;
-      console.log(this.deptList);
+    getWellList: async function () {
+      const data = await WellService.getList();
+      this.wellList = data;
+      console.log(this.wellList);
+    },
+    getCompanyList: async function () {
+      const data = await CompanyService.getList();
+      this.companyList = data;
+      console.log(this.companyList);
     },
     getFieldList: async function () {
       const data = await FieldService.getList();
       this.fieldList = data;
       console.log(this.fieldList);
     },
-    getDeptTypeList: async function () {
-      const data = await DeptTypeService.getList();
-      this.deptTypeList = data;
-      console.log(this.deptTypeList);
+    getWellStateList: async function () {
+      const data = await WellStateService.getList();
+      this.wellStateList = data;
+      console.log(this.wellStateList);
     },
     refreshData() {
       this.$toast.add({
@@ -375,67 +422,67 @@ export default {
         group: "br",
         life: 3000,
       });
-      this.getDeptList();
+      this.getWellList();
     },
     showAddData() {
       this.visibleAddDialog = true;
     },
     showEditData() {
-      if (this.selectedDept === null) {
+      if (this.selectedWell === null) {
         this.$toast.add({
           severity: "info",
           summary: "Внимание",
-          detail: "Выберите компанию для редактирования",
+          detail: "Выберите объект для редактирования",
           group: "br",
           life: 3000,
         });
       } else {
         this.visibleEditDialog = true;
-        this.deptData.dept_name = this.selectedDept.dept_name;
-        this.deptData.field = this.selectedDept.field;
-        this.deptData.deptType = this.selectedDept.deptType;
+        this.wellData.well_name = this.selectedWell.well_name;
+        this.wellData.company = this.selectedWell.company;
+        this.wellData.wellState = this.selectedWell.wellState;
       }
     },
-    saveData() {
+    saveData: async function () {
       this.submitted = true;
       if (
-        this.deptData.dept_name !== null &&
-        this.deptData.field !== null &&
-        this.deptData.deptType !== null
+        this.wellData.well_name !== null &&
+        this.wellData.company !== null &&
+        this.wellData.wellState !== null
       ) {
-        this.createDept();
-        this.getDeptList();
+        await this.createWell();
+        await this.getWellList();
         this.$toast.add({
           severity: "success",
           summary: "Успешно",
-          detail: "Компания добавлена",
+          detail: "Объект добавлена",
           group: "br",
           life: 3000,
         });
-        this.deptData = {
-          dept_name: null,
-          field: null,
-          deptType: null,
+        this.wellData = {
+          well_name: null,
+          company: null,
+          wellState: null,
         };
       }
     },
-    createDept: async function () {
-      const deptTypeId = this.deptData.deptType.dept_type_id;
-      const fieldId = this.deptData.field.field_id;
+    createWell: async function () {
+      const companyId = this.wellData.company.company_id;
+      const wellStateId = this.wellData.wellState.well_state_id;
       const requestData = {
-        dept_name: this.deptData.dept_name,
+        well_name: this.wellData.well_name,
       };
-      const data = await DeptService.create(deptTypeId, fieldId, requestData);
+      const data = await WellService.create(companyId, wellStateId, requestData);
       this.createData = data;
       console.log(this.createData);
     },
     updateData() {
       this.submitted = true;
-      console.log(this.deptData);
+      console.log(this.wellData);
       if (
-        this.deptData.dept_name !== "" &&
-        this.deptData.field !== null &&
-        this.deptData.deptType !== null
+        this.wellData.well_name !== "" &&
+        this.wellData.company !== null &&
+        this.wellData.wellState !== null
       ) {
         this.$confirm.require({
           message: "Вы точно хотите изменить выбранную запись?",
@@ -443,12 +490,12 @@ export default {
           icon: "pi pi-info-circle",
           acceptClass: "p-button-danger",
           accept: () => {
-            this.updateDept();
-            this.getDeptList();
-            this.deptData = {
-              dept_name: null,
-              field: null,
-              deptType: null,
+            this.updateWell();
+            this.getWellList();
+            this.wellData = {
+              well_name: null,
+              company: null,
+              wellState: null,
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -471,23 +518,23 @@ export default {
         });
       }
     },
-    updateDept: async function () {
-      const deptId = this.selectedDept.dept_id;
-      const deptTypeId = this.deptData.deptType.dept_type_id;
-      const fieldId = this.deptData.field.field_id;
+    updateWell: async function () {
+      const wellId = this.selectedWell.well_id;
+      const companyId = this.wellData.company.company_id;
+      const wellStateId = this.wellData.wellState.well_state_id;
       const requestData = {
-        dept_name: this.deptData.dept_name,
+        well_name: this.wellData.well_name,
       };
-      await DeptService.update(deptId, deptTypeId, fieldId, requestData);
-      this.getDeptList();
-      this.selectedDept = null;
+      await WellService.update(wellId, companyId, wellStateId, requestData);
+      this.getWellList();
+      this.selectedWell = null;
     },
     deleteData() {
-      if (this.selectedDept === null) {
+      if (this.selectedWell === null) {
         this.$toast.add({
           severity: "info",
           summary: "Внимание",
-          detail: "Выберите компанию для удаления",
+          detail: "Выберите объект для удаления",
           group: "br",
           life: 3000,
         });
@@ -498,8 +545,8 @@ export default {
           icon: "pi pi-info-circle",
           acceptClass: "p-button-danger",
           accept: () => {
-            this.deleteDept();
-            this.getDeptList();
+            this.deleteWell();
+            this.getWellList();
             this.$toast.add({
               severity: "success",
               summary: "Выполнено",
@@ -508,7 +555,7 @@ export default {
             });
           },
           reject: () => {
-            this.selectedDept = null;
+            this.selectedWell = null;
             this.$toast.add({
               severity: "error",
               summary: "Отмена",
@@ -520,17 +567,33 @@ export default {
         });
       }
     },
-    deleteDept: async function () {
-      const selectedId = this.selectedDept.dept_id;
-      await DeptService.delete(selectedId);
-      this.getDeptList();
-      this.selectedCategory = null;
+    deleteWell: async function () {
+      const selectedId = this.selectedWell.well_id;
+      await WellService.delete(selectedId);
+      this.getWellList();
+      this.selectedWell = null;
+    },
+    getSeverity(well) {
+      switch (well.wellState.well_state_name) {
+        case "Активно":
+          return "success";
+
+        case "Не активно":
+          return "warning";
+
+        case "Простой":
+          return "danger";
+
+        default:
+          return null;
+      }
     },
   },
   mounted() {
-    this.getDeptList();
+    this.getWellList();
+    this.getCompanyList();
+    this.getWellStateList();
     this.getFieldList();
-    this.getDeptTypeList();
   },
 };
 </script>

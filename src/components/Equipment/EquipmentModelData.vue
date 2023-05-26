@@ -27,24 +27,6 @@
     </div>
 
     <div class="field">
-      <label for="equipment_model_sysname">Системное имя</label>
-      <InputText
-        id="equipment_model_sysname"
-        v-model.trim="equipmentModelData.equipment_model_sysname"
-        required="true"
-        :class="{
-          'p-invalid': submitted && !equipmentModelData.equipment_model_sysname,
-        }"
-      />
-      <small
-        class="p-error"
-        v-if="submitted && !equipmentModelData.equipment_model_sysname"
-      >
-        Укажите системное имя.
-      </small>
-    </div>
-
-    <div class="field">
       <label for="equipment_class_name" class="mb-3"
         >Класс оборудования</label
       >
@@ -53,6 +35,7 @@
         v-model="equipmentModelData.equipmentClass"
         :options="equipmentClassList"
         optionLabel="equipment_class_name"
+				filter
         placeholder="Выберите класс"
         :class="{
           'p-invalid': submitted && !equipmentModelData.equipmentClass,
@@ -102,27 +85,6 @@
         v-if="submitted && !equipmentModelData.equipment_model_name"
       >
         Укажите наименование.
-      </small>
-    </div>
-
-    <div class="field">
-      <label for="equipment_model_sysname">Системное имя</label>
-      <InputText
-        id="equipment_model_sysname"
-        :value="equipmentModelData.equipment_model_sysname"
-        @input="
-          equipmentModelData.equipment_model_sysname = $event.target.value
-        "
-        required="true"
-        :class="{
-          'p-invalid': submitted && !equipmentModelData.equipment_model_sysname,
-        }"
-      />
-      <small
-        class="p-error"
-        v-if="submitted && !equipmentModelData.equipment_model_sysname"
-      >
-        Укажите системное имя.
       </small>
     </div>
 
@@ -205,6 +167,8 @@
     v-model:selection="selectedModel"
     v-model:filters="filters"
     :value="equipmentModelList"
+		paginator
+		:rows="23"
     filterDisplay="row"
     selectionMode="single"
     dataKey="equipment_model_id"
@@ -230,17 +194,6 @@
     >
       <template #body="{ data }">
         {{ data.equipment_model_name }}
-      </template>
-    </Column>
-
-    <Column
-      style="max-width: 10rem"
-      header="Системное имя"
-      field="equipment_model_sysname"
-      sortable
-    >
-      <template #body="{ data }">
-        {{ data.equipment_model_sysname }}
       </template>
     </Column>
 
@@ -312,7 +265,6 @@ export default {
       equipmentModelData: {
         equipmentClass: null,
         equipment_model_name: null,
-        equipment_model_sysname: null,
       },
       filters: {
         'equipmentClass.equipmentCategory.equipment_category_name': {
@@ -367,19 +319,17 @@ export default {
           this.selectedModel.equipmentClass;
         this.equipmentModelData.equipment_model_name =
           this.selectedModel.equipment_model_name;
-        this.equipmentModelData.equipment_model_sysname =
-          this.selectedModel.equipment_model_sysname;
       }
     },
-    saveData() {
+    saveData: async function () {
       this.submitted = true;
       if (
         this.equipmentModelData.equipment_model_name !== null &&
-        this.equipmentModelData.equipment_model_sysname !== null &&
         this.equipmentModelData.equipmentClass !== null
       ) {
-        this.createEquipmentModel();
-        this.getEquipmentModelList();
+        await this.createEquipmentModel();
+        await this.getEquipmentModelList();
+				this.submitted = false;
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
@@ -399,8 +349,6 @@ export default {
         this.equipmentModelData.equipmentClass.equipment_class_id;
       const requestData = {
         equipment_model_name: this.equipmentModelData.equipment_model_name,
-        equipment_model_sysname:
-          this.equipmentModelData.equipment_model_sysname,
       };
       const data = await EquipmentModelService.create(
         equipmentClassId,
@@ -413,21 +361,20 @@ export default {
       this.submitted = true;
       console.log(this.equipmentModelData);
       if (
-        this.equipmentModelData.equipment_model_name !== '' &&
-        this.equipmentModelData.equipment_model_sysname !== ''
+        this.equipmentModelData.equipment_model_name !== ''
       ) {
         this.$confirm.require({
           message: 'Вы точно хотите изменить выбранную запись?',
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
-          accept: () => {
-            this.updateEquipmentModel();
-            this.getEquipmentModelList();
+          accept: async () => {
+            await this.updateEquipmentModel();
+            await this.getEquipmentModelList();
+						this.submitted = false;
             this.equipmentModelData = {
               equipmentClass: null,
               equipment_model_name: null,
-              equipment_model_sysname: null,
             };
             this.visibleEditDialog = false;
             this.$toast.add({
@@ -456,8 +403,6 @@ export default {
         this.equipmentModelData.equipmentClass.equipment_class_id;
       const requestData = {
         equipment_model_name: this.equipmentModelData.equipment_model_name,
-        equipment_model_sysname:
-          this.equipmentModelData.equipment_model_sysname,
       };
       await EquipmentModelService.update(
         equipmentModelId,

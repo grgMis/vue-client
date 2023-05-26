@@ -324,14 +324,12 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 
-import ActionGroupService from "../../../services/ActionGroupService";
 import ActionService from "../../../services/ActionService";
 import ActionStateService from "../../../services/ActionStateService";
 import ActionTypeService from "../../../services/ActionTypeService";
 import EquipmentCategoryService from "../../../services/EquipmentCategoryService";
 import EquipmentService from "../../../services/EquipmentService";
 import EquipmentStateService from "../../../services/EquipmentStateService";
-import WellEquipmentService from "../../../services/WellEquipmentService";
 import WellService from "../../../services/WellService";
 import WellStateService from "../../../services/WellStateService";
 

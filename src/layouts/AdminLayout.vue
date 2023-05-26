@@ -62,11 +62,7 @@ export default {
             },
             {
               label: "Компании",
-              to: '/admin/dept'
-            },
-            {
-              label: 'Типы компаний',
-              to: '/admin/dept-type'
+              to: '/admin/company'
             },
             {
               label: 'Месторождения',
@@ -84,10 +80,6 @@ export default {
             {
               label: 'Список',
               to: '/admin/action'
-            },
-            {
-              label: "Группы",
-              to: '/admin/action-group'
             },
             {
               label: 'Типы',

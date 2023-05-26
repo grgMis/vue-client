@@ -11,10 +11,11 @@ const ActionService = {
 		return response.data;
 	},
 
-	async create(wellEquipmentId, actionTypeId, actionStateId, requestData) {
+	async create(wellId, userId, actionTypeId, actionStateId, requestData) {
 		const response = await http.post(
 			`/action
-			?well_equipment_id=${wellEquipmentId}
+			?well_id=${wellId}
+			&user_id=${userId}
 			&action_type_id=${actionTypeId}
 			&action_state_id=${actionStateId}`,
 			 requestData
@@ -22,10 +23,11 @@ const ActionService = {
 		return response.data;
 	},
 
-	async update(actionId, wellEquipmentId, actionTypeId, actionStateId, requestData) {
+	async update(actionId, wellId, userId, actionTypeId, actionStateId, requestData) {
 		const response = await http.put(
 			`/action/${actionId}
-			?well_equipment_id=${wellEquipmentId}
+			?well_id=${wellId}
+			&user_id=${userId}
 			&action_type_id=${actionTypeId}
 			&action_state_id=${actionStateId}`,
 			 requestData

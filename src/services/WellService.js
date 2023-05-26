@@ -11,8 +11,8 @@ const WellService = {
 		return response.data;
 	},
 
-	async create(deptId, wellStateId, requestData) {
-		const response = await http.post(`/well?dept_id=${deptId}&well_state_id=${wellStateId}`, requestData);
+	async create(companyId, wellStateId, requestData) {
+		const response = await http.post(`/well?company_id=${companyId}&well_state_id=${wellStateId}`, requestData);
 		return response.data;
 	},
 
@@ -21,8 +21,8 @@ const WellService = {
 		return response.data;
 	},
 
-	async update(wellId, deptId, wellStateId, requestData) {
-		const response = await http.put(`/well/${wellId}?dept_id=${deptId}&well_state=${wellStateId}`, requestData);
+	async update(wellId, companyId, wellStateId, requestData) {
+		const response = await http.put(`/well/${wellId}?company_id=${companyId}&well_state=${wellStateId}`, requestData);
 		return response.data;
 	},
 

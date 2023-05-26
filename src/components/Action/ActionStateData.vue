@@ -191,12 +191,13 @@ export default {
           this.selectedActionState.action_state_name;
       }
     },
-    saveData() {
+    saveData: async function () {
       this.submitted = true;
       if (
         this.actionStateData.action_state_name !== null) {
-        this.createActionState();
-        this.getActionStateList();
+        await this.createActionState();
+        await this.getActionStateList();
+				this.submitted = false;
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
@@ -228,9 +229,10 @@ export default {
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
-          accept: () => {
-            this.updateActionState();
-            this.getActionStateList();
+          accept: async () => {
+            await this.updateActionState();
+            await this.getActionStateList();
+						this.submitted = false;
             this.actionStateData = {
               action_state_name: null
             };

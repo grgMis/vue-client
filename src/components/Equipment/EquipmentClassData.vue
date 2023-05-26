@@ -209,6 +209,8 @@
     selectionMode="single"
     dataKey="equipment_class_id"
     showGridlines
+		paginator
+		:rows="23"
     :globalFilterFields="['equipmentCategory.equipment_category_name']"
   >
     <Column
@@ -350,15 +352,16 @@ export default {
           this.selectedClass.equipment_class_sysname;
       }
     },
-    saveData() {
+    saveData: async function ()  {
       this.submitted = true;
       if (
         this.equipmentClassData.equipment_class_name !== null &&
         this.equipmentClassData.equipment_class_sysname !== null &&
         this.equipmentClassData.equipmentCategory !== null
       ) {
-        this.createEquipmentClass();
-        this.getEquipmentClassList();
+        await this.createEquipmentClass();
+        await this.getEquipmentClassList();
+				this.submitted = false;
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
@@ -388,7 +391,7 @@ export default {
       this.createData = data;
       console.log(this.createData);
     },
-    updateData() {
+    updateData()  {
       this.submitted = true;
       console.log(this.equipmentClassData);
       if (
@@ -400,9 +403,10 @@ export default {
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
-          accept: () => {
-            this.updateEquipmentClass();
-            this.getEquipmentClassList();
+          accept: async () => {
+            await this.updateEquipmentClass();
+            await this.getEquipmentClassList();
+						this.submitted = false;
             this.equipmentClassData = {
               equipmentCategory: null,
               equipment_class_name: null,

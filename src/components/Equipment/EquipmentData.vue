@@ -44,6 +44,7 @@
         v-model="equipmentData.equipmentClass"
         :options="classList"
         @change="getModelList"
+				filter
         optionLabel="equipment_class_name"
         placeholder="Выберите класс"
         :class="{ 'p-invalid': submitted && !equipmentData.equipmentClass }"
@@ -290,7 +291,7 @@
   <DataTable
     class="pt-1 p-datatable-sm"
     paginator
-    :rows="19"
+    :rows="20"
     v-model:selection="selectedEquipment"
     v-model:filters="filters"
     :value="equipmentList"
@@ -327,6 +328,7 @@
           v-model="filterModel.value"
           @change="filterCallback()"
           :options="equipmentModelList"
+					filter
           optionLabel="equipment_model_name"
           optionValue="equipment_model_name"
           placeholder="Модель"
@@ -359,6 +361,7 @@
           v-model="filterModel.value"
           @change="filterCallback()"
           :options="equipmentClassList"
+					filter
           optionLabel="equipment_class_name"
           optionValue="equipment_class_name"
           placeholder="Класс"
@@ -646,7 +649,7 @@ export default {
       this.createData = data;
       console.log(this.createData);
     },
-    saveEquipment() {
+    saveEquipment: async function () {
       this.submitted = true;
       if (
         this.equipmentData.factory_number !== null &&
@@ -656,11 +659,12 @@ export default {
           this.equipmentData.equipmentModel !== null &&
           this.equipmentData.equipmentClass !== null
         ) {
-          this.createEquipment();
-          this.getEquipmentList();
+          await this.createEquipment();
+          await this.getEquipmentList();
+					this.submitted = false;
           this.$toast.add({
             severity: "success",
-            summary: "Successful",
+            summary: "Успешно",
             group: "br",
             detail: "Оборудование добавлено",
             life: 3000,
@@ -684,6 +688,13 @@ export default {
         group: "br",
         life: 3000,
       });
+			(this.equipmentData = {
+						factory_number: null,
+						inventory_number: null,
+						equipmentModel: null,
+						equipmentClass: null,
+						equipment_state_id: 1,
+					});
       this.getEquipmentList();
     },
     showAddData() {
@@ -726,9 +737,10 @@ export default {
           header: "Подтверждение изменения",
           icon: "pi pi-info-circle",
           acceptClass: "p-button-danger",
-          accept: () => {
-            this.updateEquipment();
-            this.getEquipmentList();
+          accept: async () => {
+            await this.updateEquipment();
+            await this.getEquipmentList();
+						this.submitted = false;
             this.equipmentData = {
               factory_number: null,
               inventory_number: null,

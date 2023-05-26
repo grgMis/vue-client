@@ -1,11 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  {
-    path: '/test',
-    name: 'home',
-    component: () => import('../components/Test.vue')
-  },
 	{
     path: '/login',
     name: 'login',
@@ -49,34 +44,22 @@ const routes = [
     component: () => import('../components/Well/FieldData.vue')
   },
 	{
-    path: '/admin/dept-type',
-    name: 'dept-type',
-		meta: {layout: 'admin'},
-    component: () => import('../components/Well/DeptTypeData.vue')
-  },
-	{
     path: '/admin/well-state',
     name: 'well-state',
 		meta: {layout: 'admin'},
     component: () => import('../components/Well/WellStateData.vue')
   },
 	{
-    path: '/admin/dept',
-    name: 'dept',
+    path: '/admin/company',
+    name: 'company',
 		meta: {layout: 'admin'},
-    component: () => import('../components/Well/DeptData.vue')
+    component: () => import('../components/Well/CompanyData.vue')
   },
 	{
     path: '/admin/well',
     name: 'well',
 		meta: {layout: 'admin'},
-    component: () => import('../components/Well/Well.vue')
-  },
-	{
-    path: '/admin/action-group',
-    name: 'action-group',
-		meta: {layout: 'admin'},
-    component: () => import('../components/Action/ActionGroupData.vue')
+    component: () => import('../components/Well/WellData.vue')
   },
 	{
     path: '/admin/action-state',

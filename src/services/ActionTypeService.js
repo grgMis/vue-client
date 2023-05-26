@@ -1,10 +1,6 @@
 import http from '../http-common';
 
 const ActionTypeService = {
-	async getListByGroup(actionGroupId) {
-		const response = await http.get(`/action-type?action_group_id=${actionGroupId}`);
-		return response.data;
-	},
 
 	async getList() {
 		const response = await http.get('/action-type');
@@ -16,18 +12,18 @@ const ActionTypeService = {
 		return response.data;
 	},
 
-	async create(actionGroupId, requestData) {
-		const response = await http.post(`/action-type?action_group_id=${actionGroupId}`, requestData);
+	async create(requestData) {
+		const response = await http.post('/action-type', requestData);
 		return response.data;
 	},
 
-	async update(actionTypeId, actionGroupId, requestData) {
-		const response = await http.put(`/action-type/${actionTypeId}?action_group_id=${actionGroupId}`, requestData);
+	async update(actionTypeId, requestData) {
+		const response = await http.put(`/action-type/${actionTypeId}`, requestData);
 		return response.data;
 	},
 
-	async delete(actionGroupId) {
-		const response = await http.delete(`/action-type/${actionGroupId}`)
+	async delete(actionTypeId) {
+		const response = await http.delete(`/action-type/${actionTypeId}`)
 		return response.data;
 	},
 };

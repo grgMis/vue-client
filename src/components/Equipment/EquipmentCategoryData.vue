@@ -244,14 +244,14 @@ export default {
           this.selectedCategory.equipment_category_sysname;
       }
     },
-    saveData() {
+    saveData: async function () {
       this.submitted = true;
       if (
         this.equipmentCategoryData.equipment_category_name !== null &&
         this.equipmentCategoryData.equipment_category_sysname !== null
       ) {
-        this.createEquipmentCategory();
-        this.getEquipmentCategoryList();
+        await this.createEquipmentCategory();
+        await this.getEquipmentCategoryList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
@@ -270,13 +270,13 @@ export default {
         equipment_category_name:
           this.equipmentCategoryData.equipment_category_name,
         equipment_category_sysname:
-          this.equipmentCategoryData.equipment_category_name,
+          this.equipmentCategoryData.equipment_category_sysname,
       };
       const data = await EquipmentCategoryService.create(requestData);
       this.createData = data;
       console.log(this.createData);
     },
-    updateData() {
+    updateData(){
       this.submitted = true;
       console.log(this.equipmentCategoryData);
       if (
@@ -288,9 +288,9 @@ export default {
           header: 'Подтверждение изменения',
           icon: 'pi pi-info-circle',
           acceptClass: 'p-button-danger',
-          accept: () => {
-            this.updateEquipmentCategory();
-            this.getEquipmentCategoryList();
+          accept: async () => {
+            await this.updateEquipmentCategory();
+            await this.getEquipmentCategoryList();
             this.equipmentCategoryData = {
               equipment_category_name: null,
               equipment_category_sysname: null,

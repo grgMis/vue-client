@@ -330,7 +330,6 @@
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 
 import ActionService from "../../../services/ActionService";
-import ActionGroupService from "../../../services/ActionGroupService";
 import ActionTypeService from "../../../services/ActionTypeService";
 import ActionStateService from "../../../services/ActionStateService";
 import EquipmentCategoryService from "../../../services/EquipmentCategoryService";
@@ -338,7 +337,6 @@ import EquipmentService from "../../../services/EquipmentService";
 import EquipmentStateService from "../../../services/EquipmentStateService";
 import WellService from "../../../services/WellService";
 import WellStateService from "../../../services/WellStateService";
-import WellEquipmentService from "../../../services/WellEquipmentService";
 
 export default {
   data() {

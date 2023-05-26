@@ -191,12 +191,12 @@ export default {
           this.selectedState.equipment_state_name;
       }
     },
-    saveData() {
+    saveData: async function () {
       this.submitted = true;
       if (
         this.equipmentStateData.equipment_state_name !== null) {
-        this.createEquipmentState();
-        this.getEquipmentStateList();
+        await this.createEquipmentState();
+        await this.getEquipmentStateList();
         this.$toast.add({
           severity: 'success',
           summary: 'Успешно',
