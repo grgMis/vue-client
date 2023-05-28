@@ -1,5 +1,5 @@
 <template>
-  <Toast position="bottom-right" group="br"/>
+  <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
   <Dialog
     v-model:visible="visibleAddDialog"
@@ -43,6 +43,7 @@
       <InputText
         id="action_type_name"
         :value="actionTypeData.action_type_name"
+        @input="actionTypeData.action_type_name = $event.target.value"
         required="true"
         :class="{
           'p-invalid': submitted && !actionTypeData.action_type_name,
@@ -129,15 +130,14 @@
         {{ data.action_type_name }}
       </template>
     </Column>
-
   </DataTable>
 </template>
 
 <script>
-import ActionTypeService from '../../services/ActionTypeService'
+import ActionTypeService from "../../services/ActionTypeService";
 
 export default {
-  name: 'ActionType',
+  name: "ActionType",
   data() {
     return {
       visibleAddDialog: false,
@@ -159,10 +159,10 @@ export default {
     },
     refreshData() {
       this.$toast.add({
-        severity: 'success',
-        summary: 'Внимание',
-        detail: 'Данные перезагружены',
-				group: 'br',
+        severity: "success",
+        summary: "Внимание",
+        detail: "Данные перезагружены",
+        group: "br",
         life: 3000,
       });
       this.getActionTypeList();
@@ -173,10 +173,10 @@ export default {
     showEditData() {
       if (this.selectedActionType === null) {
         this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите тип для редактирования',
-					group: 'br',
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите тип для редактирования",
+          group: "br",
           life: 3000,
         });
       } else {
@@ -187,17 +187,15 @@ export default {
     },
     saveData: async function () {
       this.submitted = true;
-      if (
-        this.actionTypeData.action_type_name !== null
-      ) {
+      if (this.actionTypeData.action_type_name !== null) {
         await this.createActionType();
         await this.getActionTypeList();
         this.submitted = false;
-				this.$toast.add({
-          severity: 'success',
-          summary: 'Успешно',
-          detail: 'Тип добавлен',
-					group: 'br',
+        this.$toast.add({
+          severity: "success",
+          summary: "Успешно",
+          detail: "Тип добавлен",
+          group: "br",
           life: 3000,
         });
         this.actionTypeData = {
@@ -210,45 +208,41 @@ export default {
       const requestData = {
         action_type_name: this.actionTypeData.action_type_name,
       };
-      const data = await ActionTypeService.create(
-        requestData
-      );
+      const data = await ActionTypeService.create(requestData);
       this.createData = data;
       console.log(this.createData);
     },
     updateData() {
       this.submitted = true;
       console.log(this.actionTypeData);
-      if (
-        this.actionTypeData.action_type_name !== ''
-      ) {
+      if (this.actionTypeData.action_type_name !== "") {
         this.$confirm.require({
-          message: 'Вы точно хотите изменить выбранную запись?',
-          header: 'Подтверждение изменения',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
+          message: "Вы точно хотите изменить выбранную запись?",
+          header: "Подтверждение изменения",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
           accept: async () => {
             await this.updateActionType();
             await this.getActionTypeList();
-						this.submitted = false;
+            this.submitted = false;
             this.actionTypeData = {
               action_type_name: null,
             };
             this.visibleEditDialog = false;
             this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись изменена',
-							group: 'br',
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись изменена",
+              group: "br",
               life: 3000,
             });
           },
           reject: () => {
             this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена изменения',
-							group: 'br',
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена изменения",
+              group: "br",
               life: 3000,
             });
           },
@@ -260,45 +254,42 @@ export default {
       const requestData = {
         action_type_name: this.actionTypeData.action_type_name,
       };
-      await ActionTypeService.update(
-        actionTypeId,
-        requestData
-      );
+      await ActionTypeService.update(actionTypeId, requestData);
       this.getActionTypeList();
       this.selectedActionType = null;
     },
     deleteData() {
       if (this.selectedActionType === null) {
         this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите тип для удаления',
-					group: 'br',
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите тип для удаления",
+          group: "br",
           life: 3000,
         });
       } else {
         this.$confirm.require({
-          message: 'Вы точно хотите удалить выбранную запись?',
-          header: 'Подтверждение удаления',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
+          message: "Вы точно хотите удалить выбранную запись?",
+          header: "Подтверждение удаления",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
           accept: () => {
             this.deleteActionType();
             this.getActionTypeList();
             this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись удалена',
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись удалена",
               life: 3000,
             });
           },
           reject: () => {
             this.selectedActionType = null;
             this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена удаления',
-							group: 'br',
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена удаления",
+              group: "br",
               life: 3000,
             });
           },

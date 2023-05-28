@@ -106,10 +106,9 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 
 //my components
-import ActionEntryDialog from '@/components/Action/ActionDialog/ActionEntryDialog';
-import ActionRepairDialog from '@/components/Action/ActionDialog/ActionRepairDialog';
-import ActionDemolitionDialog from '@/components/Action/ActionDialog/ActionDemolitionDialog';
-import ActionInfoDialog from '@/components/Action/ActionDialog/ActionInfoDialog';
+import ActionDialog from '@/components/Action/ActionDialog/ActionDialog';
+import EntryTemplate from '@/components/Action/ActionDialog/ActionTemplate/EntryTemplate'
+import ActionInfoDialog from '@/components/Action/ActionDialog/ActionInfoDialog'
 
 const app = createApp(App);
 
@@ -126,10 +125,9 @@ app.directive('styleclass', StyleClass);
 app.directive('focustrap', FocusTrap);
 
 //my components
-app.component('ActionEntryDialog', ActionEntryDialog);
-app.component('ActionRepairDialog', ActionRepairDialog);
-app.component('ActionDemolitionDialog', ActionDemolitionDialog);
+app.component('ActionDialog', ActionDialog);
 app.component('ActionInfoDialog', ActionInfoDialog);
+app.component('EntryTemplate', EntryTemplate);
 
 //components
 app.component('Accordion', Accordion);

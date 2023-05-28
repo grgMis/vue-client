@@ -1,6 +1,11 @@
 import http from '../http-common'
 
 const ActionCompositionService = {
+	async getListByAction(actionId) {
+		const response = await http.get(`/action-composition?action_id=${actionId}`);
+		return response.data;
+	},
+
 	async getList() {
 		const response = await http.get('/action-composition');
 		return response.data;
@@ -17,6 +22,15 @@ const ActionCompositionService = {
 			?action_id=${actionId}
 			&equipment_id=${equipmentId}
 			&action_composition_state_id=${actionCompositionStateId}`,
+			requestData
+		);
+		return response.data;
+	},
+
+	async updateState(actionCompositionId, actionCompositionStateId, requestData) {
+		const response = await http.put(
+			`/action-composition/${actionCompositionId}
+			?action_composition_state_id=${actionCompositionStateId}`,
 			requestData
 		);
 		return response.data;

@@ -44,7 +44,7 @@
         v-model="equipmentData.equipmentClass"
         :options="classList"
         @change="getModelList"
-				filter
+        filter
         optionLabel="equipment_class_name"
         placeholder="Выберите класс"
         :class="{ 'p-invalid': submitted && !equipmentData.equipmentClass }"
@@ -302,83 +302,37 @@
     :globalFilterFields="[
       'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
       'equipmentModel.equipmentClass.equipment_class_name',
-      'equipmentModel.equipment_model_name',
       'equipmentState.equipment_state_name',
       'inventory_number',
-      'factory_number',
-      'date_entry',
     ]"
   >
     <Column
       style="max-width: 10rem"
-      header="Модель"
-			field="equipmentModel.equipment_model_name"
-      filterField="equipmentModel.equipment_model_name"
-			sortable
-      :showFilterMenu="false"
-    >
-      <template #body="{ data }">
-        {{ data.equipmentModel.equipment_model_name }}
-      </template>
-      <template #filter="{ filterModel, filterCallback }">
-        <Dropdown
-          class="p-column-filter"
-          style="width: 165px"
-          :showClear="true"
-          v-model="filterModel.value"
-          @change="filterCallback()"
-          :options="equipmentModelList"
-					filter
-          optionLabel="equipment_model_name"
-          optionValue="equipment_model_name"
-          placeholder="Модель"
-        >
-          <template #option="slotProps">
-            <div>
-              <span>{{ slotProps.option.equipment_model_name }}</span>
-            </div>
-          </template>
-        </Dropdown>
-      </template>
-    </Column>
-
-    <Column
-      style="max-width: 10rem"
-      header="Класс"
-			field="equipmentModel.equipmentClass.equipment_class_name"
-      filterField="equipmentModel.equipmentClass.equipment_class_name"
+      header="Инвентарный номер"
+      field="inventory_number"
+      filterField="inventory_number"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.equipmentModel.equipmentClass.equipment_class_name }}
+        {{ data.inventory_number }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
-        <Dropdown
-          class="p-column-filter"
-          style="width: 165px"
-          :showClear="true"
+        <InputText
+          class="p-column-filter p-inputtext-sm"
           v-model="filterModel.value"
-          @change="filterCallback()"
-          :options="equipmentClassList"
-					filter
-          optionLabel="equipment_class_name"
-          optionValue="equipment_class_name"
-          placeholder="Класс"
-        >
-          <template #option="slotProps">
-            <div>
-              <span>{{ slotProps.option.equipment_class_name }}</span>
-            </div>
-          </template>
-        </Dropdown>
+          type="text"
+          @input="filterCallback()"
+          placeholder="Поиск"
+          showClear
+        />
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
       header="Категория"
-			field="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
+      field="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
       filterField="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
       sortable
       :showFilterMenu="false"
@@ -412,53 +366,63 @@
 
     <Column
       style="max-width: 10rem"
-      header="Инвентарный номер"
-			field="inventory_number"
-      filterField="inventory_number"
+      header="Класс"
+      field="equipmentModel.equipmentClass.equipment_class_name"
+      filterField="equipmentModel.equipmentClass.equipment_class_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.inventory_number }}
+        {{ data.equipmentModel.equipmentClass.equipment_class_name }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
-        <InputText
-          class="p-column-filter p-inputtext-sm"
+        <Dropdown
+          class="p-column-filter"
+          style="width: 165px"
+          :showClear="true"
           v-model="filterModel.value"
-          type="text"
-          @input="filterCallback()"
-          placeholder="Поиск"
-          showClear
-        />
+          @change="filterCallback()"
+          :options="equipmentClassList"
+          filter
+          optionLabel="equipment_class_name"
+          optionValue="equipment_class_name"
+          placeholder="Класс"
+        >
+          <template #option="slotProps">
+            <div>
+              <span>{{ slotProps.option.equipment_class_name }}</span>
+            </div>
+          </template>
+        </Dropdown>
+      </template>
+    </Column>
+
+    <Column
+      style="max-width: 10rem"
+      header="Модель"
+      field="equipmentModel.equipment_model_name"
+      sortable
+    >
+      <template #body="{ data }">
+        {{ data.equipmentModel.equipment_model_name }}
       </template>
     </Column>
 
     <Column
       style="max-width: 9rem"
       header="Заводской номер"
-			field="factory_number"
-      filterField="factory_number"
+      field="factory_number"
       sortable
-      :showFilterMenu="false"
     >
       <template #body="{ data }">
         {{ data.factory_number }}
-      </template>
-      <template #filter="{ filterModel, filterCallback }">
-        <InputText
-          class="p-column-filter p-inputtext-sm"
-          v-model="filterModel.value"
-          type="text"
-          @input="filterCallback()"
-          placeholder="Поиск"
-        />
       </template>
     </Column>
 
     <Column
       style="max-width: 12rem"
       header="Дата добавления"
-			field="date_entry"
+      field="date_entry"
       filterField="date_entry"
       dataType="date"
       :showFilterMenu="false"
@@ -467,20 +431,22 @@
       <template #body="{ data }">
         {{ data.date_entry }}
       </template>
-      <template #filter="{ filterModel }">
+      <template #filter="{ filterModel, filterCallback }">
         <Calendar
           v-model="filterModel.value"
+          @change="filterCallback()"
           dateFormat="dd-mm-yy"
           placeholder="дд-мм-гггг"
           mask="99-99-9999"
-          style="width: 7rem"
+          showIcon
+          style="width: 10rem"
         />
       </template>
     </Column>
 
     <Column
       style="max-width: 10rem"
-			field="equipmentState.equipment_state_name"
+      field="equipmentState.equipment_state_name"
       filterField="equipmentState.equipment_state_name"
       sortable
       header="Состояние"
@@ -553,24 +519,23 @@ export default {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        "equipmentModel.equipment_model_name": {
-          value: null,
-          matchMode: FilterMatchMode.EQUALS,
-        },
         "equipmentState.equipment_state_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
         inventory_number: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        factory_number: { value: null, matchMode: FilterMatchMode.CONTAINS },
         date_entry: {
-          operator: FilterOperator.AND,
-          constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+          value: null,
+          matchMode: FilterMatchMode.EQUALS,
         },
       },
     };
   },
   methods: {
+    formatDate(value) {
+      const date = new Date(value);
+      return date.toLocaleDateString("en-US");
+    },
     getEquipmentList: async function () {
       const data = await EquipmentService.getList();
       this.equipmentList = data;
@@ -659,24 +624,26 @@ export default {
           this.equipmentData.equipmentModel !== null &&
           this.equipmentData.equipmentClass !== null
         ) {
-          await this.createEquipment();
-          await this.getEquipmentList();
-					this.submitted = false;
-          this.$toast.add({
-            severity: "success",
-            summary: "Успешно",
-            group: "br",
-            detail: "Оборудование добавлено",
-            life: 3000,
+					try {
+						await this.createEquipment();
+						await this.getEquipmentList();
+						this.clearData();
+						this.$toast.add({
+							severity: "success",
+							summary: "Успешно",
+							group: "br",
+							detail: "Оборудование добавлено",
+							life: 3000,
           });
-          (this.modelList = []),
-					(this.equipmentData = {
-						factory_number: null,
-						inventory_number: null,
-						equipmentModel: null,
-						equipmentClass: null,
-						equipment_state_id: 1,
-					});
+					} catch (ex) {
+						this.$toast.add({
+							severity: "error",
+							summary: "Внимание",
+							group: "br",
+							detail: ex.response.data.message,
+							life: 3000
+						})
+					}
         }
       }
     },
@@ -688,17 +655,18 @@ export default {
         group: "br",
         life: 3000,
       });
-			(this.equipmentData = {
-						factory_number: null,
-						inventory_number: null,
-						equipmentModel: null,
-						equipmentClass: null,
-						equipment_state_id: 1,
-					});
+      this.equipmentData = {
+        factory_number: null,
+        inventory_number: null,
+        equipmentModel: null,
+        equipmentClass: null,
+        equipment_state_id: 1,
+      };
       this.getEquipmentList();
     },
     showAddData() {
       this.visibleAddDialog = true;
+			this.clearData();
     },
     showEditData() {
       if (this.selectedEquipment === null) {
@@ -740,7 +708,7 @@ export default {
           accept: async () => {
             await this.updateEquipment();
             await this.getEquipmentList();
-						this.submitted = false;
+            this.submitted = false;
             this.equipmentData = {
               factory_number: null,
               inventory_number: null,
@@ -830,6 +798,15 @@ export default {
       await EquipmentService.delete(selectedId);
       this.selectedEquipment = null;
     },
+		clearData() {
+			this.submitted = false,
+			this.modelList = [],
+			this.equipmentData.factory_number = null,
+			this.equipmentData.inventory_number = null,
+			this.equipmentData.equipmentModel = null,
+			this.equipmentData.equipmentClass = null,
+			this.equipmentData.equipmentState = null
+		},
     getSeverity(equipment) {
       switch (equipment.equipmentState.equipment_state_name) {
         case "Установлено":

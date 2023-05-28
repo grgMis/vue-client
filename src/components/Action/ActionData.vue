@@ -2,18 +2,11 @@
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
 
-  <!-- <ActionEntryDialog v-model:visible="visibleEntryDialog"></ActionEntryDialog>
-  <ActionRepairDialog
-    v-model:visible="visibleRepairDialog"
-  ></ActionRepairDialog>
-  <ActionDemolitionDialog
-    v-model:visible="visibleDemolitionDialog"
-  ></ActionDemolitionDialog>
-  <ActionInfoDialog
-    v-model:visible="visibleInfoDialog"
-    :selectedAction="selectedAction"
-  ></ActionInfoDialog> -->
   <ActionDialog v-model:visible="visibleActionDialog"></ActionDialog>
+	<ActionInfoDialog 
+		v-model:visible="visibleInfoDialog"
+		:selectedAction="selectedAction">
+	</ActionInfoDialog>
 
   <Toolbar>
     <template #start>
@@ -28,30 +21,6 @@
         style="color: gray"
         outlined
       />
-      <!-- <Button
-        label="Установка"
-        @click="showEntryDialog"
-        icon="pi pi-plus"
-        class="mr-2"
-        style="color: gray"
-        outlined
-      />
-      <Button
-        label="Демонтаж"
-        @click="showDemolitionDialog"
-        icon="pi pi-times"
-        class="mr-2"
-        style="color: gray"
-        outlined
-      />
-      <Button
-        label="Ремонт"
-        @click="showRepairDialog"
-        icon="pi pi-wrench"
-        class="mr-2"
-        style="color: gray"
-        outlined
-      /> -->
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
@@ -76,7 +45,7 @@
     showGridlines
     :globalFilterFields="[
       'well.well_name',
-      'user.user_name',
+      'user.employee.employee_last_name',
       'actionType.action_type_sysname',
       'actionState.action_state_name',
     ]"
@@ -137,13 +106,21 @@
     <Column
       style="max-width: 10rem"
       header="Ответственный"
-      field="user.user_name"
-      filterField="user.user_name"
+      field="user.employee.employee_last_name"
+      filterField="user.employee.employee_last_name"
       sortable
       :showFilterMenu="false"
     >
       <template #body="{ data }">
-        {{ data.user.user_name }}
+        {{
+          data.user.employee.employee_last_name +
+          " " +
+          data.user.employee.employee_first_name[0] +
+          "." +
+          " " +
+          data.user.employee.employee_father_name[0] +
+          "."
+        }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
@@ -230,12 +207,6 @@
 
 
 <script>
-import ActionEntryDialog from "./ActionDialog/ActionEntryDialog.vue";
-import ActionRepairDialog from "./ActionDialog/ActionRepairDialog.vue";
-import ActionDemolitionDialog from "./ActionDialog/ActionDemolitionDialog.vue";
-import ActionInfoDialog from "./ActionDialog/ActionInfoDialog.vue";
-import ActionDialog from "./ActionDialog/ActionDialog.vue"
-
 import { FilterMatchMode } from "primevue/api";
 import ActionService from "../../services/ActionService";
 import WellService from "../../services/WellService";
@@ -243,22 +214,11 @@ import ActionStateService from "../../services/ActionStateService";
 
 export default {
   name: "Action",
-  components: {
-    ActionEntryDialog,
-    ActionRepairDialog,
-    ActionDemolitionDialog,
-    ActionInfoDialog,
-		ActionDialog
-  },
   data() {
     return {
       submitted: false,
-      visibleRepairDialog: false,
-      visibleEntryDialog: false,
-      visibleDemolitionDialog: false,
       visibleInfoDialog: false,
-
-			visibleActionDialog: false,
+      visibleActionDialog: false,
 
       createData: [],
       actionList: [],
@@ -279,7 +239,7 @@ export default {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        "user.user_name": {
+        "user.employee.employee_last_name": {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
@@ -295,18 +255,8 @@ export default {
     };
   },
   methods: {
-		showActionDialog() {
-			this.visibleActionDialog = true;
-		},
-
-    showEntryDialog() {
-      this.visibleEntryDialog = true;
-    },
-    showRepairDialog() {
-      this.visibleRepairDialog = true;
-    },
-    showDemolitionDialog() {
-      this.visibleDemolitionDialog = true;
+    showActionDialog() {
+      this.visibleActionDialog = true;
     },
     showInfo() {
       this.visibleInfoDialog = true;
