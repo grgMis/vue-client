@@ -6,6 +6,20 @@ const ActionCompositionService = {
 		return response.data;
 	},
 
+	async getListByWellAndEquipmentState(wellId, equipmentStateId) {
+		const response = await http.get(
+			`/action-composition?well_id=${wellId}&equipment_state_id=${equipmentStateId}`
+			);
+			return response.data;
+	},
+
+	async getListByWellAndEquipmentCategory(wellId, equipmentCategoryId) {
+		const response = await http.get(
+			`/action-composition?well_id=${wellId}&equipment_category_id=${equipmentCategoryId}`
+			);
+			return response.data;
+	},
+
 	async getList() {
 		const response = await http.get('/action-composition');
 		return response.data;

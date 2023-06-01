@@ -107,8 +107,14 @@ import VirtualScroller from 'primevue/virtualscroller';
 
 //my components
 import ActionDialog from '@/components/Action/ActionDialog/ActionDialog';
-import EntryTemplate from '@/components/Action/ActionDialog/ActionTemplate/EntryTemplate'
-import ActionInfoDialog from '@/components/Action/ActionDialog/ActionInfoDialog'
+import EntryTemplate from '@/components/Action/ActionDialog/ActionTemplate/EntryTemplate';
+import DemolitionTemplate from '@/components/Action/ActionDialog/ActionTemplate/DemolitionTemplate';
+import RepairTemplate from '@/components/Action/ActionDialog/ActionTemplate/RepairTemplate'
+import ActionInfoDialog from '@/components/Action/ActionDialog/ActionInfoDialog';
+import GroundTemplate from '@/components/Well/EquipmentTemplate/GroundTemplate';
+import DownholeTemplate from '@/components/Well/EquipmentTemplate/DownholeTemplate';
+import ElectricalTemplate from '@/components/Well/EquipmentTemplate/ElectricalTemplate';
+import MetrologyTemplate from '@/components/Well/EquipmentTemplate/MetrologyTemplate';
 
 const app = createApp(App);
 
@@ -128,6 +134,12 @@ app.directive('focustrap', FocusTrap);
 app.component('ActionDialog', ActionDialog);
 app.component('ActionInfoDialog', ActionInfoDialog);
 app.component('EntryTemplate', EntryTemplate);
+app.component('DemolitionTemplate', DemolitionTemplate);
+app.component('RepairTemplate', RepairTemplate);
+app.component('GroundTemplate', GroundTemplate);
+app.component('DownholeTemplate', DownholeTemplate);
+app.component('ElectricalTemplate', ElectricalTemplate);
+app.component('MetrologyTemplate', MetrologyTemplate);
 
 //components
 app.component('Accordion', Accordion);

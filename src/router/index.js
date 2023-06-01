@@ -62,6 +62,12 @@ const routes = [
     component: () => import('../components/Well/WellData.vue')
   },
 	{
+    path: '/admin/current-equipment',
+    name: 'current-equipment',
+		meta: {layout: 'admin'},
+    component: () => import('../components/Well/CurrentEquipment.vue')
+  },
+	{
     path: '/admin/action-state',
     name: 'action-state',
 		meta: {layout: 'admin'},

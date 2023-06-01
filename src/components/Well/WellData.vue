@@ -119,7 +119,8 @@
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !wellData.company_name"> </small>
+        <small class="p-error" v-if="submitted && !wellData.company_name">
+        </small>
       </Dropdown>
     </div>
 
@@ -227,7 +228,7 @@
     <Column
       style="max-width: 10rem"
       header="Компания"
-			field="company.company_name"
+      field="company.company_name"
       filterField="company.company_name"
       sortable
       :showFilterMenu="false"
@@ -259,7 +260,7 @@
     <Column
       style="max-width: 10rem"
       header="Месторождение"
-			field="company.field.field_name"
+      field="company.field.field_name"
       filterField="company.field.field_name"
       sortable
       :showFilterMenu="false"
@@ -291,7 +292,7 @@
     <Column
       style="max-width: 12rem"
       header="Дата добавления"
-			field="date_entry"
+      field="date_entry"
       filterField="date_entry"
       dataType="date"
       :showFilterMenu="false"
@@ -314,7 +315,7 @@
     <Column
       style="max-width: 10rem"
       header="Состояние"
-			field="wellState.well_state_name"
+      field="wellState.well_state_name"
       filterField="wellState.well_state_name"
       sortable
       :showFilterMenu="false"
@@ -359,9 +360,9 @@ export default {
   name: "Well",
   data() {
     return {
+      submitted: false,
       visibleAddDialog: false,
       visibleEditDialog: false,
-      submitted: false,
       wellList: [],
       companyList: [],
       fieldList: [],
@@ -472,7 +473,11 @@ export default {
       const requestData = {
         well_name: this.wellData.well_name,
       };
-      const data = await WellService.create(companyId, wellStateId, requestData);
+      const data = await WellService.create(
+        companyId,
+        wellStateId,
+        requestData
+      );
       this.createData = data;
       console.log(this.createData);
     },

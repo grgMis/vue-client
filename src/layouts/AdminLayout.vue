@@ -22,72 +22,75 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       visible: false,
       items: [
         {
-          label: 'Оборудование',
+          label: "Оборудование",
           items: [
             {
-              label: 'Список',
-							to: '/admin/equipment'
+              label: "Список",
+              to: "/admin/equipment",
             },
             {
-              label: 'Модели',
-              to: '/admin/equipment-model'
+              label: "Модели",
+              to: "/admin/equipment-model",
             },
             {
-              label: 'Классы',
-              to: '/admin/equipment-class'
+              label: "Классы",
+              to: "/admin/equipment-class",
             },
             {
-              label: 'Категории',
-							to: '/admin/equipment-category'
+              label: "Категории",
+              to: "/admin/equipment-category",
             },
             {
-              label: 'Состояния',
-              to: '/admin/equipment-state'
+              label: "Состояния",
+              to: "/admin/equipment-state",
             },
           ],
         },
         {
-          label: 'Объекты',
+          label: "Объекты",
           items: [
             {
-              label: 'Список',
-              to: '/admin/well'
+              label: "Текущее оборудование",
+              to: "/admin/current-equipment",
+            },
+            {
+              label: "Список",
+              to: "/admin/well",
             },
             {
               label: "Компании",
-              to: '/admin/company'
+              to: "/admin/company",
             },
             {
-              label: 'Месторождения',
-              to: '/admin/field'
+              label: "Месторождения",
+              to: "/admin/field",
             },
             {
-              label: 'Состояния',
-              to: '/admin/well-state'
+              label: "Состояния",
+              to: "/admin/well-state",
             },
           ],
         },
-				{
-          label: 'Мероприятия',
+        {
+          label: "Мероприятия",
           items: [
             {
-              label: 'Список',
-              to: '/admin/action'
+              label: "Список",
+              to: "/admin/action",
             },
             {
-              label: 'Типы',
-              to: '/admin/action-type'
+              label: "Типы",
+              to: "/admin/action-type",
             },
             {
-              label: 'Состояния',
-              to: '/admin/action-state'
+              label: "Состояния",
+              to: "/admin/action-state",
             },
           ],
         },

@@ -463,7 +463,7 @@ export default {
             this.$toast.add({
               severity: "success",
               summary: "Выполнено",
-              detail: "Запись удалена",
+              detail: "Запись изменена",
               life: 3000,
             });
           },
@@ -483,6 +483,9 @@ export default {
       this.clearData();
       this.visibleEditCompositionDialog = true;
       this.selectedActionComposition = actionComposition;
+			this.actionData.dateComplete = actionComposition.date_complete;
+			this.actionData.actionCompositionState = actionComposition.actionCompositionState;
+			this.actionData.actionCompositionNote = actionComposition.action_composition_note;
     },
     editEquipmentInActionComposition: async function () {
       this.showData();

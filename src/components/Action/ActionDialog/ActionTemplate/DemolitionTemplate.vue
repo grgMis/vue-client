@@ -1,5 +1,13 @@
 <template>
   <div class="card">
+    <div class="field">
+      <Button
+        label="Обновить"
+        @click="refreshData"
+        class="w-full md:w-10rem"
+        icon="pi pi-refresh"
+      />
+    </div>
     <DataTable
       class="pt-1 p-datatable-sm h-25rem mb-8"
       v-model:selection="selectedEquipments"
@@ -8,25 +16,25 @@
       selectionMode="multiple"
       paginator
       :rows="6"
-      dataKey="equipment_id"
+      dataKey="action_composition_id"
       filterDisplay="row"
       showGridlines
       :globalFilterFields="[
-        'inventory_number',
-        'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
+        'equipment.inventory_number',
+        'equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
       ]"
     >
       <Column selectionMode="multiple" headerStyle="width: 3rem" />
       <Column
         style="max-width: 10rem"
         header="Инвентарный номер"
-        field="inventory_number"
-        filterField="inventory_number"
+        field="equipment.inventory_number"
+        filterField="equipment.inventory_number"
         sortable
         :showFilterMenu="false"
       >
         <template #body="{ data }">
-          {{ data.inventory_number }}
+          {{ data.equipment.inventory_number }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -43,14 +51,14 @@
       <Column
         style="max-width: 10rem"
         header="Категория"
-        field="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
-        filterField="equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
+        field="equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
+        filterField="equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name"
         :showFilterMenu="false"
         sortable
       >
         <template #body="{ data }">
           {{
-            data.equipmentModel.equipmentClass.equipmentCategory
+            data.equipment.equipmentModel.equipmentClass.equipmentCategory
               .equipment_category_name
           }}
         </template>
@@ -77,33 +85,35 @@
       <Column
         style="max-width: 10rem"
         header="Модель"
-        field="equipmentModel.equipment_model_name"
+        field="equipment.equipmentModel.equipment_model_name"
         sortable
       >
         <template #body="{ data }">
-          {{ data.equipmentModel.equipment_model_name }}
+          {{ data.equipment.equipmentModel.equipment_model_name }}
         </template>
       </Column>
 
       <Column
         style="max-width: 10rem"
         header="Класс"
-        field="equipmentModel.equipmentClass.equipment_class_name"
+        field="equipment.equipmentModel.equipmentClass.equipment_class_name"
         sortable
       >
         <template #body="{ data }">
-          {{ data.equipmentModel.equipmentClass.equipment_class_name }}
+          {{
+            data.equipment.equipmentModel.equipmentClass.equipment_class_name
+          }}
         </template>
       </Column>
 
       <Column
         style="max-width: 10rem"
         header="Состояние"
-        field="equipmentState.equipment_state_name"
+        field="equipment.equipmentState.equipment_state_name"
         sortable
       >
         <template #body="{ data }">
-          {{ data.equipmentState.equipment_state_name }}
+          {{ data.equipment.equipmentState.equipment_state_name }}
         </template>
       </Column>
     </DataTable>
@@ -112,14 +122,14 @@
         label="Сохранить"
         class="w-full md:w-10rem"
         icon="pi pi-save"
-        @click="createEntryAction"
+        @click="createDemolitionAction"
       />
       <Button
         label="Очистить"
         class="w-full md:w-10rem ml-4"
         icon="pi pi-eraser"
-				@click="clearData"
-				text
+        @click="clearData"
+        text
       />
     </div>
   </div>
@@ -129,13 +139,13 @@
 import { FilterMatchMode } from "primevue/api";
 
 import ActionCompositionService from "../../../../services/ActionCompositionService";
-import ActionService from "../../../../services/ActionService";
-import EquipmentService from "../../../../services/EquipmentService";
 import EquipmentCategoryService from "../../../../services/EquipmentCategoryService";
 import WellService from "../../../../services/WellService";
+import EquipmentService from "../../../../services/EquipmentService";
+import ActionService from "../../../../services/ActionService";
 
 export default {
-  name: "EntryTemplate",
+  name: "DemolitionTemplate",
   props: {
     selectedWell: null,
     selectedUser: null,
@@ -148,25 +158,25 @@ export default {
       equipmentCategoryList: [],
       equipmentList: [],
       selectedEquipments: [],
-			equipmentStateId: 1,
+      equipmentStateId: 5,
       createdActionData: null,
       updateData: {
         wellStateId: 3,
-        equipmentStateId: 2
+        equipmentStateId: 2,
       },
       actionData: {
         dateComplete: null,
         actionCompositionNote: null,
         actionStateId: 1,
-        actionTypeId: 1,
-        actionCompositionStateId: 1
+        actionTypeId: 2,
+        actionCompositionStateId: 1,
       },
       filters: {
-        inventory_number: {
+        "equipment.inventory_number": {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        "equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
+        "equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name":
           {
             value: null,
             matchMode: FilterMatchMode.EQUALS,
@@ -176,11 +186,20 @@ export default {
   },
   methods: {
     getEquipmentDataList: async function () {
-			const equipmentStateId = this.equipmentStateId;
-      const equipmentData = await EquipmentService.getListByState(equipmentStateId);
-      this.equipmentList = equipmentData;
-      const equipmentCategoryData = await EquipmentCategoryService.getList();
-      this.equipmentCategoryList = equipmentCategoryData;
+      const equipmentStateId = this.equipmentStateId;
+      const wellId = this.selectedWell.well_id;
+      const data =
+        await ActionCompositionService.getListByWellAndEquipmentState(
+          wellId,
+          equipmentStateId
+        );
+      this.equipmentList = data;
+      console.log(this.equipmentList);
+    },
+    getEquipmentCategoryList: async function () {
+      const data = await EquipmentCategoryService.getList();
+      this.equipmentCategoryList = data;
+      console.log(this.equipmentCategoryList);
     },
     updateWellState() {
       const wellId = this.selectedWell.well_id;
@@ -208,7 +227,7 @@ export default {
         actionStateId,
         requestData
       );
-			this.updateWellState();
+      this.updateWellState();
       this.createdActionData = data;
     },
     createActionComposition(equipmentId) {
@@ -226,7 +245,7 @@ export default {
       );
     },
     updateEquipmentStateInCurrentAction(equipment) {
-      const equipmentId = equipment.equipment_id;
+      const equipmentId = equipment.equipment.equipment_id;
       this.updateEquipmentState(equipmentId);
       this.createActionComposition(equipmentId);
     },
@@ -237,7 +256,7 @@ export default {
       await this.createAction();
       this.addDataToActionComposition();
     },
-    createEntryAction: async function () {
+    createDemolitionAction: async function () {
       if (this.selectedWell === null) {
         this.$toast.add({
           severity: "info",
@@ -275,7 +294,7 @@ export default {
         acceptClass: "p-button-danger",
         accept: async () => {
           await this.createData();
-					this.clearData();
+          this.clearData();
           this.$toast.add({
             severity: "success",
             summary: "Выполнено",
@@ -283,7 +302,7 @@ export default {
             group: "br",
             life: 3000,
           });
-					this.getEquipmentDataList();
+          this.getEquipmentDataList();
         },
         reject: () => {
           this.$toast.add({
@@ -296,12 +315,31 @@ export default {
         },
       });
     },
-    clearData() {;
+    refreshData() {
+      if (this.selectedWell === null) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите объект",
+          group: "br",
+          life: 3000,
+        });
+        return;
+      } else {
+        this.$toast.add({
+          severity: "success",
+          summary: `Объект [${this.selectedWell.well_name}]`,
+          detail: "Оборудование загружено",
+          group: "br",
+          life: 3000,
+        });
+      }
+      this.getEquipmentDataList();
+      this.getEquipmentCategoryList();
+    },
+    clearData() {
       this.selectedEquipments = [];
     },
-  },
-  mounted() {
-    this.getEquipmentDataList();
   },
 };
 </script>

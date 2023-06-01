@@ -18,7 +18,6 @@
             optionLabel="well_name"
             placeholder="Объект"
             class="w-full md:w-15rem"
-            :class="{ 'p-invalid': submitted && !selectedData.selectedWell }"
           >
             <template #option="slotProps">
               <div v-if="slotProps.option.well_name">
@@ -28,11 +27,6 @@
                 {{ slotProps.placeholder }}
               </span>
             </template>
-            <small
-              class="p-error"
-              v-if="submitted && !selectedData.selectedWell"
-            >
-            </small>
           </Dropdown>
         </div>
 
@@ -46,7 +40,6 @@
             optionLabel="employee.employee_last_name"
             placeholder="Сотрудник"
             class="w-full md:w-15rem"
-            :class="{ 'p-invalid': submitted && !selectedData.selectedUser }"
           >
             <template #option="slotProps">
               <div v-if="slotProps.option.employee.employee_last_name">
@@ -64,11 +57,6 @@
                 {{ slotProps.placeholder }}
               </span>
             </template>
-            <small
-              class="p-error"
-              v-if="submitted && !selectedData.selectedUser"
-            >
-            </small>
           </Dropdown>
         </div>
 
@@ -142,12 +130,28 @@
             <i class="pi pi-times mr-2"></i>
             <span>Демонтаж</span>
           </template>
+          <DemolitionTemplate
+            :selectedWell="selectedData.selectedWell"
+            :selectedUser="selectedData.selectedUser"
+            :dateBegin="selectedData.dateBegin"
+            :dateEnd="selectedData.dateEnd"
+            :actionNote="selectedData.actionNote"
+          >
+          </DemolitionTemplate>
         </TabPanel>
         <TabPanel>
           <template #header>
             <i class="pi pi-wrench mr-2"></i>
             <span>Ремонт</span>
           </template>
+          <RepairTemplate
+            :selectedWell="selectedData.selectedWell"
+            :selectedUser="selectedData.selectedUser"
+            :dateBegin="selectedData.dateBegin"
+            :dateEnd="selectedData.dateEnd"
+            :actionNote="selectedData.actionNote"
+          >
+          </RepairTemplate>
         </TabPanel>
       </TabView>
     </div>
@@ -183,8 +187,8 @@ export default {
     },
     clearData() {
       this.selectedData.selectedWell = null;
-      (this.selectedData.selectedUser = null),
-        (this.selectedData.dateBegin = null);
+      this.selectedData.selectedUser = null;
+      this.selectedData.dateBegin = null;
       this.selectedData.dateEnd = null;
       this.selectedData.actionNote = null;
     },
