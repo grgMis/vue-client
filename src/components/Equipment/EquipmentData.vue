@@ -642,7 +642,7 @@ export default {
 							group: "br",
 							detail: ex.response.data.message,
 							life: 3000
-						})
+						});
 					}
         }
       }

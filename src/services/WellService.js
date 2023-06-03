@@ -22,7 +22,7 @@ const WellService = {
 	},
 
 	async update(wellId, companyId, wellStateId, requestData) {
-		const response = await http.put(`/well/${wellId}?company_id=${companyId}&well_state=${wellStateId}`, requestData);
+		const response = await http.put(`/well/${wellId}?company_id=${companyId}&well_state_id=${wellStateId}`, requestData);
 		return response.data;
 	},
 

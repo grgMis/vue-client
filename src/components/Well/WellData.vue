@@ -494,9 +494,9 @@ export default {
           header: "Подтверждение изменения",
           icon: "pi pi-info-circle",
           acceptClass: "p-button-danger",
-          accept: () => {
-            this.updateWell();
-            this.getWellList();
+          accept: async () => {
+            await this.updateWell();
+            await this.getWellList();
             this.wellData = {
               well_name: null,
               company: null,
@@ -530,6 +530,7 @@ export default {
       const requestData = {
         well_name: this.wellData.well_name,
       };
+			console.log(this.wellData.wellState);
       await WellService.update(wellId, companyId, wellStateId, requestData);
       this.getWellList();
       this.selectedWell = null;

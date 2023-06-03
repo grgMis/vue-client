@@ -10,7 +10,7 @@
           outlined
           @click="visible = true"
         />
-        <label class="font-bold text-3xl ml-3">Панель администратора</label>
+        <label class="font-bold text-3xl ml-3">Панель диспетчера</label>
       </template>
       <template #end>
         <label class="font-bold text-xl mr-3">
@@ -75,48 +75,6 @@ export default {
             {
               label: "Состояния",
               to: "/admin/equipment-state",
-            },
-          ],
-        },
-        {
-          label: "Объекты",
-          items: [
-            {
-              label: "Текущее оборудование",
-              to: "/admin/current-equipment",
-            },
-            {
-              label: "Список",
-              to: "/admin/well",
-            },
-            {
-              label: "Компании",
-              to: "/admin/company",
-            },
-            {
-              label: "Месторождения",
-              to: "/admin/field",
-            },
-            {
-              label: "Состояния",
-              to: "/admin/well-state",
-            },
-          ],
-        },
-        {
-          label: "Мероприятия",
-          items: [
-            {
-              label: "Список",
-              to: "/admin/action",
-            },
-            {
-              label: "Типы",
-              to: "/admin/action-type",
-            },
-            {
-              label: "Состояния",
-              to: "/admin/action-state",
             },
           ],
         },
