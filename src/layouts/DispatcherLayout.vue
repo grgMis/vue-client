@@ -2,18 +2,19 @@
   <div>
     <ConfirmPopup group="demo" />
     <Toast position="bottom-right" group="br" />
-    <Menubar>
+    <Menubar class="bg-indigo-600">
       <template #start>
         <Button
+					class="text-indigo-50"
           icon="pi pi-bars"
           style="color: gray"
           outlined
           @click="visible = true"
         />
-        <label class="font-bold text-3xl ml-3">Панель диспетчера</label>
+        <label class="font-bold text-3xl ml-3 text-indigo-50">Панель диспетчера</label>
       </template>
       <template #end>
-        <label class="font-bold text-xl mr-3">
+        <label class="font-bold text-xl mr-3 text-indigo-50">
           {{
             currentUser.employee.employee_last_name +
             " " +
@@ -25,7 +26,7 @@
           }}
         </label>
         <Button
-          class="mr-2"
+          class="mr-2 text-indigo-50"
           icon="pi pi-sign-out"
           style="color: gray"
           outlined

@@ -1,6 +1,7 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
+  <!--Диалоговая форма добавления типа мероприятия-->
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
@@ -30,7 +31,7 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="saveData" />
     </template>
   </Dialog>
-
+  <!--Диалоговая форма редактирования типа мероприятия-->
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
@@ -61,46 +62,38 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="updateData" />
     </template>
   </Dialog>
-
+  <!--Меню для взаимодействия со списком мероприятий-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Типы мероприятий</span>
+      <span class="font-bold text-3xl text-indigo-500">Типы мероприятий</span>
     </template>
     <template #end>
       <Button
         label="Добавить"
         @click="showAddData"
         icon="pi pi-plus"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Изменить"
         @click="showEditData"
         icon="pi pi-pencil"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Удалить"
         @click="deleteData"
         icon="pi pi-times"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
     </template>
   </Toolbar>
-
+  <!--Вывод списка мероприятий-->
   <DataTable
     class="pt-1 p-datatable-sm"
     v-model:selection="selectedActionType"
@@ -155,7 +148,6 @@ export default {
     getActionTypeList: async function () {
       const data = await ActionTypeService.getList();
       this.actionTypeList = data;
-      console.log(this.actionTypeList);
     },
     refreshData() {
       this.$toast.add({
@@ -185,6 +177,16 @@ export default {
           this.selectedActionType.action_type_name;
       }
     },
+    // Логика добавления типа мероприятия
+    createActionType: async function () {
+      const requestData = {
+        action_type_name: this.actionTypeData.action_type_name,
+      };
+      const data = await ActionTypeService.create(requestData);
+      this.createData = data;
+      console.log(this.createData);
+    },
+    // Проверка и вызов метода добавления типа мероприятия
     saveData: async function () {
       this.submitted = true;
       if (this.actionTypeData.action_type_name !== null) {
@@ -204,14 +206,17 @@ export default {
         };
       }
     },
-    createActionType: async function () {
+    // Логика редактирования типа мероприятия
+    updateActionType: async function () {
+      const actionTypeId = this.selectedActionType.action_type_id;
       const requestData = {
         action_type_name: this.actionTypeData.action_type_name,
       };
-      const data = await ActionTypeService.create(requestData);
-      this.createData = data;
-      console.log(this.createData);
+      await ActionTypeService.update(actionTypeId, requestData);
+      this.getActionTypeList();
+      this.selectedActionType = null;
     },
+    // Проверка и вызов метода редактирования типа мероприятия
     updateData() {
       this.submitted = true;
       console.log(this.actionTypeData);
@@ -249,15 +254,14 @@ export default {
         });
       }
     },
-    updateActionType: async function () {
-      const actionTypeId = this.selectedActionType.action_type_id;
-      const requestData = {
-        action_type_name: this.actionTypeData.action_type_name,
-      };
-      await ActionTypeService.update(actionTypeId, requestData);
+		// Логика удаления типа мероприятия
+    deleteActionType: async function () {
+      const selectedId = this.selectedActionType.action_type_id;
+      await ActionTypeService.delete(selectedId);
       this.getActionTypeList();
       this.selectedActionType = null;
     },
+		// Проверка и вызов метода удаления типа мероприятия
     deleteData() {
       if (this.selectedActionType === null) {
         this.$toast.add({
@@ -295,12 +299,6 @@ export default {
           },
         });
       }
-    },
-    deleteActionType: async function () {
-      const selectedId = this.selectedActionType.action_type_id;
-      await ActionTypeService.delete(selectedId);
-      this.getActionTypeList();
-      this.selectedActionType = null;
     },
   },
   mounted() {

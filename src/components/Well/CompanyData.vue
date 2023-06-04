@@ -1,6 +1,7 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
+  <!--Диалоговая форма добавления компании-->
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
@@ -51,7 +52,7 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="saveData" />
     </template>
   </Dialog>
-
+  <!--Диалоговая форма редактирования компании-->
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
@@ -103,57 +104,50 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="updateData" />
     </template>
   </Dialog>
-
+  <!--Меню для взаимодействия со списком компаний-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Компании</span>
+      <span class="font-bold text-3xl text-indigo-500">Компании</span>
     </template>
     <template #end>
       <Button
         label="Добавить"
         @click="showAddData"
         icon="pi pi-plus"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Изменить"
         @click="showEditData"
         icon="pi pi-pencil"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Удалить"
         @click="deleteData"
         icon="pi pi-times"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
     </template>
   </Toolbar>
-
+  <!--Вывод списка компний-->
   <DataTable
     class="pt-1 p-datatable-sm"
     v-model:selection="selectedCompany"
     v-model:filters="filters"
-    :value="companyList"
+    :value="filterByDate"
     selectionMode="single"
     dataKey="company_id"
     filterDisplay="row"
     showGridlines
     :globalFilterFields="['field.field_name', 'date_entry']"
   >
+    <template #empty> Компании не найдены. </template>
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
@@ -165,11 +159,12 @@
       </template>
     </Column>
 
-    <Column 
-			style="max-width: 10rem" 
-			header="Наименование" 
-			field="company_name" 
-			sortable>
+    <Column
+      style="max-width: 10rem"
+      header="Наименование"
+      field="company_name"
+      sortable
+    >
       <template #body="{ data }">
         {{ data.company_name }}
       </template>
@@ -178,7 +173,7 @@
     <Column
       style="max-width: 10rem"
       header="Месторождение"
-			field="field.field_name"
+      field="field.field_name"
       filterField="field.field_name"
       sortable
       :showFilterMenu="false"
@@ -210,22 +205,22 @@
     <Column
       style="max-width: 12rem"
       header="Дата добавления"
-			field="date_entry"
-      filterField="date_entry"
+      field="date_entry"
       dataType="date"
       :showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ data.date_entry }}
+        {{ formatDate(data.date_entry) }}
       </template>
-      <template #filter="{ filterModel }">
+      <template #filter="{}">
         <Calendar
-          v-model="filterModel.value"
-          dateFormat="dd-mm-yy"
+          v-model="filterDateEntry"
+          dateFormat="dd.mm.yy"
           placeholder="дд-мм-гггг"
-          mask="99-99-9999"
-          style="width: 7rem"
+          showIcon
+          showButtonBar
+          style="width: 10rem"
         />
       </template>
     </Column>
@@ -233,7 +228,7 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import CompanyService from "../../services/CompanyService";
 import FieldService from "../../services/FieldService";
 
@@ -243,6 +238,7 @@ export default {
     return {
       visibleAddDialog: false,
       visibleEditDialog: false,
+      filterDateEntry: null,
       submitted: false,
       companyList: [],
       fieldList: [],
@@ -256,24 +252,21 @@ export default {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        date_entry: {
-          operator: FilterOperator.AND,
-          constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-        },
       },
       createData: [],
     };
   },
   methods: {
+    formatDate(value) {
+      return new Date(value).toLocaleDateString();
+    },
     getCompanyList: async function () {
       const data = await CompanyService.getList();
       this.companyList = data;
-      console.log(this.companyList);
     },
     getFieldList: async function () {
       const data = await FieldService.getList();
       this.fieldList = data;
-      console.log(this.fieldList);
     },
     refreshData() {
       this.$toast.add({
@@ -284,6 +277,7 @@ export default {
         life: 3000,
       });
       this.getCompanyList();
+			this.selectedCompany = null;
     },
     showAddData() {
       this.visibleAddDialog = true;
@@ -303,6 +297,17 @@ export default {
         this.companyData.field = this.selectedCompany.field;
       }
     },
+    // Логика добавления компании
+    createCompany: async function () {
+      const fieldId = this.companyData.field.field_id;
+      const requestData = {
+        company_name: this.companyData.company_name,
+      };
+      const data = await CompanyService.create(fieldId, requestData);
+      this.createData = data;
+      console.log(this.createData);
+    },
+    // Проверка и вызов метода добавления компании
     saveData() {
       this.submitted = true;
       if (
@@ -324,15 +329,18 @@ export default {
         };
       }
     },
-    createCompany: async function () {
+    // Логика редактирования компании
+    updateCompany: async function () {
+      const companyId = this.selectedCompany.company_id;
       const fieldId = this.companyData.field.field_id;
       const requestData = {
         company_name: this.companyData.company_name,
       };
-      const data = await CompanyService.create(fieldId, requestData);
-      this.createData = data;
-      console.log(this.createData);
+      await CompanyService.update(companyId, fieldId, requestData);
+      this.getCompanyList();
+      this.selectedCompany = null;
     },
+    // Проверка и вызов метода редактирования компании
     updateData() {
       this.submitted = true;
       console.log(this.companyData);
@@ -373,16 +381,14 @@ export default {
         });
       }
     },
-    updateCompany: async function () {
-      const companyId = this.selectedCompany.company_id;
-      const fieldId = this.companyData.field.field_id;
-      const requestData = {
-        company_name: this.companyData.company_name,
-      };
-      await CompanyService.update(companyId, fieldId, requestData);
+		// Логика удаления компании
+    deleteCompany: async function () {
+      const selectedId = this.selectedcompany.company_id;
+      await CompanyService.delete(selectedId);
       this.getCompanyList();
       this.selectedCompany = null;
     },
+		// Проверка и вызов метода удаления компании
     deleteData() {
       if (this.selectedCompany === null) {
         this.$toast.add({
@@ -421,16 +427,24 @@ export default {
         });
       }
     },
-    deleteCompany: async function () {
-      const selectedId = this.selectedcompany.company_id;
-      await CompanyService.delete(selectedId);
-      this.getCompanyList();
-      this.selectedCompany = null;
-    },
   },
   mounted() {
     this.getCompanyList();
     this.getFieldList();
+  },
+  computed: {
+		// Фильтрация списка компании по дате внесения
+    filterByDate() {
+      if (this.filterDateEntry === null) {
+        return this.companyList;
+      } else {
+        return this.companyList.filter(
+          (c) =>
+            this.formatDate(c.date_entry) ===
+            this.formatDate(this.filterDateEntry)
+        );
+      }
+    },
   },
 };
 </script>

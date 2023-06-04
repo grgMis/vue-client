@@ -1,10 +1,12 @@
 <template>
+  <!-- Шаблон диалоговой формы для просмотра информации о мероприятие -->
   <Dialog
     :style="{ width: '1000px' }"
     header="Информация о мероприятие"
     :modal="true"
     class="p-fluid"
   >
+    <!-- Вложенная диалоговая форма для редактирования оборудования в мероприятие -->
     <Dialog
       v-model:visible="visibleEditCompositionDialog"
       :style="{ width: '450px' }"
@@ -79,7 +81,7 @@
         <Button label="Сохранить" icon="pi pi-check" text @click="saveUpdate" />
       </template>
     </Dialog>
-
+    <!-- Блок с выводом информации о текущем мероприятие -->
     <div class="card">
       <div class="flex align-items-stretch flex-wrap">
         <div class="field align-items-center w-12rem">
@@ -156,7 +158,7 @@
             id="date_entry"
             class="w-full p-2 md:w-8rem ml-5 border-1 font-bold text-xl border-solid border-gray-500 border-round-lg"
           >
-            {{ selectedAction.date_entry }}
+            {{ formatDate(selectedAction.date_entry) }}
           </label>
         </div>
 
@@ -170,7 +172,7 @@
             id="date_begin"
             class="w-full p-2 md:w-8rem ml-5 border-1 font-bold text-xl border-solid border-gray-500 border-round-lg"
           >
-            {{ selectedAction.date_begin }}
+            {{ formatDate(selectedAction.date_begin) }}
           </label>
         </div>
 
@@ -184,7 +186,7 @@
             id="date_end"
             class="w-full p-2 md:w-8rem ml-5 border-1 font-bold text-xl border-solid border-gray-500 border-round-lg"
           >
-            {{ selectedAction.date_end }}
+            {{ formatDate(selectedAction.date_end) }}
           </label>
         </div>
 
@@ -203,7 +205,7 @@
         </div>
       </div>
     </div>
-
+    <!-- Блок с выводом информации об объекте текущего мероприятия -->
     <div class="field mt-3">
       <label class="font-bold text-xl">Информация об объекте</label>
     </div>
@@ -266,7 +268,7 @@
         </div>
       </div>
     </div>
-
+    <!-- Блок с выводом списка оборудования текущего мероприятия -->
     <div class="field mt-3">
       <label class="font-bold text-xl">Информация об оборудование</label>
     </div>
@@ -369,7 +371,11 @@
             />
           </template>
         </Column>
-        <Column :exportable="false" style="min-width: 8rem" bodyStyle="text-align:center">
+        <Column
+          :exportable="false"
+          style="min-width: 8rem"
+          bodyStyle="text-align:center"
+        >
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
@@ -414,6 +420,9 @@ export default {
     };
   },
   methods: {
+    formatDate(value) {
+      return new Date(value).toLocaleDateString();
+    },
     getActionCompisitionListByAction: async function () {
       const actionId = this.selectedAction.action_id;
       const data = await ActionCompositionService.getListByAction(actionId);
@@ -423,8 +432,10 @@ export default {
       const data = await ActionCompositionStateService.getList();
       this.actionCompositionStateList = data;
     },
+    // Логика обновления выбранного оборудования текущего мероприятия
     updateActionComposition: async function () {
-			const actionCompositionId = this.selectedActionComposition.action_composition_id;
+      const actionCompositionId =
+        this.selectedActionComposition.action_composition_id;
       const actionCompositionStateId =
         this.actionData.actionCompositionState.action_composition_state_id;
       const requestData = {
@@ -437,6 +448,7 @@ export default {
         requestData
       );
     },
+    // Проверки и вызов метода для обновление оборудования текущего мероприятия
     saveUpdate() {
       this.submitted = true;
       if (
@@ -458,7 +470,7 @@ export default {
           acceptClass: "p-button-danger",
           accept: async () => {
             await this.updateActionComposition();
-						await this.getActionCompisitionListByAction();
+            await this.getActionCompisitionListByAction();
             this.clearData();
             this.$toast.add({
               severity: "success",
@@ -483,9 +495,11 @@ export default {
       this.clearData();
       this.visibleEditCompositionDialog = true;
       this.selectedActionComposition = actionComposition;
-			this.actionData.dateComplete = actionComposition.date_complete;
-			this.actionData.actionCompositionState = actionComposition.actionCompositionState;
-			this.actionData.actionCompositionNote = actionComposition.action_composition_note;
+      this.actionData.dateComplete = actionComposition.date_complete;
+      this.actionData.actionCompositionState =
+        actionComposition.actionCompositionState;
+      this.actionData.actionCompositionNote =
+        actionComposition.action_composition_note;
     },
     editEquipmentInActionComposition: async function () {
       this.showData();

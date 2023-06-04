@@ -6,6 +6,11 @@ const UserService = {
 		return response.data;
 	},
 
+	async getListByPost(employeePostId) {
+		const response = await http.get(`/user?employee_post_id=${employeePostId}`);
+		return response.data;
+	},
+
 	async getByLogin(userLogin) {
 		const response = await http.get(`/user/auth?user_login=${userLogin}`);
 		return response.data;

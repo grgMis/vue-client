@@ -14,6 +14,7 @@
         'equipment.equipmentState.equipment_state_name',
       ]"
     >
+		<template #empty> Список эоектрического оборудования не найден. </template>
       <Column
         style="max-width: 10rem"
         header="Инвентарный номер"

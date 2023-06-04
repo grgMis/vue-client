@@ -1,6 +1,7 @@
 <template>
-  <Toast position="bottom-right" group="br"/>
+  <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
+  <!--Диалоговая форма добавления класса оборудования-->
   <Dialog
     v-model:visible="visibleAddDialog"
     :style="{ width: '450px' }"
@@ -78,7 +79,7 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="saveData" />
     </template>
   </Dialog>
-
+  <!--Диалоговая форма редактирвания класса оборудования-->
   <Dialog
     v-model:visible="visibleEditDialog"
     :style="{ width: '450px' }"
@@ -160,46 +161,38 @@
       <Button label="Сохранить" icon="pi pi-check" text @click="updateData" />
     </template>
   </Dialog>
-
+  <!--Меню для взаимодействия со списком классов оборудования-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Классы</span>
+      <span class="font-bold text-3xl text-indigo-500">Классы</span>
     </template>
     <template #end>
       <Button
         label="Добавить"
         @click="showAddData"
         icon="pi pi-plus"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Изменить"
         @click="showEditData"
         icon="pi pi-pencil"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         label="Удалить"
         @click="deleteData"
         icon="pi pi-times"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
     </template>
   </Toolbar>
-
+  <!--Вывод списка классов оборудования-->
   <DataTable
     class="pt-1 p-datatable-sm"
     v-model:selection="selectedClass"
@@ -209,10 +202,11 @@
     selectionMode="single"
     dataKey="equipment_class_id"
     showGridlines
-		paginator
-		:rows="23"
+    paginator
+    :rows="23"
     :globalFilterFields="['equipmentCategory.equipment_category_name']"
   >
+    <template #empty> Классы оборудования не найдены. </template>
     <Column
       style="max-width: 10rem"
       header="Идентификатор"
@@ -249,7 +243,7 @@
     <Column
       style="max-width: 10rem"
       header="Категория"
-			field="equipmentCategory.equipment_category_name"
+      field="equipmentCategory.equipment_category_name"
       filterField="equipmentCategory.equipment_category_name"
       sortable
       :showFilterMenu="false"
@@ -281,12 +275,12 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import EquipmentCategoryService from '../../services/EquipmentCategoryService';
-import EquipmentClassService from '../../services/EquipmentClassService';
+import { FilterMatchMode } from "primevue/api";
+import EquipmentCategoryService from "../../services/EquipmentCategoryService";
+import EquipmentClassService from "../../services/EquipmentClassService";
 
 export default {
-  name: 'EquipmentClass',
+  name: "EquipmentClass",
   data() {
     return {
       visibleAddDialog: false,
@@ -301,7 +295,7 @@ export default {
         equipment_class_sysname: null,
       },
       filters: {
-        'equipmentCategory.equipment_category_name': {
+        "equipmentCategory.equipment_category_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
@@ -313,22 +307,21 @@ export default {
     getEquipmentClassList: async function () {
       const data = await EquipmentClassService.getList();
       this.equipmentClassList = data;
-      console.log(this.equipmentClassList);
     },
     getEquipmentCategoryList: async function () {
       const data = await EquipmentCategoryService.getList();
       this.equipmentCategoryList = data;
-      console.log(this.equipmentCategoryList);
     },
     refreshData() {
       this.$toast.add({
-        severity: 'success',
-        summary: 'Внимание',
-        detail: 'Данные перезагружены',
-				group: 'br',
+        severity: "success",
+        summary: "Внимание",
+        detail: "Данные перезагружены",
+        group: "br",
         life: 3000,
       });
       this.getEquipmentClassList();
+			this.selectedClass = null;
     },
     showAddData() {
       this.visibleAddDialog = true;
@@ -336,10 +329,10 @@ export default {
     showEditData() {
       if (this.selectedClass === null) {
         this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите класс для редактирования',
-					group: 'br',
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите класс для редактирования",
+          group: "br",
           life: 3000,
         });
       } else {
@@ -352,30 +345,7 @@ export default {
           this.selectedClass.equipment_class_sysname;
       }
     },
-    saveData: async function ()  {
-      this.submitted = true;
-      if (
-        this.equipmentClassData.equipment_class_name !== null &&
-        this.equipmentClassData.equipment_class_sysname !== null &&
-        this.equipmentClassData.equipmentCategory !== null
-      ) {
-        await this.createEquipmentClass();
-        await this.getEquipmentClassList();
-				this.submitted = false;
-        this.$toast.add({
-          severity: 'success',
-          summary: 'Успешно',
-          detail: 'Класс добавлен',
-					group: 'br',
-          life: 3000,
-        });
-        this.equipmentClassData = {
-          equipmentCategory: null,
-          equipment_class_name: null,
-          equipment_class_sysname: null,
-        };
-      }
-    },
+    // Логика добавления класса оборудования
     createEquipmentClass: async function () {
       const equipmentCategoryId =
         this.equipmentClassData.equipmentCategory.equipment_category_id;
@@ -391,48 +361,32 @@ export default {
       this.createData = data;
       console.log(this.createData);
     },
-    updateData()  {
+    // Проверка и вызов метода добавления класса оборудования
+    saveData: async function () {
       this.submitted = true;
-      console.log(this.equipmentClassData);
       if (
-        this.equipmentClassData.equipment_class_name !== '' &&
-        this.equipmentClassData.equipment_class_sysname !== ''
+        this.equipmentClassData.equipment_class_name !== null &&
+        this.equipmentClassData.equipment_class_sysname !== null &&
+        this.equipmentClassData.equipmentCategory !== null
       ) {
-        this.$confirm.require({
-          message: 'Вы точно хотите изменить выбранную запись?',
-          header: 'Подтверждение изменения',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
-          accept: async () => {
-            await this.updateEquipmentClass();
-            await this.getEquipmentClassList();
-						this.submitted = false;
-            this.equipmentClassData = {
-              equipmentCategory: null,
-              equipment_class_name: null,
-              equipment_class_sysname: null,
-            };
-            this.visibleEditDialog = false;
-            this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись изменена',
-							group: 'br',
-              life: 3000,
-            });
-          },
-          reject: () => {
-            this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена изменения',
-							group: 'br',
-              life: 3000,
-            });
-          },
+        await this.createEquipmentClass();
+        await this.getEquipmentClassList();
+        this.submitted = false;
+        this.$toast.add({
+          severity: "success",
+          summary: "Успешно",
+          detail: "Класс добавлен",
+          group: "br",
+          life: 3000,
         });
+        this.equipmentClassData = {
+          equipmentCategory: null,
+          equipment_class_name: null,
+          equipment_class_sysname: null,
+        };
       }
     },
+    // Логика редактирования класса оборудования
     updateEquipmentClass: async function () {
       const equipmentClassId = this.selectedClass.equipment_class_id;
       const equipmentCategoryId =
@@ -450,49 +404,94 @@ export default {
       this.getEquipmentClassList();
       this.selectedClass = null;
     },
-    deleteData() {
-      if (this.selectedClass === null) {
-        this.$toast.add({
-          severity: 'info',
-          summary: 'Внимание',
-          detail: 'Выберите класс для удаления',
-					group: 'br',
-          life: 3000,
-        });
-      } else {
+    // Проверка и вызов метода редатирования класса оборудования
+    updateData() {
+      this.submitted = true;
+      console.log(this.equipmentClassData);
+      if (
+        this.equipmentClassData.equipment_class_name !== "" &&
+        this.equipmentClassData.equipment_class_sysname !== ""
+      ) {
         this.$confirm.require({
-          message: 'Вы точно хотите удалить выбранную запись?',
-          header: 'Подтверждение удаления',
-          icon: 'pi pi-info-circle',
-          acceptClass: 'p-button-danger',
-          accept: () => {
-            this.deleteEquipmentClass();
-            this.getEquipmentClassList();
+          message: "Вы точно хотите изменить выбранную запись?",
+          header: "Подтверждение изменения",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
+          accept: async () => {
+            await this.updateEquipmentClass();
+            await this.getEquipmentClassList();
+            this.submitted = false;
+            this.equipmentClassData = {
+              equipmentCategory: null,
+              equipment_class_name: null,
+              equipment_class_sysname: null,
+            };
+            this.visibleEditDialog = false;
             this.$toast.add({
-              severity: 'success',
-              summary: 'Выполнено',
-              detail: 'Запись удалена',
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись изменена",
+              group: "br",
               life: 3000,
             });
           },
           reject: () => {
-            this.selectedCategory = null;
             this.$toast.add({
-              severity: 'error',
-              summary: 'Отмена',
-              detail: 'Отмена удаления',
-							group: 'br',
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена изменения",
+              group: "br",
               life: 3000,
             });
           },
         });
       }
     },
+    // Логика удаления класса оборудования
     deleteEquipmentClass: async function () {
       const selectedId = this.selectedClass.equipment_class_id;
       await EquipmentClassService.delete(selectedId);
       this.getEquipmentClassList();
       this.selectedClass = null;
+    },
+    // Проверка и вызов метода удаления класса оборудования
+    deleteData() {
+      if (this.selectedClass === null) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Внимание",
+          detail: "Выберите класс для удаления",
+          group: "br",
+          life: 3000,
+        });
+      } else {
+        this.$confirm.require({
+          message: "Вы точно хотите удалить выбранную запись?",
+          header: "Подтверждение удаления",
+          icon: "pi pi-info-circle",
+          acceptClass: "p-button-danger",
+          accept: () => {
+            this.deleteEquipmentClass();
+            this.getEquipmentClassList();
+            this.$toast.add({
+              severity: "success",
+              summary: "Выполнено",
+              detail: "Запись удалена",
+              life: 3000,
+            });
+          },
+          reject: () => {
+            this.selectedCategory = null;
+            this.$toast.add({
+              severity: "error",
+              summary: "Отмена",
+              detail: "Отмена удаления",
+              group: "br",
+              life: 3000,
+            });
+          },
+        });
+      }
     },
   },
   mounted() {

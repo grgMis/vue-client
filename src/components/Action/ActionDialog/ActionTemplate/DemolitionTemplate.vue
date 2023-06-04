@@ -1,4 +1,5 @@
 <template>
+  <!-- Шаблон формы для внесения мероприятия по демонтажу -->
   <div class="card">
     <div class="field">
       <Button
@@ -8,6 +9,7 @@
         icon="pi pi-refresh"
       />
     </div>
+    <!-- Вывод списка оборудования по выбранному объекту -->
     <DataTable
       class="pt-1 p-datatable-sm h-25rem mb-8"
       v-model:selection="selectedEquipments"
@@ -24,6 +26,7 @@
         'equipment.equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
       ]"
     >
+      <template #empty> Оборудование не найдено. </template>
       <Column selectionMode="multiple" headerStyle="width: 3rem" />
       <Column
         style="max-width: 10rem"
@@ -210,6 +213,7 @@ export default {
       const equipmentStateId = this.updateData.equipmentStateId;
       EquipmentService.updateState(equipmentId, equipmentStateId);
     },
+    // Логика создание мероприятия по демонтажу оборудования
     createAction: async function () {
       const wellId = this.selectedWell.well_id;
       const userId = this.selectedUser.user_id;
@@ -230,6 +234,7 @@ export default {
       this.updateWellState();
       this.createdActionData = data;
     },
+    // Привязка выбранного оборудования к текущему мероприятию
     createActionComposition(equipmentId) {
       const actionId = this.createdActionData.action_id;
       const actionCompositionStateId = this.actionData.actionCompositionStateId;
@@ -244,11 +249,13 @@ export default {
         requestData
       );
     },
+    // Обновление состояния добавленного оборудования
     updateEquipmentStateInCurrentAction(equipment) {
       const equipmentId = equipment.equipment.equipment_id;
       this.updateEquipmentState(equipmentId);
       this.createActionComposition(equipmentId);
     },
+    // Привязка оборудования к мероприятияю через цикл
     addDataToActionComposition() {
       this.selectedEquipments.forEach(this.updateEquipmentStateInCurrentAction);
     },
@@ -256,6 +263,7 @@ export default {
       await this.createAction();
       this.addDataToActionComposition();
     },
+    // Проверки и вызов метода для создания мероприятия по демонтажу
     createDemolitionAction: async function () {
       if (this.selectedWell === null) {
         this.$toast.add({
@@ -266,7 +274,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       if (this.selectedUser === null) {
         this.$toast.add({
           severity: "info",
@@ -276,7 +284,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       if (this.selectedEquipments.length === 0) {
         this.$toast.add({
           severity: "info",
@@ -286,7 +294,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       this.$confirm.require({
         message: "Подтвердите внесение мероприятия?",
         header: "Подтверждение внесения",

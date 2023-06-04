@@ -1,5 +1,7 @@
 <template>
+  <!-- Шаблон формы для внесения мероприятия по установке -->
   <div class="card">
+    <!-- Вывод не установленного списка оборудования -->
     <DataTable
       class="pt-1 p-datatable-sm h-25rem mb-8"
       v-model:selection="selectedEquipments"
@@ -16,6 +18,7 @@
         'equipmentModel.equipmentClass.equipmentCategory.equipment_category_name',
       ]"
     >
+      <template #empty> Оборудование не найдено. </template>
       <Column selectionMode="multiple" headerStyle="width: 3rem" />
       <Column
         style="max-width: 10rem"
@@ -118,8 +121,8 @@
         label="Очистить"
         class="w-full md:w-10rem ml-4"
         icon="pi pi-eraser"
-				@click="clearData"
-				text
+        @click="clearData"
+        text
       />
     </div>
   </div>
@@ -148,18 +151,18 @@ export default {
       equipmentCategoryList: [],
       equipmentList: [],
       selectedEquipments: [],
-			equipmentStateId: 1,
+      equipmentStateId: 1,
       createdActionData: null,
       updateData: {
         wellStateId: 3,
-        equipmentStateId: 2
+        equipmentStateId: 2,
       },
       actionData: {
         dateComplete: null,
         actionCompositionNote: null,
         actionStateId: 1,
         actionTypeId: 1,
-        actionCompositionStateId: 1
+        actionCompositionStateId: 1,
       },
       filters: {
         inventory_number: {
@@ -176,8 +179,10 @@ export default {
   },
   methods: {
     getEquipmentDataList: async function () {
-			const equipmentStateId = this.equipmentStateId;
-      const equipmentData = await EquipmentService.getListByState(equipmentStateId);
+      const equipmentStateId = this.equipmentStateId;
+      const equipmentData = await EquipmentService.getListByState(
+        equipmentStateId
+      );
       this.equipmentList = equipmentData;
       const equipmentCategoryData = await EquipmentCategoryService.getList();
       this.equipmentCategoryList = equipmentCategoryData;
@@ -191,6 +196,7 @@ export default {
       const equipmentStateId = this.updateData.equipmentStateId;
       EquipmentService.updateState(equipmentId, equipmentStateId);
     },
+    // Логика создания мероприятия по установке оборудования
     createAction: async function () {
       const wellId = this.selectedWell.well_id;
       const userId = this.selectedUser.user_id;
@@ -208,9 +214,10 @@ export default {
         actionStateId,
         requestData
       );
-			this.updateWellState();
+      this.updateWellState();
       this.createdActionData = data;
     },
+    // Привязка выбранного оборудования к текущему мероприятию
     createActionComposition(equipmentId) {
       const actionId = this.createdActionData.action_id;
       const actionCompositionStateId = this.actionData.actionCompositionStateId;
@@ -225,11 +232,13 @@ export default {
         requestData
       );
     },
+    // Обновление состояния добавленного оборудования
     updateEquipmentStateInCurrentAction(equipment) {
       const equipmentId = equipment.equipment_id;
       this.updateEquipmentState(equipmentId);
       this.createActionComposition(equipmentId);
     },
+    // Привязка оборудования к мероприятияю через цикл
     addDataToActionComposition() {
       this.selectedEquipments.forEach(this.updateEquipmentStateInCurrentAction);
     },
@@ -237,6 +246,7 @@ export default {
       await this.createAction();
       this.addDataToActionComposition();
     },
+    // Проверки и вызов метода для создания мероприятия по установке
     createEntryAction: async function () {
       if (this.selectedWell === null) {
         this.$toast.add({
@@ -247,7 +257,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       if (this.selectedUser === null) {
         this.$toast.add({
           severity: "info",
@@ -257,7 +267,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       if (this.selectedEquipments.length === 0) {
         this.$toast.add({
           severity: "info",
@@ -267,7 +277,7 @@ export default {
           life: 3000,
         });
         return;
-      };
+      }
       this.$confirm.require({
         message: "Подтвердите внесение мероприятия?",
         header: "Подтверждение внесения",
@@ -275,7 +285,7 @@ export default {
         acceptClass: "p-button-danger",
         accept: async () => {
           await this.createData();
-					this.clearData();
+          this.clearData();
           this.$toast.add({
             severity: "success",
             summary: "Выполнено",
@@ -283,7 +293,7 @@ export default {
             group: "br",
             life: 3000,
           });
-					this.getEquipmentDataList();
+          this.getEquipmentDataList();
         },
         reject: () => {
           this.$toast.add({
@@ -296,7 +306,7 @@ export default {
         },
       });
     },
-    clearData() {;
+    clearData() {
       this.selectedEquipments = [];
     },
   },

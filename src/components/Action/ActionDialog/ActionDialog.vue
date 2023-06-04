@@ -1,4 +1,5 @@
 <template>
+<!-- Шаблон диалоговой формы для добавления мероприятия -->
   <Dialog
     :style="{ width: '1000px' }"
     header="Создание мероприятия"
@@ -108,7 +109,7 @@
         </div>
       </div>
     </div>
-
+<!-- Меню для выбора типа мероприятия и привязка компонентов конкретного типа мероприятия -->
     <div class="card">
       <TabView class="tabview-custom">
         <TabPanel>
@@ -167,6 +168,7 @@ export default {
     return {
       wellList: [],
       userList: [],
+			employeePostId: 2,
       selectedData: {
         selectedWell: null,
         selectedUser: null,
@@ -182,7 +184,7 @@ export default {
       this.wellList = data;
     },
     getUserList: async function () {
-      const data = await UserService.getList();
+      const data = await UserService.getListByPost(this.employeePostId);
       this.userList = data;
     },
     clearData() {

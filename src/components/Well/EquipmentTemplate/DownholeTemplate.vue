@@ -14,6 +14,7 @@
         'equipment.equipmentState.equipment_state_name',
       ]"
     >
+		<template #empty> Список глубинно-насосного оборудования не найден. </template>
       <Column
         style="max-width: 10rem"
         header="Инвентарный номер"
@@ -95,7 +96,7 @@
             :options="equipmentStateList"
             optionLabel="equipment_state_name"
             optionValue="equipment_state_name"
-            placeholder=""
+            placeholder="Поиск"
           >
             <template #option="slotProps">
               <div>

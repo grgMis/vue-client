@@ -1,36 +1,34 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
-
+	<!--Диалоговая форма добавления мероприятия-->
   <ActionDialog v-model:visible="visibleActionDialog"></ActionDialog>
-	<ActionInfoDialog 
-		v-model:visible="visibleInfoDialog"
-		:selectedAction="selectedAction">
-	</ActionInfoDialog>
-
+	<!--Диалоговая форма просмотра информации о мероприятие-->
+  <ActionInfoDialog
+    v-model:visible="visibleInfoDialog"
+    :selectedAction="selectedAction"
+  >
+  </ActionInfoDialog>
+	<!--Меню для взаимодействия со списком мероприятий-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl">Мероприятия</span>
+      <span class="font-bold text-3xl text-indigo-500">Мероприятия</span>
     </template>
     <template #end>
       <Button
         label="Создать"
         @click="showActionDialog"
         icon="pi pi-plus"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
-        class="mr-2"
-        style="color: gray"
-        outlined
+        class="mr-2 bg-indigo-500"
       />
     </template>
   </Toolbar>
-
+	<!--Вывод списка мероприятий-->
   <DataTable
     class="pt-1 p-datatable-sm"
     paginator
@@ -38,7 +36,7 @@
     :rows="20"
     v-model:selection="selectedAction"
     v-model:filters="filters"
-    :value="actionList"
+    :value="filterByDate"
     selectionMode="single"
     dataKey="action_id"
     filterDisplay="row"
@@ -50,6 +48,7 @@
       'actionState.action_state_name',
     ]"
   >
+    <template #empty> Мероприятия не найдены. </template>
     <Column
       style="max-width: 10rem"
       header="Объект"
@@ -138,10 +137,21 @@
       header="Дата внесения"
       field="date_entry"
       dataType="date"
+			:showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ data.date_entry }}
+        {{ formatDate(data.date_entry) }}
+      </template>
+      <template #filter="{}">
+        <Calendar
+          v-model="filterDateEntry"
+          dateFormat="dd.mm.yy"
+          placeholder="дд-мм-гггг"
+          showIcon
+          showButtonBar
+          style="width: 10rem"
+        />
       </template>
     </Column>
 
@@ -150,10 +160,21 @@
       header="Дата начала"
       field="date_begin"
       dataType="date"
+			:showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ data.date_begin }}
+        {{ formatDate(data.date_begin) }}
+      </template>
+      <template #filter="{}">
+        <Calendar
+          v-model="filterDateBegin"
+          dateFormat="dd.mm.yy"
+          placeholder="дд-мм-гггг"
+          showIcon
+          showButtonBar
+          style="width: 10rem"
+        />
       </template>
     </Column>
 
@@ -162,10 +183,21 @@
       header="Дата окончания"
       field="date_end"
       dataType="date"
+			:showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ data.date_end }}
+        {{ formatDate(data.date_end) }}
+      </template>
+      <template #filter="{}">
+        <Calendar
+          v-model="filterDateEnd"
+          dateFormat="dd.mm.yy"
+          placeholder="дд-мм-гггг"
+          showIcon
+          showButtonBar
+          style="width: 10rem"
+        />
       </template>
     </Column>
 
@@ -220,6 +252,10 @@ export default {
       visibleInfoDialog: false,
       visibleActionDialog: false,
 
+      filterDateEntry: null,
+      filterDateBegin: null,
+      filterDateEnd: null,
+
       createData: [],
       actionList: [],
       selectedAction: null,
@@ -255,6 +291,9 @@ export default {
     };
   },
   methods: {
+    formatDate(value) {
+      return new Date(value).toLocaleDateString();
+    },
     showActionDialog() {
       this.visibleActionDialog = true;
     },
@@ -264,17 +303,14 @@ export default {
     getActionList: async function () {
       const data = await ActionService.getList();
       this.actionList = data;
-      console.log(this.actionList);
     },
     getWellList: async function () {
       const data = await WellService.getList();
       this.wellList = data;
-      console.log(this.wellList);
     },
     getActionStateList: async function () {
       const data = await ActionStateService.getList();
       this.actionStateList = data;
-      console.log(this.actionStateList);
     },
     refreshData() {
       this.$toast.add({
@@ -285,6 +321,7 @@ export default {
         life: 3000,
       });
       this.getActionList();
+			this.selectedAction = null;
     },
     getSeverity(action) {
       switch (action.actionState.action_state_name) {
@@ -303,6 +340,32 @@ export default {
     this.getActionList();
     this.getWellList();
     this.getActionStateList();
+  },
+  computed: {
+		// Фильтрация списка мероприятий по датам
+		filterByDate() {
+			// Фильтрация по дате внесенния мероприятия
+			if (this.filterDateEntry !== null) {
+        return this.actionList.filter(a => this.formatDate(a.date_entry) === this.formatDate(this.filterDateEntry));
+      }
+			// Фильтрация по дате начала мероприятия
+			else if (this.filterDateBegin !== null) {
+				return this.actionList.filter(a => this.formatDate(a.date_begin) === this.formatDate(this.filterDateBegin));
+			}
+			// Фильтрация по дате окончания мероприятия
+			else if (this.filterDateEnd !== null) {
+				return this.actionList.filter(a => this.formatDate(a.date_end) === this.formatDate(this.filterDateEnd));
+			}
+			// Фильтрация по диапозону дат начала и окончания мероприятия
+			else if (this.filterDateBegin !== null && this.filterDateEnd !== null) {
+				return this.actionList.filter(a => this.formatDate(a.date_begin) >= this.formatDate(this.filterDateBegin) &&
+																					 this.formatDate(a.date_end) <= this.formatDate(this.filterDateEnd));
+			}
+			// Список мероприятий без фильтров
+			else {
+        return this.actionList;
+      }
+    },
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
+	<!--Диалоговая форма для просмотра текущего оборудования-->
   <Dialog
     v-model:visible="visibleInfoDialog"
     :style="{ width: '1000px' }"
@@ -53,10 +54,10 @@
       </TabView>
     </div>
   </Dialog>
-
+	<!--Меню для взаимодействия со списком объектов-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl text-indigo-700"
+      <span class="font-bold text-3xl text-indigo-500"
         >Текущее оборудование</span
       >
     </template>
@@ -64,17 +65,17 @@
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
-        class="mr-2 font-bold"
+        class="mr-2 font-bold bg-indigo-500"
       />
     </template>
   </Toolbar>
-
+		<!--Вывод списка объектов-->
   <DataTable
     class="pt-1 p-datatable-sm"
     v-model:selection="selectedWell"
     v-model:filters="filters"
     @dblclick="showInfo"
-    :value="wellList"
+    :value="filterByDate"
     selectionMode="single"
     dataKey="well_id"
     filterDisplay="row"
@@ -82,15 +83,35 @@
     paginator
     :rows="20"
     :globalFilterFields="[
+			'well_name',
       'company.company_name',
       'company.field.field_name',
       'wellState.well_state_name',
       'date_entry',
     ]"
   >
-    <Column style="max-width: 10rem" header="Наименование" field="d" sortable>
+	<template #empty> Список скважин не найден. </template>
+    <Column
+      style="max-width: 10rem"
+      header="Наименование"
+      field="well_name"
+      filterField="well_name"
+      sortable
+      :showFilterMenu="false"
+    >
       <template #body="{ data }">
         {{ data.well_name }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText
+					style="max-width: 10rem"
+          class="p-column-filter p-inputtext-sm"
+          v-model="filterModel.value"
+          type="text"
+          @input="filterCallback()"
+          placeholder="Поиск"
+          showClear
+        />
       </template>
     </Column>
 
@@ -162,21 +183,21 @@
       style="max-width: 12rem"
       header="Дата внесения"
       field="date_entry"
-      filterField="date_entry"
       dataType="date"
       :showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ data.date_entry }}
+        {{ formatDate(data.date_entry) }}
       </template>
-      <template #filter="{ filterModel }">
+     <template #filter="{}">
         <Calendar
-          v-model="filterModel.value"
-          dateFormat="dd-mm-yy"
+          v-model="filterDateEntry"
+          dateFormat="dd.mm.yy"
           placeholder="дд-мм-гггг"
-          mask="99-99-9999"
-          style="width: 7rem"
+          showIcon
+          showButtonBar
+          style="width: 10rem"
         />
       </template>
     </Column>
@@ -219,7 +240,7 @@
 </template>
 
 <script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import WellService from "../../services/WellService";
 import CompanyService from "../../services/CompanyService";
 import FieldService from "../../services/FieldService";
@@ -230,12 +251,17 @@ export default {
   data() {
     return {
       visibleInfoDialog: false,
+			filterDateEntry: null,
       wellList: [],
       selectedWell: null,
       companyList: [],
       fieldList: [],
       wellStateList: [],
       filters: {
+				well_name: {
+					value: null,
+					matchMode: FilterMatchMode.CONTAINS,
+				},
         "company.company_name": {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
@@ -248,14 +274,13 @@ export default {
           value: null,
           matchMode: FilterMatchMode.EQUALS,
         },
-        date_entry: {
-          operator: FilterOperator.AND,
-          constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-        },
       },
     };
   },
   methods: {
+		formatDate(value) {
+      return new Date(value).toLocaleDateString();
+    },
     showInfo() {
       this.visibleInfoDialog = true;
     },
@@ -284,6 +309,7 @@ export default {
         life: 3000,
       });
       this.getWellList();
+			this.selectedWell = null;
     },
     getSeverity(well) {
       switch (well.wellState.well_state_name) {
@@ -306,6 +332,19 @@ export default {
     this.getCompanyList();
     this.getWellStateList();
     this.getFieldList();
+  },
+	computed: {
+    filterByDate() {
+      if (this.filterDateEntry === null) {
+        return this.wellList;
+      } else {
+        return this.wellList.filter(
+          (e) =>
+            this.formatDate(e.date_entry) ===
+            this.formatDate(this.filterDateEntry)
+        );
+      }
+    },
   },
 };
 </script>
