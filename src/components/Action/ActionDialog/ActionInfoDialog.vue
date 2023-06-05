@@ -22,6 +22,7 @@
           class="w-full md:w-10rem"
           dateOnly
           showIcon
+          dateFormat="dd.mm.yy"
           placeholder="дд.мм.гггг"
           mask="99.99.9999"
         />
@@ -377,7 +378,7 @@
           paginator
           v-model:selection="selectedActionComposition"
           selectionMode="single"
-          :rows="5"
+          :rows="4"
           :value="actionCompositionList"
           dataKey="action_composition_id"
           showGridlines
@@ -500,11 +501,7 @@
         text
         @click="showEditActionDialog"
       />
-      <Button
-        label="Завершить"
-        class="bg-indigo-600"
-        @click="closeAction"
-      />
+      <Button label="Завершить" class="bg-indigo-600" @click="closeAction" />
     </template>
   </Dialog>
 </template>
@@ -544,17 +541,15 @@ export default {
         actionNote: null,
       },
       updateData: {
-        equipmentStateId: 5,
+        entryStateId: 5,
+        demolitionStateId: 1,
+        repairStateId: 5,
       },
     };
   },
   methods: {
     formatDate(value) {
       return new Date(value).toLocaleDateString();
-    },
-    updateEquipmentState(equipmentId) {
-      const equipmentStateId = this.updateData.equipmentStateId;
-      EquipmentService.updateState(equipmentId, equipmentStateId);
     },
     getActionStateList: async function () {
       const data = await ActionStateService.getList();
@@ -569,23 +564,47 @@ export default {
       const data = await ActionCompositionStateService.getList();
       this.actionCompositionStateList = data;
     },
+    // Логика обновления состояния оборудования
+    updateEquipmentState(equipmentId) {
+      if (this.selectedAction.actionType.action_type_id === 1) {
+        const equipmentStateId = this.updateData.entryStateId;
+        EquipmentService.updateState(equipmentId, equipmentStateId);
+      }
+      if (this.selectedAction.actionType.action_type_id === 2) {
+        const equipmentStateId = this.updateData.demolitionStateId;
+        EquipmentService.updateState(equipmentId, equipmentStateId);
+      }
+      if (this.selectedAction.actionType.action_type_id === 3) {
+        const equipmentStateId = this.updateData.repairStateId;
+        EquipmentService.updateState(equipmentId, equipmentStateId);
+      }
+    },
     // Обновление состояния текущего оборудования мероприятия
     updateEquipmentStateInCurrentEquipment(actionComposition) {
       const equipmentId = actionComposition.equipment.equipment_id;
       this.updateEquipmentState(equipmentId);
-      this.createCurrentEquipment(equipmentId);
+      if (this.selectedAction.actionType.action_type_id === 1) {
+        this.createCurrentEquipment(equipmentId);
+      }
+      if (this.selectedAction.actionType.action_type_id === 2) {
+        this.deleteCurrentEquipment(equipmentId);
+      }
     },
     // Логика добавление оборудования к объекту
     createCurrentEquipment(equipmentId) {
       const wellId = this.selectedAction.well.well_id;
       WellEquipmentService.create(wellId, equipmentId);
     },
+    // Логика удаления оборудования с объекта
+    deleteCurrentEquipment(equipmentId) {
+      const wellId = this.selectedAction.well.well_id;
+      WellEquipmentService.deleteByWellAndEquip(wellId, equipmentId);
+    },
     // Логика закрытия мероприятия
     updateActionState: async function () {
-      await ActionService.closeAction(
-        this.selectedAction.action_id,
-        this.actionStateId
-      );
+      const actionId = this.selectedAction.action_id;
+      const actionStateId = this.actionStateId;
+      await ActionService.closeAction(actionId, actionStateId);
     },
     // Вызов метода добавления оборудования к объекту
     addEquipmentToWell() {
@@ -685,7 +704,6 @@ export default {
     },
     // Проверки и вызов метода для обновление оборудования текущего мероприятия
     saveUpdate() {
-      this.submitted = true;
       if (
         this.actionData.actionCompositionState === null &&
         this.actionData.dateComplete === null
@@ -705,6 +723,7 @@ export default {
           accept: async () => {
             await this.updateActionComposition();
             await this.getActionCompisitionListByAction();
+            this.visibleEditCompositionDialog = false;
             this.$toast.add({
               severity: "success",
               summary: "Выполнено",

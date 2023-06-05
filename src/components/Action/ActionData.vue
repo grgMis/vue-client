@@ -3,12 +3,18 @@
   <ConfirmDialog />
   <!--Диалоговая форма добавления мероприятия-->
   <ActionDialog v-model:visible="visibleActionDialog"></ActionDialog>
-  <!--Диалоговая форма просмотра информации о мероприятие-->
+  <!--Диалоговая форма просмотра и редактирования информации о мероприятие-->
   <ActionInfoDialog
     v-model:visible="visibleInfoDialog"
     :selectedAction="selectedAction"
   >
   </ActionInfoDialog>
+  <!--Диалоговая форма просмотра информации о мероприятие-->
+  <ActionInfoOnlyDialog
+    v-model:visible="visibleInfoOnlyDialog"
+    :selectedAction="selectedAction"
+  >
+  </ActionInfoOnlyDialog>
   <!--Меню для взаимодействия со списком мероприятий-->
   <Toolbar>
     <template #start>
@@ -254,6 +260,7 @@ export default {
     return {
       submitted: false,
       visibleInfoDialog: false,
+      visibleInfoOnlyDialog: false,
       visibleActionDialog: false,
 
       filterDateEntry: null,
@@ -302,15 +309,10 @@ export default {
       this.visibleActionDialog = true;
     },
     showInfo() {
-      console.log(this.selectedAction.actionType);
-      if (this.selectedAction.actionType.action_type_id === 1) {
+      if (this.selectedAction.actionState.action_state_id === 3) {
+        this.visibleInfoOnlyDialog = true;
+      } else {
         this.visibleInfoDialog = true;
-      }
-      if (this.selectedAction.actionType.action_type_id === 2) {
-        console.log("Демонтаж");
-      }
-      if (this.selectedAction.actionType.action_type_id === 3) {
-        console.log("Ремонт");
       }
     },
     getActionList: async function () {

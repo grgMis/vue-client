@@ -25,8 +25,8 @@ const WellEquipmentService = {
 		return response.data;
 	},
 
-	async deleteByEquipment(wellEquipmentId, equipmentId) {
-		const response = await http.delete(`/well-equipment/${wellEquipmentId}?equipment_id=${equipmentId}`)
+	async deleteByWellAndEquip(wellId, equipmentId) {
+		const response = await http.delete(`/well-equipment?well_id=${wellId}&equipment_id=${equipmentId}`)
 		return response.data;
 	},
 };

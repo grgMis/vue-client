@@ -166,7 +166,7 @@ export default {
       createdActionData: null,
       updateData: {
         wellStateId: 3,
-        equipmentStateId: 2,
+        equipmentStateId: 4,
       },
       actionData: {
         dateComplete: null,
