@@ -203,8 +203,8 @@ export default {
       const actionTypeId = this.actionData.actionTypeId;
       const actionStateId = this.actionData.actionStateId;
       const requestData = {
-        date_begin: this.dateBegin.toLocaleDateString(),
-        date_end: this.dateEnd.toLocaleDateString(),
+        date_begin: this.dateBegin,
+        date_end: this.dateEnd,
         action_note: this.actionNote,
       };
       const data = await ActionService.create(

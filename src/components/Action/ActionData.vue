@@ -1,15 +1,15 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
-	<!--Диалоговая форма добавления мероприятия-->
+  <!--Диалоговая форма добавления мероприятия-->
   <ActionDialog v-model:visible="visibleActionDialog"></ActionDialog>
-	<!--Диалоговая форма просмотра информации о мероприятие-->
+  <!--Диалоговая форма просмотра информации о мероприятие-->
   <ActionInfoDialog
     v-model:visible="visibleInfoDialog"
     :selectedAction="selectedAction"
   >
   </ActionInfoDialog>
-	<!--Меню для взаимодействия со списком мероприятий-->
+  <!--Меню для взаимодействия со списком мероприятий-->
   <Toolbar>
     <template #start>
       <span class="font-bold text-3xl text-indigo-500">Мероприятия</span>
@@ -28,7 +28,7 @@
       />
     </template>
   </Toolbar>
-	<!--Вывод списка мероприятий-->
+  <!--Вывод списка мероприятий-->
   <DataTable
     class="pt-1 p-datatable-sm"
     paginator
@@ -69,7 +69,7 @@
           :options="wellList"
           optionLabel="well_name"
           optionValue="well_name"
-          placeholder="Объект"
+          placeholder="Поиск"
         >
           <template #option="slotProps">
             <div>
@@ -137,7 +137,7 @@
       header="Дата внесения"
       field="date_entry"
       dataType="date"
-			:showFilterMenu="false"
+      :showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
@@ -160,11 +160,13 @@
       header="Дата начала"
       field="date_begin"
       dataType="date"
-			:showFilterMenu="false"
+      :showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ formatDate(data.date_begin) }}
+        <template v-if="data.date_begin !== null">
+          {{ formatDate(data.date_begin) }}
+        </template>
       </template>
       <template #filter="{}">
         <Calendar
@@ -183,11 +185,13 @@
       header="Дата окончания"
       field="date_end"
       dataType="date"
-			:showFilterMenu="false"
+      :showFilterMenu="false"
       sortable
     >
       <template #body="{ data }">
-        {{ formatDate(data.date_end) }}
+        <template v-if="data.date_end !== null">
+          {{ formatDate(data.date_end) }}
+        </template>
       </template>
       <template #filter="{}">
         <Calendar
@@ -224,7 +228,7 @@
           :options="actionStateList"
           optionLabel="action_state_name"
           optionValue="action_state_name"
-          placeholder="Состояние"
+          placeholder="Поиск"
         >
           <template #option="slotProps">
             <div>
@@ -298,7 +302,16 @@ export default {
       this.visibleActionDialog = true;
     },
     showInfo() {
-      this.visibleInfoDialog = true;
+      console.log(this.selectedAction.actionType);
+      if (this.selectedAction.actionType.action_type_id === 1) {
+        this.visibleInfoDialog = true;
+      }
+      if (this.selectedAction.actionType.action_type_id === 2) {
+        console.log("Демонтаж");
+      }
+      if (this.selectedAction.actionType.action_type_id === 3) {
+        console.log("Ремонт");
+      }
     },
     getActionList: async function () {
       const data = await ActionService.getList();
@@ -321,7 +334,7 @@ export default {
         life: 3000,
       });
       this.getActionList();
-			this.selectedAction = null;
+      this.selectedAction = null;
     },
     getSeverity(action) {
       switch (action.actionState.action_state_name) {
@@ -342,27 +355,42 @@ export default {
     this.getActionStateList();
   },
   computed: {
-		// Фильтрация списка мероприятий по датам
-		filterByDate() {
-			// Фильтрация по дате внесенния мероприятия
-			if (this.filterDateEntry !== null) {
-        return this.actionList.filter(a => this.formatDate(a.date_entry) === this.formatDate(this.filterDateEntry));
+    // Фильтрация списка мероприятий по датам
+    filterByDate() {
+      // Фильтрация по дате внесенния мероприятия
+      if (this.filterDateEntry !== null) {
+        return this.actionList.filter(
+          (a) =>
+            this.formatDate(a.date_entry) ===
+            this.formatDate(this.filterDateEntry)
+        );
       }
-			// Фильтрация по дате начала мероприятия
-			else if (this.filterDateBegin !== null) {
-				return this.actionList.filter(a => this.formatDate(a.date_begin) === this.formatDate(this.filterDateBegin));
-			}
-			// Фильтрация по дате окончания мероприятия
-			else if (this.filterDateEnd !== null) {
-				return this.actionList.filter(a => this.formatDate(a.date_end) === this.formatDate(this.filterDateEnd));
-			}
-			// Фильтрация по диапозону дат начала и окончания мероприятия
-			else if (this.filterDateBegin !== null && this.filterDateEnd !== null) {
-				return this.actionList.filter(a => this.formatDate(a.date_begin) >= this.formatDate(this.filterDateBegin) &&
-																					 this.formatDate(a.date_end) <= this.formatDate(this.filterDateEnd));
-			}
-			// Список мероприятий без фильтров
-			else {
+      // Фильтрация по дате начала мероприятия
+      else if (this.filterDateBegin !== null) {
+        return this.actionList.filter(
+          (a) =>
+            this.formatDate(a.date_begin) ===
+            this.formatDate(this.filterDateBegin)
+        );
+      }
+      // Фильтрация по дате окончания мероприятия
+      else if (this.filterDateEnd !== null) {
+        return this.actionList.filter(
+          (a) =>
+            this.formatDate(a.date_end) === this.formatDate(this.filterDateEnd)
+        );
+      }
+      // Фильтрация по диапозону дат начала и окончания мероприятия
+      else if (this.filterDateBegin !== null && this.filterDateEnd !== null) {
+        return this.actionList.filter(
+          (a) =>
+            this.formatDate(a.date_begin) >=
+              this.formatDate(this.filterDateBegin) &&
+            this.formatDate(a.date_end) <= this.formatDate(this.filterDateEnd)
+        );
+      }
+      // Список мероприятий без фильтров
+      else {
         return this.actionList;
       }
     },

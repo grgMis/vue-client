@@ -18,7 +18,7 @@
       selectionMode="multiple"
       paginator
       :rows="6"
-      dataKey="action_composition_id"
+      dataKey="well_equipment_id"
       filterDisplay="row"
       showGridlines
       :globalFilterFields="[
@@ -146,6 +146,7 @@ import EquipmentCategoryService from "../../../../services/EquipmentCategoryServ
 import WellService from "../../../../services/WellService";
 import EquipmentService from "../../../../services/EquipmentService";
 import ActionService from "../../../../services/ActionService";
+import WellEquipmentService from '../../../../services/WellEquipmentService';
 
 export default {
   name: "DemolitionTemplate",
@@ -189,12 +190,10 @@ export default {
   },
   methods: {
     getEquipmentDataList: async function () {
-      const equipmentStateId = this.equipmentStateId;
       const wellId = this.selectedWell.well_id;
       const data =
-        await ActionCompositionService.getListByWellAndEquipmentState(
+        await WellEquipmentService.getListByWell(
           wellId,
-          equipmentStateId
         );
       this.equipmentList = data;
       console.log(this.equipmentList);
@@ -220,8 +219,8 @@ export default {
       const actionTypeId = this.actionData.actionTypeId;
       const actionStateId = this.actionData.actionStateId;
       const requestData = {
-        date_begin: this.dateBegin.toLocaleDateString(),
-        date_end: this.dateEnd.toLocaleDateString(),
+        date_begin: this.dateBegin,
+        date_end: this.dateEnd,
         action_note: this.actionNote,
       };
       const data = await ActionService.create(

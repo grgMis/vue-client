@@ -113,7 +113,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 
-import ActionCompositionService from '../../../services/ActionCompositionService';
+import WellEquipmentService from '../../../services/WellEquipmentService';
 import EquipmentStateService from '../../../services/EquipmentStateService';
 
 export default {
@@ -141,10 +141,10 @@ export default {
   },
 	methods: {
 		getEquipmentDataList: async function () {
+			const wellId = this.selectedWell.well_id;
       const equipmentCategoryId = this.equipmentCategoryId;
-      const wellId = this.selectedWell.well_id;
       const data =
-        await ActionCompositionService.getListByWellAndEquipmentCategory(
+        await WellEquipmentService.getListByWellAndEquipmentCategory(
           wellId,
           equipmentCategoryId
         );

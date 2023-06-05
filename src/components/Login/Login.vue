@@ -32,7 +32,6 @@
         </small>
       </div>
       <template #footer>
-        <Button @click="showCurrentUser"></Button>
         <Button label="Войти" @click="auth" autofocus />
       </template>
     </Dialog>
@@ -85,9 +84,8 @@ export default {
         } else {
           this.$toast.add({
             severity: "success",
-            summary: "Успешно",
+            summary: "Пользователь найден",
             group: "tr",
-            detail: "Пользователь найден",
             life: 3000,
           });
 					this.user = true;
@@ -145,10 +143,6 @@ export default {
     auth: async function () {
       await this.validatoin();
       this.checkUserData();
-    },
-    showCurrentUser() {
-      console.log(this.currentUser);
-			console.log(this.$route.meta.layout);
     },
     showAdminPage() {
       router.push("/admin");

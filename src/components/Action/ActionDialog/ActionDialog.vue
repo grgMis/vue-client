@@ -69,6 +69,7 @@
             class="w-full md:w-10rem"
             dateOnly
             showIcon
+						dateFormat="dd.mm.yy"
             placeholder="дд.мм.гггг"
             mask="99.99.9999"
           />
@@ -82,6 +83,7 @@
             class="w-full md:w-10rem"
             dateOnly
             showIcon
+						dateFormat="dd.mm.yy"
             placeholder="дд.мм.гггг"
             mask="99.99.9999"
           />

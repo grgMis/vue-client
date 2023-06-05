@@ -23,6 +23,15 @@ const ActionService = {
 		return response.data;
 	},
 
+	async updateCurrentAction(actionId, actionStateId, requestData) {
+		const response = await http.put(
+			`/action/${actionId}
+			?action_state_id=${actionStateId}`,
+			 requestData
+			);
+		return response.data;
+	},
+
 	async update(actionId, wellId, userId, actionTypeId, actionStateId, requestData) {
 		const response = await http.put(
 			`/action/${actionId}
@@ -31,6 +40,14 @@ const ActionService = {
 			&action_type_id=${actionTypeId}
 			&action_state_id=${actionStateId}`,
 			 requestData
+			);
+		return response.data;
+	},
+
+	async closeAction(actionId, actionStateId) {
+		const response = await http.put(
+			`/action/${actionId}
+			?action_state_id=${actionStateId}`
 			);
 		return response.data;
 	},
