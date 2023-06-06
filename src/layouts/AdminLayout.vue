@@ -122,6 +122,27 @@ export default {
             },
           ],
         },
+				{
+          label: "Пользователи",
+          items: [
+            {
+              label: "Список",
+              to: "/admin/user",
+            },
+            {
+              label: "Роли",
+              to: "/admin/user-role",
+            },
+            {
+              label: "Сотрудники",
+              to: "/admin/employee",
+            },
+						{
+              label: "Должности",
+              to: "/admin/employee-post",
+            },
+          ],
+        },
       ],
     };
   },

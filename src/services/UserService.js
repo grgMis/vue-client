@@ -21,13 +21,13 @@ const UserService = {
 		return response.data;
 	},
 
-	async create(userRoleId, requestData) {
-		const response = await http.post(`/user?user_role_id=${userRoleId}`, requestData);
+	async create(userRoleId, employeeId, requestData) {
+		const response = await http.post(`/user?user_role_id=${userRoleId}&employee_id=${employeeId}`, requestData);
 		return response.data;
 	},
 
-	async update(userId, userRoleId, requestData) {
-		const response = await http.put(`/user/${userId}?user_role_id=${userRoleId}`, requestData);
+	async update(userId, userRoleId, employeeId, requestData) {
+		const response = await http.put(`/user/${userId}?user_role_id=${userRoleId}&employee_id=${employeeId}`, requestData);
 		return response.data;
 	},
 

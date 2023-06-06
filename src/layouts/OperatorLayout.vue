@@ -26,9 +26,8 @@
           }}
         </label>
         <Button
-          class="mr-2 text-indigo-50s"
+          class="mr-2 text-indigo-50"
           icon="pi pi-sign-out"
-          style="color: gray"
           outlined
           @click="signOut"
         />

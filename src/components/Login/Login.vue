@@ -106,7 +106,7 @@ export default {
         });
         return;
       }
-      if (this.currentUser.employee.employeePost.employee_post_id === 5) {
+      if (this.currentUser.employee.employeePost.employee_post_id === 8) {
         this.$toast.add({
           severity: "success",
           summary: "Успешная авторизация",

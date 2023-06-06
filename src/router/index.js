@@ -100,6 +100,30 @@ const routes = [
 		meta: { layout: 'admin' },
 		component: () => import('../components/Action/ActionData.vue')
 	},
+	{
+		path: '/admin/user',
+		name: 'user',
+		meta: { layout: 'admin' },
+		component: () => import('../components/User/UserData.vue')
+	},
+	{
+		path: '/admin/user-role',
+		name: 'user-role',
+		meta: { layout: 'admin' },
+		component: () => import('../components/User/UserRoleData.vue')
+	},
+	{
+		path: '/admin/employee',
+		name: 'employee',
+		meta: { layout: 'admin' },
+		component: () => import('../components/User/EmployeeData.vue')
+	},
+	{
+		path: '/admin/employee-post',
+		name: 'employee-post',
+		meta: { layout: 'admin' },
+		component: () => import('../components/User/EmployeePostData.vue')
+	},
 ]
 
 const router = createRouter({
