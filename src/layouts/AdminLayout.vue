@@ -58,6 +58,10 @@ export default {
         {
           label: "Оборудование",
           items: [
+						{
+              label: "Отчет",
+              to: "/admin/current-equipment-report",
+            },
             {
               label: "Список",
               to: "/admin/equipment",

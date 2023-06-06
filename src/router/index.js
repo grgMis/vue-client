@@ -23,6 +23,12 @@ const routes = [
 		meta: { layout: 'dispatcher' },
 	},
 	{
+		path: '/admin/current-equipment-report',
+		name: 'current-equipment-report',
+		meta: { layout: 'admin' },
+		component: () => import('../components/Equipment/CurrentEquipmentReport.vue')
+	},
+	{
 		path: '/admin/equipment',
 		name: 'equipment',
 		meta: { layout: 'admin' },
