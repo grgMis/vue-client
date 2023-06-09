@@ -58,23 +58,20 @@ export default {
           items: [
             {
               label: "Список",
-              to: "/admin/equipment",
+              to: "/operator/current-equipment",
             },
             {
-              label: "Модели",
-              to: "/admin/equipment-model",
+              label: "Отчет",
+              to: "/operator/current-equipment-report",
             },
+          ],
+        },
+				{
+          label: "Мероприятия",
+          items: [
             {
-              label: "Классы",
-              to: "/admin/equipment-class",
-            },
-            {
-              label: "Категории",
-              to: "/admin/equipment-category",
-            },
-            {
-              label: "Состояния",
-              to: "/admin/equipment-state",
+              label: "Список",
+              to: "/operator/action",
             },
           ],
         },

@@ -5,13 +5,15 @@
     <Menubar class="bg-indigo-600">
       <template #start>
         <Button
-					class="text-indigo-50"
+          class="text-indigo-50"
           icon="pi pi-bars"
           style="color: gray"
           outlined
           @click="visible = true"
         />
-        <label class="font-bold text-3xl ml-3 text-indigo-50">Панель администратора</label>
+        <label class="font-bold text-3xl ml-3 text-indigo-50">
+          Панель администратора
+        </label>
       </template>
       <template #end>
         <label class="font-bold text-xl mr-3 text-indigo-50">
@@ -37,8 +39,7 @@
     <div class="card flex justify-content-center">
       <Sidebar v-model:visible="visible" class="w-full md:w-15rem lg:w-15rem">
         <div class="card flex justify-content-center">
-          <Menu
-						:model="items" />
+          <Menu :model="items" />
         </div>
       </Sidebar>
     </div>
@@ -58,7 +59,7 @@ export default {
         {
           label: "Оборудование",
           items: [
-						{
+            {
               label: "Отчет",
               to: "/admin/current-equipment-report",
             },
@@ -126,7 +127,7 @@ export default {
             },
           ],
         },
-				{
+        {
           label: "Пользователи",
           items: [
             {
@@ -141,7 +142,7 @@ export default {
               label: "Сотрудники",
               to: "/admin/employee",
             },
-						{
+            {
               label: "Должности",
               to: "/admin/employee-post",
             },

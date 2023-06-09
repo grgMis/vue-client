@@ -410,7 +410,7 @@
           </Column>
 
           <Column
-            style="max-width: 10rem"
+            style="max-width: 12rem"
             header="Класс"
             field="equipment.equipmentModel.equipmentClass.equipment_class_name"
             sortable

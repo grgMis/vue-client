@@ -521,6 +521,7 @@ export default {
     getEquipmentList: async function () {
       const data = await EquipmentService.getList();
       this.equipmentList = data;
+      console.log(this.equipmentList);
     },
     getEquipmentModelList: async function () {
       const data = await EquipmentModelService.getList();
@@ -585,7 +586,7 @@ export default {
         equipment_state_id: 1,
       };
       this.getEquipmentList();
-			this.selectedEquipment = null;
+      this.selectedEquipment = null;
     },
     showAddData() {
       this.visibleAddDialog = true;
@@ -666,7 +667,7 @@ export default {
         }
       }
     },
-    // Логика редактирования оборудования
+    // Проверка и вызов метода редактирования оборудования
     updateData() {
       this.submitted = true;
       console.log(this.equipmentData);
@@ -712,7 +713,7 @@ export default {
         });
       }
     },
-    // Проверка и вызов метода редактирования оборудования
+    // Логика редактирования оборудования
     updateEquipment: async function () {
       const equipmentId = this.selectedEquipment.equipment_id;
       const equipmentModelId =
@@ -731,13 +732,13 @@ export default {
       );
       this.selectedEquipment = null;
     },
-		// Логика удаления оборудования
+    // Логика удаления оборудования
     deleteEquipment: async function () {
       const selectedId = this.selectedEquipment.equipment_id;
       await EquipmentService.delete(selectedId);
       this.selectedEquipment = null;
     },
-		// Проверка и вызов метода удаления оборудования
+    // Проверка и вызов метода удаления оборудования
     deleteData() {
       if (this.selectedEquipment === null) {
         this.$toast.add({
@@ -753,13 +754,14 @@ export default {
           header: "Подтверждение удаления",
           icon: "pi pi-info-circle",
           acceptClass: "p-button-danger",
-          accept: () => {
-            this.deleteEquipment();
-            this.getEquipmentList();
+          accept: async () => {
+            await this.deleteEquipment();
+            await this.getEquipmentList();
             this.$toast.add({
               severity: "success",
               summary: "Выполнено",
               detail: "Запись удалена",
+              group: "br",
               life: 3000,
             });
           },
@@ -777,13 +779,13 @@ export default {
       }
     },
     clearData() {
-      (this.submitted = false),
-        (this.modelList = []),
-        (this.equipmentData.factory_number = null),
-        (this.equipmentData.inventory_number = null),
-        (this.equipmentData.equipmentModel = null),
-        (this.equipmentData.equipmentClass = null),
-        (this.equipmentData.equipmentState = null);
+      this.submitted = false;
+      this.modelList = [];
+      this.equipmentData.factory_number = null;
+      this.equipmentData.inventory_number = null;
+      this.equipmentData.equipmentModel = null;
+      this.equipmentData.equipmentClass = null;
+      this.equipmentData.equipmentState = null;
     },
     getSeverity(equipment) {
       switch (equipment.equipmentState.equipment_state_name) {

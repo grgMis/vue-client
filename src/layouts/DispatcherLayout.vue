@@ -55,27 +55,19 @@ export default {
       currentUser: null,
       items: [
         {
-          label: "Оборудование",
+          label: "Мероприятия",
           items: [
             {
               label: "Список",
-              to: "/admin/equipment",
+              to: "/dispatcher/action",
             },
+          ],
+        },{
+          label: "Оборудование",
+          items: [
             {
-              label: "Модели",
-              to: "/admin/equipment-model",
-            },
-            {
-              label: "Классы",
-              to: "/admin/equipment-class",
-            },
-            {
-              label: "Категории",
-              to: "/admin/equipment-category",
-            },
-            {
-              label: "Состояния",
-              to: "/admin/equipment-state",
+              label: "Текущее оборудование",
+              to: "/dispatcher/current-equipment",
             },
           ],
         },

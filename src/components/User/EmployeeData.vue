@@ -43,7 +43,7 @@
     </div>
 
     <div class="field">
-      <label for="employee_father_name">Имя</label>
+      <label for="employee_father_name">Отчество</label>
       <InputText
         id="employee_father_name"
         v-model.trim="employeeData.employeeFatherName"

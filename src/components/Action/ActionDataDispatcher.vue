@@ -1,8 +1,6 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
-  <!--Диалоговая форма создания мероприятия-->
-  <ActionDialog v-model:visible="visibleActionDialog"></ActionDialog>
   <!--Диалоговая форма просмотра и редактирования информации о мероприятие-->
   <ActionInfoDialog
     v-model:visible="visibleInfoDialog"
@@ -18,15 +16,9 @@
   <!--Меню для взаимодействия со списком мероприятий-->
   <Toolbar>
     <template #start>
-      <span class="font-bold text-3xl text-indigo-500"> Мероприятия </span>
+      <span class="font-bold text-3xl text-indigo-500">Мероприятия</span>
     </template>
-    <template #end>
-      <Button
-        label="Создать"
-        @click="showActionDialog"
-        icon="pi pi-plus"
-        class="mr-2 bg-indigo-500"
-      />
+		<template #end>
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
@@ -261,11 +253,12 @@ export default {
       submitted: false,
       visibleInfoDialog: false,
       visibleInfoOnlyDialog: false,
-      visibleActionDialog: false,
 
       filterDateEntry: null,
       filterDateBegin: null,
       filterDateEnd: null,
+
+			currentUser: null,
 
       createData: [],
       actionList: [],
@@ -305,8 +298,8 @@ export default {
     formatDate(value) {
       return new Date(value).toLocaleDateString();
     },
-    showActionDialog() {
-      this.visibleActionDialog = true;
+		getCurrentUser: async function() {
+      this.currentUser = await JSON.parse(localStorage.getItem("user"));
     },
     showInfo() {
       if (this.selectedAction.actionState.action_state_id === 3) {
@@ -316,7 +309,8 @@ export default {
       }
     },
     getActionList: async function () {
-      const data = await ActionService.getList();
+			const userId = this.currentUser.user_id;
+      const data = await ActionService.getListByCurrentUser(userId);
       this.actionList = data;
     },
     getWellList: async function () {
@@ -352,7 +346,7 @@ export default {
     },
   },
   mounted() {
-    this.getActionList();
+		this.getCurrentUser();
     this.getWellList();
     this.getActionStateList();
   },
@@ -368,7 +362,7 @@ export default {
         );
       }
       // Фильтрация по дате начала мероприятия
-      else if (this.filterDateBegin !== null && this.filterDateEnd === null) {
+      else if (this.filterDateBegin !== null) {
         return this.actionList.filter(
           (a) =>
             this.formatDate(a.date_begin) ===
@@ -376,7 +370,7 @@ export default {
         );
       }
       // Фильтрация по дате окончания мероприятия
-      else if (this.filterDateBegin === null && this.filterDateEnd !== null) {
+      else if (this.filterDateEnd !== null) {
         return this.actionList.filter(
           (a) =>
             this.formatDate(a.date_end) === this.formatDate(this.filterDateEnd)

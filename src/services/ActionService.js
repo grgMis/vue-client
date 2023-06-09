@@ -6,6 +6,11 @@ const ActionService = {
 		return response.data;
 	},
 
+	async getListByCurrentUser(userId) {
+		const response = await http.get(`/action?user_id=${userId}`);
+		return response.data;
+	},
+
 	async get(actionId) {
 		const response = await http.get(`/action/${actionId}`);
 		return response.data;

@@ -130,6 +130,36 @@ const routes = [
 		meta: { layout: 'admin' },
 		component: () => import('../components/User/EmployeePostData.vue')
 	},
+	{
+		path: '/operator/action',
+		name: 'operator-action',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Action/ActionData.vue')
+	},
+	{
+		path: '/operator/current-equipment',
+		name: 'operator-current-equipment',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Well/CurrentEquipment.vue')
+	},
+	{
+		path: '/operator/current-equipment-report',
+		name: 'operator-current-equipment-report',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Equipment/CurrentEquipmentReport.vue')
+	},
+	{
+		path: '/dispatcher/action',
+		name: 'dispatcher-action',
+		meta: { layout: 'dispatcher' },
+		component: () => import('../components/Action/ActionDataDispatcher.vue')
+	},
+	{
+		path: '/dispatcher/current-equipment',
+		name: 'dispatcher-current-equipment',
+		meta: { layout: 'dispatcher' },
+		component: () => import('../components/Well/CurrentEquipment.vue')
+	},
 ]
 
 const router = createRouter({
