@@ -43,8 +43,12 @@
     <Toolbar>
       <template #start>
         <span class="font-bold text-3xl">
-          Текущее оборудование объекта {{ this.wellName }}
-          {{ this.currentDate }}</span
+          Текущее оборудование объекта {{ this.wellName }}</span
+        >
+      </template>
+			<template #end>
+				<span class="font-bold text-3xl">
+          Дата: {{ this.currentDate }}</span
         >
       </template>
     </Toolbar>

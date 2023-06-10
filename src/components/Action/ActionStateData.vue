@@ -167,7 +167,7 @@ export default {
         this.$toast.add({
           severity: "info",
           summary: "Внимание",
-          detail: "Выберите состояние для редактирования",
+          detail: "Выберите Статус для редактирования",
           group: "br",
           life: 3000,
         });
@@ -196,7 +196,7 @@ export default {
         this.$toast.add({
           severity: "success",
           summary: "Успешно",
-          detail: "Состояние добавлено",
+          detail: "Статус добавлено",
           group: "br",
           life: 3000,
         });
@@ -266,7 +266,7 @@ export default {
         this.$toast.add({
           severity: "info",
           summary: "Внимание",
-          detail: "Выберите состояние для удаления",
+          detail: "Выберите статус для удаления",
           group: "br",
           life: 3000,
         });

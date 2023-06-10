@@ -660,7 +660,7 @@ export default {
               severity: "error",
               summary: "Внимание",
               group: "br",
-              detail: ex.response.data.message,
+              detail: "Оборудование уже существует",
               life: 3000,
             });
           }

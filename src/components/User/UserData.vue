@@ -68,8 +68,7 @@
             {{ slotProps.placeholder }}
           </span>
         </template>
-        <small class="p-error" v-if="submitted && !userData.employee">
-        </small>
+        <small class="p-error" v-if="submitted && !userData.employee"> </small>
       </Dropdown>
     </div>
 
@@ -478,22 +477,32 @@ export default {
         this.userData.userLogin !== null &&
         this.userData.userPassword !== null
       ) {
-        await this.createUser();
-        await this.getUserList();
-        this.submitted = false;
-        this.$toast.add({
-          severity: "success",
-          summary: "Успешно",
-          detail: "Пользователь добавлен",
-          group: "br",
-          life: 3000,
-        });
-        this.userData = {
-          employee: null,
-          userRole: null,
-          userLogin: null,
-          userPassword: null,
-        };
+        try {
+          await this.createUser();
+          await this.getUserList();
+          this.submitted = false;
+          this.$toast.add({
+            severity: "success",
+            summary: "Успешно",
+            detail: "Пользователь добавлен",
+            group: "br",
+            life: 3000,
+          });
+          this.userData = {
+            employee: null,
+            userRole: null,
+            userLogin: null,
+            userPassword: null,
+          };
+        } catch (ex) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Внимание",
+            group: "br",
+            detail: "Пользователь уже существует",
+            life: 3000,
+          });
+        }
       }
     },
     // Логика редактирования пользователя
@@ -603,8 +612,8 @@ export default {
   mounted() {
     this.getUserList();
     this.getUserRoleList();
-		this.getEmployeeList();
-		this.getEmployeePostList();
+    this.getEmployeeList();
+    this.getEmployeePostList();
   },
 };
 </script>

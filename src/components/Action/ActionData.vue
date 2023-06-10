@@ -213,7 +213,7 @@
 
     <Column
       style="max-width: 10rem"
-      header="Состояние"
+      header="Статус"
       field="actionState.action_state_name"
       filterField="actionState.action_state_name"
       sortable
@@ -309,7 +309,7 @@ export default {
       this.visibleActionDialog = true;
     },
     showInfo() {
-      if (this.selectedAction.actionState.action_state_id === 3) {
+      if (this.selectedAction.actionState.action_state_id === 5) {
         this.visibleInfoOnlyDialog = true;
       } else {
         this.visibleInfoDialog = true;
@@ -341,10 +341,13 @@ export default {
     getSeverity(action) {
       switch (action.actionState.action_state_name) {
         case "Активно":
-          return "danger";
+          return "warning";
+
+        case "Закрыто":
+          return "success";
 
         case "Завершено":
-          return "success";
+          return "danger";
 
         default:
           return null;

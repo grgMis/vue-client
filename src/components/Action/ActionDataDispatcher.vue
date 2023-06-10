@@ -205,7 +205,7 @@
 
     <Column
       style="max-width: 10rem"
-      header="Состояние"
+      header="Статус"
       field="actionState.action_state_name"
       filterField="actionState.action_state_name"
       sortable

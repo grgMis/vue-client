@@ -63,7 +63,7 @@
           <label
             for="action_state_name"
             class="mb-3 font-bold bg-indigo-400 p-2 text-white border-round-lg"
-            >Состояние мероприятия</label
+            >Статус мероприятия</label
           >
           <label
             id="action_state_name"
@@ -295,7 +295,7 @@
             style="max-width: 10rem"
             field="actionCompositionState.action_composition_state_name"
             sortable
-            header="Состояние"
+            header="Статус"
           >
             <template #body="slotProps">
               <Tag

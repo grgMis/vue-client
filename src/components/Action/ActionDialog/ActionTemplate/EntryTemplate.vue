@@ -101,7 +101,7 @@
 
       <Column
         style="max-width: 10rem"
-        header="Состояние"
+        header="Статус"
         field="equipmentState.equipment_state_name"
         sortable
       >
