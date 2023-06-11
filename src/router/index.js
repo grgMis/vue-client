@@ -137,6 +137,24 @@ const routes = [
 		component: () => import('../components/Action/ActionData.vue')
 	},
 	{
+		path: '/operator/equipment',
+		name: 'operator-equipment',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Equipment/EquipmentDataOperator.vue')
+	},
+	{
+		path: '/operator/equipment-model',
+		name: 'operator-equipment-model',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Equipment/EquipmentModelDataOperator.vue')
+	},
+	{
+		path: '/operator/well',
+		name: 'operator-well',
+		meta: { layout: 'operator' },
+		component: () => import('../components/Well/WellDataOperator.vue')
+	},
+	{
 		path: '/operator/current-equipment',
 		name: 'operator-current-equipment',
 		meta: { layout: 'operator' },
@@ -147,6 +165,18 @@ const routes = [
 		name: 'operator-current-equipment-report',
 		meta: { layout: 'operator' },
 		component: () => import('../components/Equipment/CurrentEquipmentReport.vue')
+	},
+	{
+		path: '/dispatcher/equipment',
+		name: 'dispatcher-equipment',
+		meta: { layout: 'dispatcher' },
+		component: () => import('../components/Equipment/EquipmentDataDispatcher.vue')
+	},
+	{
+		path: '/dispatcher/well',
+		name: 'dispatcher-well',
+		meta: { layout: 'dispatcher' },
+		component: () => import('../components/Well/WellDataDispatcher.vue')
 	},
 	{
 		path: '/dispatcher/action',

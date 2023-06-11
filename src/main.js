@@ -111,6 +111,8 @@ import EntryTemplate from '@/components/Action/ActionDialog/ActionTemplate/Entry
 import DemolitionTemplate from '@/components/Action/ActionDialog/ActionTemplate/DemolitionTemplate';
 import RepairTemplate from '@/components/Action/ActionDialog/ActionTemplate/RepairTemplate'
 import ActionInfoDialog from '@/components/Action/ActionDialog/ActionInfoDialog';
+import ActionInfoDialogDispatcher from '@/components/Action/ActionDialog/ActionInfoDialogDispatcher';
+import ActionInfoActiveDialogDispatcher from '@/components/Action/ActionDialog/ActionInfoActiveDialogDispatcher'
 import ActionInfoOnlyDialog from '@/components/Action/ActionDialog/ActionInfoOnlyDialog';
 import GroundTemplate from '@/components/Well/EquipmentTemplate/GroundTemplate';
 import DownholeTemplate from '@/components/Well/EquipmentTemplate/DownholeTemplate';
@@ -134,6 +136,8 @@ app.directive('focustrap', FocusTrap);
 //my components
 app.component('ActionDialog', ActionDialog);
 app.component('ActionInfoDialog', ActionInfoDialog);
+app.component('ActionInfoDialogDispatcher', ActionInfoDialogDispatcher);
+app.component('ActionInfoActiveDialogDispatcher', ActionInfoActiveDialogDispatcher);
 app.component('ActionInfoOnlyDialog', ActionInfoOnlyDialog);
 app.component('EntryTemplate', EntryTemplate);
 app.component('DemolitionTemplate', DemolitionTemplate);

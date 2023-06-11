@@ -5,13 +5,15 @@
     <Menubar class="bg-indigo-600">
       <template #start>
         <Button
-					class="text-indigo-50"
+          class="text-indigo-50"
           icon="pi pi-bars"
           style="color: gray"
           outlined
           @click="visible = true"
         />
-        <label class="font-bold text-3xl ml-3 text-indigo-50">Панель диспетчера</label>
+        <label class="font-bold text-3xl ml-3 text-indigo-50"
+          >Панель диспетчера</label
+        >
       </template>
       <template #end>
         <label class="font-bold text-xl mr-3 text-indigo-50">
@@ -54,6 +56,28 @@ export default {
       visible: false,
       currentUser: null,
       items: [
+				{
+          label: "Оборудование",
+          items: [
+            {
+              label: "Текущее оборудование",
+              to: "/dispatcher/current-equipment",
+            },
+						{
+              label: "Список",
+              to: "/dispatcher/equipment",
+            },
+          ],
+        },
+				{
+          label: "Объекты",
+          items: [
+            {
+              label: "Список",
+              to: "/dispatcher/well",
+            },
+          ],
+        },
         {
           label: "Мероприятия",
           items: [
@@ -62,15 +86,7 @@ export default {
               to: "/dispatcher/action",
             },
           ],
-        },{
-          label: "Оборудование",
-          items: [
-            {
-              label: "Текущее оборудование",
-              to: "/dispatcher/current-equipment",
-            },
-          ],
-        },
+        },        
       ],
     };
   },

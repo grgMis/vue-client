@@ -1,12 +1,17 @@
 <template>
   <Toast position="bottom-right" group="br" />
   <ConfirmDialog />
+  <!--Диалоговая форма просмотра и активации информации о мероприятие-->
+  <ActionInfoActiveDialogDispatcher
+    v-model:visible="visibleInfoActiveDialog"
+    :selectedAction="selectedAction"
+  ></ActionInfoActiveDialogDispatcher>
   <!--Диалоговая форма просмотра и редактирования информации о мероприятие-->
-  <ActionInfoDialog
+  <ActionInfoDialogDispatcher
     v-model:visible="visibleInfoDialog"
     :selectedAction="selectedAction"
   >
-  </ActionInfoDialog>
+  </ActionInfoDialogDispatcher>
   <!--Диалоговая форма просмотра информации о мероприятие-->
   <ActionInfoOnlyDialog
     v-model:visible="visibleInfoOnlyDialog"
@@ -18,7 +23,7 @@
     <template #start>
       <span class="font-bold text-3xl text-indigo-500">Мероприятия</span>
     </template>
-		<template #end>
+    <template #end>
       <Button
         @click="refreshData"
         icon="pi pi-refresh"
@@ -42,7 +47,7 @@
     :globalFilterFields="[
       'well.well_name',
       'user.employee.employee_last_name',
-      'actionType.action_type_sysname',
+      'actionType.action_type_name',
       'actionState.action_state_name',
     ]"
   >
@@ -60,7 +65,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
-          class="p-column-filter w-full md:w-10rem"
+          class="p-column-filter w-full md:w-9rem"
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
@@ -81,8 +86,8 @@
     <Column
       style="max-width: 10rem"
       header="Тип мероприятия"
-      field="actionType.action_type_sysname"
-      filterField="actionType.action_type_sysname"
+      field="actionType.action_type_name"
+      filterField="actionType.action_type_name"
       sortable
       :showFilterMenu="false"
     >
@@ -91,7 +96,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
-          class="p-column-filter p-inputtext-sm w-full md:w-10rem"
+          class="p-column-filter p-inputtext-sm w-full md:w-9rem"
           v-model="filterModel.value"
           type="text"
           @input="filterCallback()"
@@ -121,7 +126,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
-          class="p-column-filter p-inputtext-sm w-full md:w-10rem"
+          class="p-column-filter p-inputtext-sm w-full md:w-9rem"
           v-model="filterModel.value"
           type="text"
           @input="filterCallback()"
@@ -219,7 +224,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
-          class="p-column-filter w-full md:w-10rem"
+          class="p-column-filter w-full md:w-9rem"
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
@@ -253,12 +258,13 @@ export default {
       submitted: false,
       visibleInfoDialog: false,
       visibleInfoOnlyDialog: false,
+      visibleInfoActiveDialog: false,
 
       filterDateEntry: null,
       filterDateBegin: null,
       filterDateEnd: null,
 
-			currentUser: null,
+      currentUser: null,
 
       createData: [],
       actionList: [],
@@ -283,7 +289,7 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        "actionType.action_type_sysname": {
+        "actionType.action_type_name": {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
@@ -298,18 +304,21 @@ export default {
     formatDate(value) {
       return new Date(value).toLocaleDateString();
     },
-		getCurrentUser: async function() {
+    getCurrentUser: async function () {
       this.currentUser = await JSON.parse(localStorage.getItem("user"));
     },
     showInfo() {
-      if (this.selectedAction.actionState.action_state_id === 3) {
+      if (this.selectedAction.actionState.action_state_id === 3 ||
+					this.selectedAction.actionState.action_state_id === 5) {
         this.visibleInfoOnlyDialog = true;
+      } else if (this.selectedAction.actionState.action_state_id === 1) {
+        this.visibleInfoActiveDialog = true;
       } else {
         this.visibleInfoDialog = true;
       }
     },
     getActionList: async function () {
-			const userId = this.currentUser.user_id;
+      const userId = this.currentUser.user_id;
       const data = await ActionService.getListByCurrentUser(userId);
       this.actionList = data;
     },
@@ -337,8 +346,11 @@ export default {
         case "Активно":
           return "danger";
 
-        case "Завершено":
+        case "Закрыто":
           return "success";
+
+        case "Завершено":
+          return "warning";
 
         default:
           return null;
@@ -346,7 +358,7 @@ export default {
     },
   },
   mounted() {
-		this.getCurrentUser();
+    this.getCurrentUser();
     this.getWellList();
     this.getActionStateList();
   },

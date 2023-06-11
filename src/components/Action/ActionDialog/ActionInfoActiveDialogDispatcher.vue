@@ -210,8 +210,6 @@
         <DataTable
           class="pt-1 p-datatable-sm"
           paginator
-          v-model:selection="selectedActionComposition"
-          selectionMode="single"
           :rows="4"
           :value="actionCompositionList"
           dataKey="action_composition_id"
@@ -244,7 +242,7 @@
           </Column>
 
           <Column
-            style="max-width: 12rem"
+            style="max-width: 10rem"
             header="Класс"
             field="equipment.equipmentModel.equipmentClass.equipment_class_name"
             sortable
@@ -312,19 +310,15 @@
         </DataTable>
       </div>
     </div>
-
-    <template #footer>
-      <Button label="Закрыть" class="bg-indigo-600" @click="closeAction" />
+		<template #footer>
+      <Button label="Активировать" class="bg-indigo-600" @click="activeAction" />
     </template>
   </Dialog>
 </template>
 
 <script>
 import ActionCompositionService from "../../../services/ActionCompositionService";
-import ActionService from "../../../services/ActionService";
-import ActionStateService from "../../../services/ActionStateService";
-import EquipmentService from "../../../services/EquipmentService";
-import WellEquipmentService from "../../../services/WellEquipmentService";
+import ActionService from '../../../services/ActionService';
 
 export default {
   props: {
@@ -332,98 +326,41 @@ export default {
   },
   data() {
     return {
-      submitted: false,
-      selectedActionComposition: {},
       actionCompositionList: [],
-      actionCompositionStateList: [],
-      actionStateList: [],
-      dateComplete: null,
-      actionStateId: 5,
-      updateData: {
-        entryStateId: 5,
-        demolitionStateId: 1,
-        repairStateId: 5,
-      },
+			actionState: 2
     };
   },
   methods: {
     formatDate(value) {
       return new Date(value).toLocaleDateString();
     },
-    getActionStateList: async function () {
-      const data = await ActionStateService.getList();
-      this.actionStateList = data;
-    },
     getActionCompisitionListByAction: async function () {
       const actionId = this.selectedAction.action_id;
       const data = await ActionCompositionService.getListByAction(actionId);
       this.actionCompositionList = data;
     },
-    // Логика обновления состояния оборудования
-    updateEquipmentState(equipmentId) {
-      if (this.selectedAction.actionType.action_type_id === 1) {
-        const equipmentStateId = this.updateData.entryStateId;
-        EquipmentService.updateState(equipmentId, equipmentStateId);
-      }
-      if (this.selectedAction.actionType.action_type_id === 2) {
-        const equipmentStateId = this.updateData.demolitionStateId;
-        EquipmentService.updateState(equipmentId, equipmentStateId);
-      }
-      if (this.selectedAction.actionType.action_type_id === 3) {
-        const equipmentStateId = this.updateData.repairStateId;
-        EquipmentService.updateState(equipmentId, equipmentStateId);
-      }
-    },
-    // Обновление состояния текущего оборудования мероприятия
-    updateEquipmentStateInCurrentEquipment(actionComposition) {
-      const equipmentId = actionComposition.equipment.equipment_id;
-      this.updateEquipmentState(equipmentId);
-      if (this.selectedAction.actionType.action_type_id === 1) {
-        this.createCurrentEquipment(equipmentId);
-      }
-      if (this.selectedAction.actionType.action_type_id === 2) {
-        this.deleteCurrentEquipment(equipmentId);
-      }
-    },
-    // Логика добавление оборудования к объекту
-    createCurrentEquipment(equipmentId) {
-      const wellId = this.selectedAction.well.well_id;
-      WellEquipmentService.create(wellId, equipmentId);
-    },
-    // Логика удаления оборудования с объекта
-    deleteCurrentEquipment(equipmentId) {
-      const wellId = this.selectedAction.well.well_id;
-      WellEquipmentService.deleteByWellAndEquip(wellId, equipmentId);
-    },
-    // Логика закрытия мероприятия
-    updateActionState: async function () {
-      const actionId = this.selectedAction.action_id;
-      const actionStateId = this.actionStateId;
-      await ActionService.closeAction(actionId, actionStateId);
-    },
-    // Вызов метода добавления оборудования к объекту
-    addEquipmentToWell() {
-      this.actionCompositionList.forEach(
-        this.updateEquipmentStateInCurrentEquipment
-      );
-    },
-    // Вызов методов для завершения мероприятия
-    updateAndCloseAction: async function () {
-      await this.updateActionState();
-      this.addEquipmentToWell();
-    },
-    closeAction() {
+		// Логика активации мероприятия
+		updateStateAction: async function() {
+			const actionId = this.selectedAction.action_id;
+			const actionStateId = this.actionState;
+			const dateBegin = new Date();
+			const requestData = {
+        date_begin: dateBegin,
+      };
+			await ActionService.updateState(actionId, actionStateId, requestData);
+		},
+		// Вызов метода активации мероприятия
+		activeAction() {
       this.$confirm.require({
-        message: "Подтвердите закрытие мероприятия?",
-        header: "Подтверждение закрытия",
+        message: "Вы точно хотите активировать мероприятие?",
+        header: "Подтверждение активации",
         icon: "pi pi-info-circle",
-        acceptClass: "p-button-danger",
         accept: () => {
-          this.updateAndCloseAction();
+          this.updateStateAction();
           this.$toast.add({
             severity: "success",
             summary: "Выполнено",
-            detail: "Мероприятие закрыто",
+            detail: "Мероприятие активно",
             group: "br",
             life: 3000,
           });
@@ -432,7 +369,7 @@ export default {
           this.$toast.add({
             severity: "error",
             summary: "Отмена",
-            detail: "Отмена закрытия мероприятия",
+            detail: "Отмена",
             group: "br",
             life: 3000,
           });
@@ -459,7 +396,6 @@ export default {
   },
   beforeUpdate() {
     this.getActionCompisitionListByAction();
-    this.getActionStateList();
   },
 };
 </script>

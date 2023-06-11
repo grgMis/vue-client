@@ -57,12 +57,29 @@ export default {
           label: "Оборудование",
           items: [
             {
-              label: "Список",
+              label: "Текущее оборудование",
               to: "/operator/current-equipment",
+            },
+						{
+              label: "Список",
+              to: "/operator/equipment",
+            },
+						{
+              label: "Модели",
+              to: "/operator/equipment-model",
             },
             {
               label: "Отчет",
               to: "/operator/current-equipment-report",
+            },
+          ],
+        },
+				{
+          label: "Объекты",
+          items: [
+            {
+              label: "Список",
+              to: "/operator/well",
             },
           ],
         },

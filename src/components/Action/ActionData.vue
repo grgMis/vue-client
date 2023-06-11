@@ -50,7 +50,7 @@
     :globalFilterFields="[
       'well.well_name',
       'user.employee.employee_last_name',
-      'actionType.action_type_sysname',
+      'actionType.action_type_name',
       'actionState.action_state_name',
     ]"
   >
@@ -68,7 +68,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
-          class="p-column-filter w-full md:w-10rem"
+          class="p-column-filter w-full md:w-9rem"
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
@@ -89,8 +89,8 @@
     <Column
       style="max-width: 10rem"
       header="Тип мероприятия"
-      field="actionType.action_type_sysname"
-      filterField="actionType.action_type_sysname"
+      field="actionType.action_type_name"
+      filterField="actionType.action_type_name"
       sortable
       :showFilterMenu="false"
     >
@@ -99,7 +99,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
-          class="p-column-filter p-inputtext-sm w-full md:w-10rem"
+          class="p-column-filter p-inputtext-sm w-full md:w-9rem"
           v-model="filterModel.value"
           type="text"
           @input="filterCallback()"
@@ -129,7 +129,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
-          class="p-column-filter p-inputtext-sm w-full md:w-10rem"
+          class="p-column-filter p-inputtext-sm w-full md:w-9rem"
           v-model="filterModel.value"
           type="text"
           @input="filterCallback()"
@@ -227,7 +227,7 @@
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Dropdown
-          class="p-column-filter w-full md:w-10rem"
+          class="p-column-filter w-full md:w-9rem"
           :showClear="true"
           v-model="filterModel.value"
           @change="filterCallback()"
@@ -290,7 +290,7 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        "actionType.action_type_sysname": {
+        "actionType.action_type_name": {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
@@ -309,10 +309,10 @@ export default {
       this.visibleActionDialog = true;
     },
     showInfo() {
-      if (this.selectedAction.actionState.action_state_id === 5) {
-        this.visibleInfoOnlyDialog = true;
-      } else {
+      if (this.selectedAction.actionState.action_state_id === 3) {
         this.visibleInfoDialog = true;
+      } else {
+        this.visibleInfoOnlyDialog = true;
       }
     },
     getActionList: async function () {
@@ -341,13 +341,13 @@ export default {
     getSeverity(action) {
       switch (action.actionState.action_state_name) {
         case "Активно":
-          return "warning";
+          return "danger";
 
         case "Закрыто":
           return "success";
 
         case "Завершено":
-          return "danger";
+          return "warning";
 
         default:
           return null;
